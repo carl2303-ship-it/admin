@@ -13,7 +13,10 @@ function serverOnlyClient(
   })
 }
 
-/** Service role do hub (hub_staff, Auth Admin). Nunca no browser. */
+/**
+ * Service role do projeto SportsEvents (= Auth do hub + hub_staff + dados SE).
+ * Nunca no browser.
+ */
 export function createHubServiceClient() {
   return serverOnlyClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -21,7 +24,12 @@ export function createHubServiceClient() {
   )
 }
 
-/** Read-only / bridge Boost — service role só no servidor. */
+/** Alias: KPIs / bridge SE usam o mesmo projeto que o Auth do hub. */
+export function createSportsEventsServiceClient() {
+  return createHubServiceClient()
+}
+
+/** Read-only / bridge Boost — projeto Supabase separado; service role só no servidor. */
 export function createBoostServiceClient() {
   return serverOnlyClient(
     process.env.BOOST_SUPABASE_URL,
@@ -29,18 +37,10 @@ export function createBoostServiceClient() {
   )
 }
 
-/** Read-only / bridge Padel1 — service role só no servidor. */
+/** Read-only / bridge Padel1 — projeto Supabase separado; service role só no servidor. */
 export function createPadel1ServiceClient() {
   return serverOnlyClient(
     process.env.PADEL1_SUPABASE_URL,
     process.env.PADEL1_SUPABASE_SERVICE_ROLE_KEY
-  )
-}
-
-/** Read-only / bridge SportsEvents — service role só no servidor. */
-export function createSportsEventsServiceClient() {
-  return serverOnlyClient(
-    process.env.SE_SUPABASE_URL,
-    process.env.SE_SUPABASE_SERVICE_ROLE_KEY
   )
 }

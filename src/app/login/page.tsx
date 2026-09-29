@@ -128,7 +128,7 @@ function LoginFormInner() {
           <p className="mt-6 border-t border-zinc-100 pt-4 text-[11px] leading-relaxed text-zinc-500">
             Não há registo público. Seed de{' '}
             <code className="rounded bg-zinc-100 px-1">hub_staff</code> no
-            Supabase do hub após criar o user Auth.
+            Supabase SportsEvents (Auth partilhado) após o user Auth.
           </p>
         </div>
       </main>

@@ -1,5 +1,6 @@
--- PADEL HUB — staff global (Supabase do hub)
--- Aplicar no projeto Supabase dedicado ao admin.sportsevents.app
+-- PADEL HUB — staff global
+-- Aplicar no projeto Supabase SportsEvents (mesmo Auth do hub;
+-- NÃO criar projeto Supabase novo só para admin.sportsevents.app).
 
 create extension if not exists "pgcrypto";
 
@@ -27,7 +28,7 @@ create table if not exists public.hub_staff (
   updated_at timestamptz not null default now(),
   constraint hub_staff_user_id_unique unique (user_id),
   constraint hub_staff_email_unique unique (email)
-};
+);
 
 create index if not exists hub_staff_role_idx on public.hub_staff (role);
 create index if not exists hub_staff_active_idx on public.hub_staff (active);
@@ -79,8 +80,8 @@ create policy "hub_staff_select_owner"
 comment on table public.hub_staff is 'Equipa global PADEL HUB (admin.sportsevents.app)';
 comment on column public.hub_staff.boost_user_id is 'auth.users id no Supabase Boost (opcional, bridge)';
 comment on column public.hub_staff.padel1_user_id is 'auth.users id no Supabase padel1 (opcional, bridge)';
-comment on column public.hub_staff.se_user_id is 'auth.users id no Supabase SportsEvents (opcional, bridge)';
+comment on column public.hub_staff.se_user_id is 'Opcional; Auth partilhado com SE — se NULL, bridge SE usa user_id';
 
--- Seed manual (exemplo): após criar user no Auth do hub,
+-- Seed manual (exemplo): após user Auth no projeto SportsEvents,
 -- insert into public.hub_staff (user_id, email, full_name, role)
 -- values ('<uuid-do-auth>', 'carlos@…', 'Carlos', 'owner');

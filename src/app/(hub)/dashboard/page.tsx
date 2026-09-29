@@ -32,7 +32,7 @@ export default async function DashboardPage() {
         {auth.isBootstrap && (
           <p className="mt-3 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
             Modo bootstrap: a tabela <code>hub_staff</code> está vazia. Insere o
-            teu user como <strong>owner</strong> no Supabase do hub.
+            teu user como <strong>owner</strong> no Supabase SportsEvents.
           </p>
         )}
       </div>

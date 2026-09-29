@@ -1,24 +1,23 @@
 /**
  * Contrato SSO / bridge do PADEL HUB → admins legacy.
  *
+ * Identity do hub = Auth do projeto Supabase SportsEvents (partilhado).
+ * Boost e Padel1 continuam Auth/projetos separados.
+ *
  * Fluxo alvo (Fase 1+):
  * 1. Utilizador autenticado no hub com hub_staff activo.
- * 2. POST/GET /api/bridge/{product} verifica RBAC + mapeamento *_user_id.
- * 3. Hub usa service role do produto para generateLink (magiclink / recovery)
- *    no Auth do produto destino, com redirectTo = admin URL legacy.
- * 4. Browser redirecciona para o action_link (utilizador entra sem password).
+ * 2. GET /api/bridge/{product} verifica RBAC + mapeamento *_user_id.
+ * 3. Hub usa service role do produto para generateLink (magiclink)
+ *    no Auth do destino, com redirectTo = admin URL legacy.
+ * 4. Browser redirecciona para o action_link.
  *
- * Gaps nos legacy (documentados — NÃO implementados nestes repos nesta fase):
- * - Boost: sem RBAC; qualquer authenticated = admin. Bridge só precisa de user
- *   Auth existente; hardening RLS fica paralelo (Fase 1 quick-win no repo Boost).
- * - Padel1: precisa de linha em `super_admins` para HQ; magic link sozinho não
- *   basta se o user não for SA. Manager não tem endpoint de exchange token.
- * - SportsEvents: precisa de `staff_members` activo; login é email/password;
- *   magic link Supabase funciona se redirectTo apontar para /admin e o proxy
- *   aceitar sessão — confirmar Site URL / Redirect URLs no dashboard SE.
+ * Gaps nos legacy:
+ * - Boost: sem RBAC; bridge precisa de boost_user_id mapeado.
+ * - Padel1: precisa de super_admins; magic link sozinho não basta.
+ * - SportsEvents: Auth partilhado — se_user_id NULL ⇒ usa user_id do hub;
+ *   ainda exige staff_members activo no ERP.
  *
- * Enquanto o mapeamento *_user_id estiver vazio, o bridge faz FALLBACK para
- * deep-link puro (abre o admin; o user autentica manualmente no produto).
+ * Sem mapeamento (Boost/Padel1) ⇒ FALLBACK deep-link.
  */
 
 import type { ProductId } from './kpis'
@@ -54,7 +53,8 @@ export type BridgeResult =
 function mappedUserId(staff: HubStaff, product: ProductId): string | null {
   if (product === 'boost') return staff.boost_user_id
   if (product === 'padel1') return staff.padel1_user_id
-  return staff.se_user_id
+  // Auth partilhado com SE: default = user_id do hub
+  return staff.se_user_id || staff.user_id
 }
 
 function productService(product: ProductId) {
@@ -69,7 +69,7 @@ const PRODUCT_GAPS: Record<ProductId, string> = {
   padel1:
     'HQ exige super_admins. Magic link só autentica; o user destino tem de ser SA. Sem exchange token no Manager.',
   sportsevents:
-    'ERP exige staff_members. Confirmar Redirect URLs no projeto SE. Sem bridge nativo além de magic link Supabase.',
+    'Auth partilhado com o hub. Ainda exige staff_members no ERP. Redirect URLs do callback hub no dashboard SE.',
 }
 
 export async function resolveBridge(

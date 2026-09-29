@@ -1,5 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr'
 
+/** Browser client — Auth no projeto Supabase SportsEvents (partilhado com o hub). */
 export function createClient() {
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

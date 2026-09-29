@@ -5,14 +5,17 @@ Backoffice global em **admin.sportsevents.app** — shell Next.js que agrega Boo
 ## Stack
 
 - Next.js 16 (App Router) + React 19 + TypeScript + Tailwind 4
-- Supabase Auth (projeto **hub**) + clients read-only server-side para 3 produtos
+- **Supabase Auth = projeto SportsEvents** (mesmo project; sem 4.º projeto)
+- Tabela `hub_staff` nesse projeto; dados SE via o mesmo service role
+- Clients read-only server-side para **Boost** e **Padel1** (projetos separados)
 - Deploy: Netlify (`@netlify/plugin-nextjs`)
 
 ## Desenvolvimento
 
 ```bash
 cp .env.example .env.local
-# preencher NEXT_PUBLIC_SUPABASE_* do hub + service roles
+# NEXT_PUBLIC_SUPABASE_* + SUPABASE_SERVICE_ROLE_KEY = credenciais SportsEvents
+# + BOOST_* / PADEL1_* (service roles dos outros produtos)
 npm install
 npm run dev
 ```
@@ -23,8 +26,8 @@ Abrir http://localhost:3000 → redirect para `/login` ou `/dashboard`.
 
 | Path | Função |
 |------|--------|
-| `supabase/migrations/20260929140000_create_hub_staff.sql` | Tabela + RLS hub_staff |
-| `.env.example` | Hub + Boost + Padel1 + SE |
+| `supabase/migrations/20260929140000_create_hub_staff.sql` | Tabela + RLS — **aplicar no Supabase SportsEvents** |
+| `.env.example` | Auth/SE + Boost + Padel1 |
 | `src/proxy.ts` | Gate Auth (Next 16 proxy) |
 | `src/lib/auth/` | RBAC roles + guards |
 | `src/lib/products/` | KPIs, deep-links, bridge SSO |
