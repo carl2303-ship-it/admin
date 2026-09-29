@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Domínio de produção (após DNS):
+# admin.sportsevents.app → site Netlify deste repo
+#
+# Em Netlify UI:
+# 1. Domain management → Add domain alias admin.sportsevents.app
+# 2. Env vars: copiar de .env.example (todas as chaves server-side)
+# 3. Site URL / Auth redirect: https://admin.sportsevents.app/auth/callback
