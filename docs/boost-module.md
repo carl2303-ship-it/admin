@@ -1,53 +1,50 @@
-# Módulo Boost Store (Fase 2)
+# Módulo Boost Store (paridade total)
 
-UI no hub em `/produtos/boost/*`. Substitui o placeholder da Fase 1 para as tabs críticas do `admin.html`.
+UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia-a-dia — não MVP + fallback forever.
 
 ## Auth / RBAC
 
 - Gate: `hub_staff` no Supabase SportsEvents (`requireHubAccess('boost')`).
-- Leitura: `owner`, `commerce`, `content` (+ bootstrap).
-- Escrita: `owner`, `commerce` (+ bootstrap).
+- Leitura módulo: `owner`, `commerce`, `content` (+ bootstrap).
+- Escrita loja/SaaS/marketing: `owner`, `commerce` (+ bootstrap).
+- Escrita blog: `owner`, `commerce`, `content` (+ bootstrap).
+- Equipa hub (`/equipa`): só `owner` (criar/editar contas).
 - Service role Boost **nunca** no browser — Server Actions / RSC.
 
 ## Env
 
-Já existentes:
-
-- `BOOST_SUPABASE_URL`
-- `BOOST_SUPABASE_SERVICE_ROLE_KEY`
-- `BOOST_SUPABASE_ANON_KEY` — necessário para invocar Edge Functions
-- `NEXT_PUBLIC_BOOST_ADMIN_URL` — deep-link legacy
-
-Novas (opcionais):
-
-| Var | Uso |
-|-----|-----|
-| `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` | Conta Auth Boost dedicada para `provision-saas-license` (exige JWT user) |
-| `BOOST_EDGE_USER_ID` | Alternativa: user id Boost para generateLink+verifyOtp |
-| `NEXT_PUBLIC_BOOST_STORE_URL` | Base URLs Stripe success/cancel (default `https://boostpadel.store`) |
-
-Se `hub_staff.boost_user_id` estiver mapeado, o hub tenta usá-lo para Edge JWT antes de falhar.
+- `BOOST_SUPABASE_URL` / `BOOST_SUPABASE_SERVICE_ROLE_KEY` / `BOOST_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_BOOST_ADMIN_URL` — deep-link emergência
+- `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` ou `BOOST_EDGE_USER_ID`
+- `NEXT_PUBLIC_BOOST_STORE_URL`
 
 ## Edge Functions (reutilizadas)
 
-- `provision-saas-license` — criar licença + login Tour; `resend_credentials`
-- `stripe-checkout` com `productType: 'saas-tour-subscription'` — link pagamento
+- `provision-saas-license`
+- `stripe-checkout` (`saas-tour-subscription` a partir do hub)
 
-Não há lógica Stripe no repo admin.
+## Rotas
 
-## Migrado vs legacy
+| Rota | Tab admin.html |
+|------|----------------|
+| `/produtos/boost/produtos` | Produtos |
+| `/produtos/boost/pedidos` | Pedidos |
+| `/produtos/boost/categorias` | Categorias |
+| `/produtos/boost/marcas` | Marcas |
+| `/produtos/boost/descontos` | Descontos |
+| `/produtos/boost/blog` | Blog |
+| `/produtos/boost/estagios` | Estágios |
+| `/produtos/boost/newsletter` | Newsletter |
+| `/produtos/boost/ebook-leads` | Leads Ebook |
+| `/produtos/boost/ebook-compras` | Compras Ebook |
+| `/produtos/boost/analytics` | Analytics |
+| `/produtos/boost/saas` | SaaS Tour |
+| `/produtos/boost/stripe` | (novo) visibilidade Stripe |
+| `/produtos/boost/contas` | (novo) owners Tour |
+| `/equipa` | Contas hub_staff (não existia no Boost) |
 
-| Área | Hub | Legacy |
-|------|-----|--------|
-| Produtos | ✅ CRUD essencial | Upload multi-imagem / Quill rico |
-| Pedidos | ✅ lista + status | email teste digital |
-| Categorias / Marcas | ✅ | — |
-| Descontos | ✅ básico | applies_to produtos específicos (UI parcial) |
-| SaaS Tour | ✅ | editar cores avançado no modal |
-| Blog / estágios / newsletter / ebooks / analytics | — | ✅ admin.html |
+Inventário detalhado + checkboxes: Project store `docs/paridade-boost-admin.md`.
 
-Fallback: bridge `/api/bridge/boost` + deep-link no rodapé de cada página do módulo.
+## Legacy
 
-## RLS hardening (opcional)
-
-Ver `docs/boost-rls-admin-users.md` — **não aplicar em produção sem Carlos**.
+Rodapé do módulo = emergência (Quill rico, upload multi-ficheiro Storage, preview email digital).
