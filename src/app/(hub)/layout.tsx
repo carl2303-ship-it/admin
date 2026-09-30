@@ -56,6 +56,7 @@ export default async function HubLayout({
             <a href="/produtos/padel1">Padel1</a>
             <a href="/produtos/sportsevents">SE</a>
             <a href="/conteudo">Conteúdo</a>
+            <a href="/configuracao">Config</a>
           </nav>
         </header>
         <main className="flex-1 p-4 md:p-8">{children}</main>
