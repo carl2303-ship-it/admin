@@ -9,6 +9,7 @@ type Props = {
   label: string
   confirm?: string
   variant?: 'primary' | 'ghost' | 'danger'
+  /** Server Action (ou .bind); nunca passar closures criadas em RSC. */
   action: () => Promise<ActionResult>
   onDone?: (result: ActionResult) => void
 }

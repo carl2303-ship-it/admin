@@ -93,7 +93,7 @@ export default async function BoostOrdersPage({
                         label="Eliminar"
                         variant="danger"
                         confirm="Eliminar este pedido?"
-                        action={() => deleteOrder(o.id)}
+                        action={deleteOrder.bind(null, o.id)}
                       />
                     )}
                   </div>

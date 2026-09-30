@@ -133,7 +133,7 @@ export default async function BoostDiscountsPage({
                         label="Eliminar"
                         variant="danger"
                         confirm={`Eliminar ${d.code}?`}
-                        action={() => deleteDiscount(d.id)}
+                        action={deleteDiscount.bind(null, d.id)}
                       />
                     </div>
                   )}
