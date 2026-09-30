@@ -64,7 +64,7 @@ export function ProductForm({
             defaultValue={product?.category_id || ''}
             className={fieldClass}
           >
-            <option value="">-</option>
+            <option value="">—</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -79,7 +79,7 @@ export function ProductForm({
             defaultValue={product?.brand_id || ''}
             className={fieldClass}
           >
-            <option value="">-</option>
+            <option value="">—</option>
             {brands.map((b) => (
               <option key={b.id} value={b.id}>
                 {b.name}
@@ -88,7 +88,7 @@ export function ProductForm({
           </select>
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">Preco EUR</span>
+          <span className="text-xs font-bold uppercase text-zinc-500">Preço €</span>
           <input
             name="price"
             type="number"
@@ -101,7 +101,7 @@ export function ProductForm({
         </label>
         <label className="block space-y-1">
           <span className="text-xs font-bold uppercase text-zinc-500">
-            Preco compare
+            Preço compare
           </span>
           <input
             name="compare_at_price"
@@ -135,7 +135,7 @@ export function ProductForm({
       </div>
       <label className="block space-y-1">
         <span className="text-xs font-bold uppercase text-zinc-500">
-          Descricao curta
+          Descrição curta
         </span>
         <input
           name="short_description"
@@ -145,7 +145,7 @@ export function ProductForm({
       </label>
       <label className="block space-y-1">
         <span className="text-xs font-bold uppercase text-zinc-500">
-          Descricao (HTML)
+          Descrição (HTML)
         </span>
         <textarea
           name="description"
@@ -205,7 +205,7 @@ export function ProductForm({
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="flex gap-2">
         <button type="submit" disabled={pending} className={btnPrimary}>
-          {pending ? 'A guardar...' : 'Guardar'}
+          {pending ? 'A guardar…' : 'Guardar'}
         </button>
         <button
           type="button"
