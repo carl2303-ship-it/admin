@@ -5,9 +5,9 @@ import {
   staffRole,
 } from '@/lib/boost/auth'
 import { listBlogPosts } from '@/lib/boost/queries'
-import { deleteBlogPost, saveBlogPost } from '@/lib/boost/actions'
+import { deleteBlogPost } from '@/lib/boost/actions'
 import { ActionButton } from '@/components/boost/action-buttons'
-import { SimpleEntityForm } from '@/components/boost/simple-entity-form'
+import { BlogForm } from '@/components/boost/blog-form'
 import {
   ConfigBanner,
   ErrorBanner,
@@ -46,65 +46,7 @@ export default async function BoostBlogPage({
       <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
         Blog
       </h2>
-      <p className="text-xs text-zinc-500">
-        Editor HTML simples (paridade funcional). Upload Quill/Storage avançado
-        ainda opcional via URL de imagem.
-      </p>
-      {write && (
-        <SimpleEntityForm
-          title={editing ? 'Editar post' : 'Novo post'}
-          onCancelHref="/produtos/boost/blog"
-          action={saveBlogPost}
-          hidden={editing ? { id: editing.id } : undefined}
-          fields={[
-            {
-              name: 'title',
-              label: 'Título',
-              required: true,
-              defaultValue: editing?.title,
-            },
-            {
-              name: 'author',
-              label: 'Autor',
-              defaultValue: editing?.author || 'BOOST PADEL',
-            },
-            {
-              name: 'category',
-              label: 'Categoria',
-              defaultValue: editing?.category || 'geral',
-            },
-            {
-              name: 'image_url',
-              label: 'URL imagem',
-              defaultValue: editing?.image_url || '',
-            },
-            {
-              name: 'excerpt',
-              label: 'Excerpt',
-              type: 'textarea',
-              defaultValue: editing?.excerpt || '',
-            },
-            {
-              name: 'content',
-              label: 'Conteúdo (HTML)',
-              type: 'textarea',
-              defaultValue: editing?.content || '',
-            },
-            {
-              name: 'published',
-              label: 'Publicado',
-              type: 'checkbox',
-              defaultValue: editing?.published ?? false,
-            },
-            {
-              name: 'featured',
-              label: 'Destaque',
-              type: 'checkbox',
-              defaultValue: editing?.featured ?? false,
-            },
-          ]}
-        />
-      )}
+      {write && <BlogForm post={editing} />}
       <Panel>
         <TableShell>
           <thead>
@@ -152,7 +94,7 @@ export default async function BoostBlogPage({
                       <ActionButton
                         label="Eliminar"
                         variant="danger"
-                        confirm={`Eliminar "${p.title}"?`}
+                        confirm={`Eliminar «${p.title}»?`}
                         action={deleteBlogPost.bind(null, p.id)}
                       />
                     </div>

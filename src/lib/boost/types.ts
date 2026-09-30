@@ -39,10 +39,12 @@ export type BoostOrder = {
 export type BoostOrderItem = {
   id: string
   order_id: string
-  product_id: string | null
+  product_id?: string | null
   product_name: string | null
   quantity: number
-  price: number
+  price?: number
+  product_price?: number
+  subtotal?: number
 }
 
 export type BoostCategory = {
