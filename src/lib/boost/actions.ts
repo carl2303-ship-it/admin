@@ -59,6 +59,62 @@ function slugify(text: string) {
 
 // --- Products ---
 
+function parseJsonArray(raw: string): unknown[] {
+  try {
+    const parsed = JSON.parse(raw || '[]')
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+export async function uploadBoostImage(
+  formData: FormData
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  const g = await guardContentWrite()
+  if (!g.ok) return g
+
+  try {
+    const file = formData.get('file')
+    if (!(file instanceof File) || file.size === 0) {
+      return { ok: false, error: 'Ficheiro em falta' }
+    }
+    const allowed = [
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+    ]
+    if (!allowed.includes(file.type)) {
+      return { ok: false, error: 'Tipo de ficheiro não suportado' }
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      return { ok: false, error: 'Imagem > 5MB' }
+    }
+
+    const folder = String(formData.get('folder') || 'products')
+      .replace(/[^a-z0-9/_-]/gi, '')
+      .replace(/^\/+|\/+$/g, '') || 'products'
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
+    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 9)}.${ext}`
+
+    const client = requireBoostClient()
+    const buffer = Buffer.from(await file.arrayBuffer())
+    const { error } = await client.storage.from('product-images').upload(path, buffer, {
+      contentType: file.type,
+      cacheControl: '3600',
+      upsert: false,
+    })
+    if (error) return { ok: false, error: error.message }
+
+    const { data } = client.storage.from('product-images').getPublicUrl(path)
+    return { ok: true, url: data.publicUrl }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro upload' }
+  }
+}
+
 export async function saveProduct(
   formData: FormData
 ): Promise<ActionResult> {
@@ -71,7 +127,37 @@ export async function saveProduct(
     const name = String(formData.get('name') || '').trim()
     if (!name) return { ok: false, error: 'Nome obrigatório' }
 
+    const description = String(formData.get('description') || '').trim()
+    if (!description || description === '<p><br></p>') {
+      return { ok: false, error: 'Descrição obrigatória' }
+    }
+
+    const additionalRaw = String(formData.get('additional_images') || '')
+    const additional_images = additionalRaw
+      .split('\n')
+      .map((u) => u.trim())
+      .filter(Boolean)
+
+    const colors = parseJsonArray(String(formData.get('colors_json') || '[]'))
+      .map((c) => {
+        if (!c || typeof c !== 'object') return null
+        const o = c as { name?: unknown; hex?: unknown }
+        const colorName = String(o.name || '').trim()
+        if (!colorName) return null
+        return { name: colorName, hex: String(o.hex || '#000000') }
+      })
+      .filter(Boolean)
+
+    const sizes = parseJsonArray(String(formData.get('sizes_json') || '[]'))
+      .map((s) => String(s || '').trim())
+      .filter(Boolean)
+
     const slugRaw = String(formData.get('slug') || '').trim()
+    const imageUrl = String(formData.get('image_url') || '') || null
+    if (!imageUrl && !id) {
+      return { ok: false, error: 'Imagem do produto obrigatória (upload ou URL)' }
+    }
+
     const payload = {
       name,
       slug: slugRaw || slugify(name),
@@ -82,9 +168,12 @@ export async function saveProduct(
         ? parseFloat(String(formData.get('compare_at_price')))
         : null,
       stock: parseInt(String(formData.get('stock') || '0'), 10) || 0,
-      image_url: String(formData.get('image_url') || '') || null,
+      image_url: imageUrl,
+      additional_images,
+      colors,
+      sizes,
       short_description: String(formData.get('short_description') || '') || null,
-      description: String(formData.get('description') || '') || null,
+      description,
       active: formData.get('active') === 'on' || formData.get('active') === 'true',
       is_featured:
         formData.get('is_featured') === 'on' ||
@@ -314,6 +403,22 @@ export async function saveDiscount(formData: FormData): Promise<ActionResult> {
       .trim()
     if (!code) return { ok: false, error: 'Código obrigatório' }
     const appliesTo = String(formData.get('applies_to') || 'all')
+
+    let productIds: string[] = []
+    if (appliesTo === 'specific_products') {
+      productIds = parseJsonArray(String(formData.get('product_ids_json') || '[]'))
+        .map((x) => String(x))
+        .filter(Boolean)
+      if (productIds.length === 0) {
+        return { ok: false, error: 'Selecione pelo menos um produto' }
+      }
+    }
+
+    if (appliesTo === 'category') {
+      const cat = String(formData.get('category') || '').trim()
+      if (!cat) return { ok: false, error: 'Categoria obrigatória' }
+    }
+
     const payload = {
       code,
       description: String(formData.get('description') || '') || null,
@@ -328,7 +433,7 @@ export async function saveDiscount(formData: FormData): Promise<ActionResult> {
         appliesTo === 'category'
           ? String(formData.get('category') || '') || null
           : null,
-      product_ids: [] as string[],
+      product_ids: appliesTo === 'specific_products' ? productIds : [],
       valid_from:
         String(formData.get('valid_from') || '') || new Date().toISOString(),
       valid_until: String(formData.get('valid_until') || '') || null,
@@ -347,6 +452,41 @@ export async function saveDiscount(formData: FormData): Promise<ActionResult> {
     }
     revalidateBoost(['/produtos/boost/descontos'])
     return { ok: true }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  }
+}
+
+export async function getDigitalProductsForEmailPreview(): Promise<
+  | { ok: true; products: { name: string; download_url: string | null }[] }
+  | { ok: false; error: string }
+> {
+  const auth = await requireBoostModule()
+  if (!auth.user) return { ok: false, error: 'Não autenticado' }
+  if (auth.error && !auth.isBootstrap) return { ok: false, error: auth.error }
+
+  try {
+    const client = requireBoostClient()
+    const { data, error } = await client
+      .from('products')
+      .select('name, download_url')
+      .eq('is_digital', true)
+      .limit(3)
+    if (error) return { ok: false, error: error.message }
+    if (!data || data.length === 0) {
+      return {
+        ok: false,
+        error:
+          'Não foram encontrados produtos digitais. Adicione pelo menos um produto digital com link de download.',
+      }
+    }
+    return {
+      ok: true,
+      products: data.map((p) => ({
+        name: String(p.name),
+        download_url: (p.download_url as string | null) || null,
+      })),
+    }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
   }
@@ -724,69 +864,6 @@ export async function deleteEbookPurchase(id: string): Promise<ActionResult> {
     if (error) return { ok: false, error: error.message }
     revalidateBoost(['/produtos/boost/ebook-compras'])
     return { ok: true }
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
-  }
-}
-
-// --- Storage uploads + email digital preview (paridade admin.js) ---
-
-export async function uploadBoostImage(
-  formData: FormData
-): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
-  const g = await guardContentWrite()
-  if (!g.ok) return g
-  try {
-    const file = formData.get('file')
-    if (!(file instanceof File) || file.size === 0) {
-      return { ok: false, error: 'Ficheiro em falta' }
-    }
-    const folderRaw = String(formData.get('folder') || 'products')
-    const folder = folderRaw.replace(/[^a-zA-Z0-9/_-]/g, '') || 'products'
-    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
-    const allowed = new Set(['jpg', 'jpeg', 'png', 'gif', 'webp'])
-    if (!allowed.has(ext)) {
-      return { ok: false, error: 'Tipo de imagem não suportado' }
-    }
-    const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 9)}.${ext}`
-    const client = requireBoostClient()
-    const bytes = new Uint8Array(await file.arrayBuffer())
-    const { error } = await client.storage.from('product-images').upload(fileName, bytes, {
-      cacheControl: '3600',
-      upsert: false,
-      contentType: file.type || `image/${ext === 'jpg' ? 'jpeg' : ext}`,
-    })
-    if (error) return { ok: false, error: error.message }
-    const { data } = client.storage.from('product-images').getPublicUrl(fileName)
-    if (!data?.publicUrl) return { ok: false, error: 'URL pública indisponível' }
-    return { ok: true, url: data.publicUrl }
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : 'Erro no upload' }
-  }
-}
-
-export async function getDigitalProductsForEmailPreview(): Promise<
-  | { ok: true; products: { name: string; download_url: string | null }[] }
-  | { ok: false; error: string }
-> {
-  const g = await guardWrite()
-  if (!g.ok) return g
-  try {
-    const client = requireBoostClient()
-    const { data, error } = await client
-      .from('products')
-      .select('name, download_url')
-      .eq('is_digital', true)
-      .order('name')
-      .limit(50)
-    if (error) return { ok: false, error: error.message }
-    return {
-      ok: true,
-      products: (data ?? []).map((p) => ({
-        name: String(p.name ?? ''),
-        download_url: p.download_url ? String(p.download_url) : null,
-      })),
-    }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
   }
