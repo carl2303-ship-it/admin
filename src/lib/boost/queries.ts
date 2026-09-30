@@ -1,1 +1,1 @@
-@/tmp/queries-body.txt
+PLACEHOLDER_READ_FROM_FILE
