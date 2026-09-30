@@ -33,7 +33,6 @@ UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia
 | `/produtos/boost/marcas` | Marcas |
 | `/produtos/boost/descontos` | Descontos |
 | `/produtos/boost/blog` | Blog |
-| `/produtos/boost/estagios` | Estágios |
 | `/produtos/boost/newsletter` | Newsletter |
 | `/produtos/boost/ebook-leads` | Leads Ebook |
 | `/produtos/boost/ebook-compras` | Compras Ebook |
@@ -42,6 +41,30 @@ UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia
 | `/produtos/boost/stripe` | (novo) visibilidade Stripe |
 | `/produtos/boost/contas` | (novo) owners Tour |
 | `/equipa` | Contas hub_staff (não existia no Boost) |
+
+## Fora de âmbito (módulo Boost)
+
+- **Estágios** — geridos em **sportsevents.app** (ERP SE), não no hub Boost. Sem rota `/produtos/boost/estagios`.
+
+## Stripe no hub (sem `STRIPE_SECRET_KEY`)
+
+O hub **não** precisa de `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` no Netlify do admin.
+Pagamentos e webhooks ficam nas **Edge Functions do projeto Boost** (onde já existe `STRIPE_SECRET_KEY`).
+
+Para **visibilidade** (`/produtos/boost/stripe`) + gerar payment links SaaS:
+
+| Env no hub (admin Netlify) | Para quê |
+|----------------------------|----------|
+| `BOOST_SUPABASE_URL` | Client + invoke Edge |
+| `BOOST_SUPABASE_SERVICE_ROLE_KEY` | Ler orgs / ebook sessions (tabelas) |
+| `BOOST_SUPABASE_ANON_KEY` | Invoke Edge (`stripe-checkout`, provision) |
+| `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` **ou** `BOOST_EDGE_USER_ID` | JWT para EFs autenticadas |
+| `NEXT_PUBLIC_BOOST_STORE_URL` | Link loja na UI Stripe |
+
+| Só no Boost (Supabase Edge / Netlify Boost) | Para quê |
+|---------------------------------------------|---------| 
+| `STRIPE_SECRET_KEY` | Checkout / manage subscription nas EFs |
+| `STRIPE_WEBHOOK_SECRET` | Webhook Stripe nas EFs |
 
 Inventário detalhado + checkboxes: Project store `docs/paridade-boost-admin.md`.
 
