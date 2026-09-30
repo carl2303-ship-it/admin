@@ -62,6 +62,11 @@ export default async function BoostBrandsPage({
               defaultValue: editing?.logo_url || '',
             },
             {
+              name: 'website_url',
+              label: 'Website URL',
+              defaultValue: editing?.website_url || '',
+            },
+            {
               name: 'display_order',
               label: 'Ordem',
               type: 'number',
@@ -88,6 +93,7 @@ export default async function BoostBrandsPage({
             <tr>
               <Th>Nome</Th>
               <Th>Slug</Th>
+              <Th>Website</Th>
               <Th>Ordem</Th>
               <Th>Estado</Th>
               <Th>Acções</Th>
@@ -98,6 +104,20 @@ export default async function BoostBrandsPage({
               <tr key={b.id}>
                 <Td className="font-semibold">{b.name}</Td>
                 <Td className="font-mono text-xs">{b.slug}</Td>
+                <Td>
+                  {b.website_url ? (
+                    <a
+                      href={b.website_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-bold text-sky-700 hover:underline"
+                    >
+                      Link
+                    </a>
+                  ) : (
+                    '—'
+                  )}
+                </Td>
                 <Td>{b.display_order}</Td>
                 <Td>
                   <StatusPill active={b.active} activeLabel="Ativa" />

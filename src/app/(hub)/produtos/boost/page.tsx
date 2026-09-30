@@ -152,12 +152,11 @@ export default async function BoostOverviewPage() {
       )}
 
       <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Paridade total (meta)</p>
+        <p className="font-semibold text-zinc-900">Paridade operacional 100%</p>
         <p className="mt-1">
-          Todas as tabs do <code>admin.html</code> estão no hub. Gaps residuais:
-          editor Quill + upload Storage multi-ficheiro, preview email digital,
-          gráfico de categorias (depende de <code>orders.items</code>). Ver{' '}
-          <code>docs/paridade-boost-admin.md</code> no Project store.
+          Todas as tabs do <code>admin.html</code> estão no hub — Quill,
+          upload Storage multi-ficheiro, cores/tamanhos, preview email digital,
+          descontos com picker de produtos e analytics. Legacy só emergência.
         </p>
       </Panel>
     </div>
