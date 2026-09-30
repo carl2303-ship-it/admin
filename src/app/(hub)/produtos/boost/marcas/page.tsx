@@ -115,7 +115,7 @@ export default async function BoostBrandsPage({
                         label="Eliminar"
                         variant="danger"
                         confirm={`Eliminar "${b.name}"?`}
-                        action={() => deleteBrand(b.id)}
+                        action={deleteBrand.bind(null, b.id)}
                       />
                     </div>
                   )}

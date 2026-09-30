@@ -110,7 +110,7 @@ export default async function BoostCategoriesPage({
                         label="Eliminar"
                         variant="danger"
                         confirm={`Eliminar "${c.name}"?`}
-                        action={() => deleteCategory(c.id)}
+                        action={deleteCategory.bind(null, c.id)}
                       />
                     </div>
                   )}

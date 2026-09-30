@@ -115,19 +115,22 @@ export default async function BoostProductsPage() {
                         </Link>
                         <ActionButton
                           label={p.is_featured ? '★' : '☆'}
-                          action={() =>
-                            quickUpdateProduct(p.id, 'is_featured', !p.is_featured)
-                          }
+                          action={quickUpdateProduct.bind(
+                            null,
+                            p.id,
+                            'is_featured',
+                            !p.is_featured
+                          )}
                         />
                         <ActionButton
                           label="Duplicar"
-                          action={() => duplicateProduct(p.id)}
+                          action={duplicateProduct.bind(null, p.id)}
                         />
                         <ActionButton
                           label="Eliminar"
                           variant="danger"
                           confirm={`Eliminar "${p.name}"?`}
-                          action={() => deleteProduct(p.id)}
+                          action={deleteProduct.bind(null, p.id)}
                         />
                       </>
                     )}
