@@ -3,7 +3,18 @@ import { redirect } from 'next/navigation'
 import { requireBoostModule, canWriteBoost, staffRole } from '@/lib/boost/auth'
 import { boostModuleCounts } from '@/lib/boost/queries'
 import { ConfigBanner, ErrorBanner, Panel } from '@/components/boost/ui'
-import { Package, ShoppingBag, Percent, KeyRound } from 'lucide-react'
+import {
+  Package,
+  ShoppingBag,
+  Percent,
+  KeyRound,
+  BookOpen,
+  CalendarDays,
+  Mail,
+  Download,
+  CreditCard,
+  BarChart3,
+} from 'lucide-react'
 
 const LINKS = [
   {
@@ -30,6 +41,36 @@ const LINKS = [
     key: 'saas' as const,
     icon: KeyRound,
   },
+  {
+    href: '/produtos/boost/blog',
+    label: 'Blog',
+    key: 'blog' as const,
+    icon: BookOpen,
+  },
+  {
+    href: '/produtos/boost/estagios',
+    label: 'Estágios',
+    key: 'stages' as const,
+    icon: CalendarDays,
+  },
+  {
+    href: '/produtos/boost/newsletter',
+    label: 'Newsletter',
+    key: 'newsletter' as const,
+    icon: Mail,
+  },
+  {
+    href: '/produtos/boost/ebook-leads',
+    label: 'Leads Ebook',
+    key: 'ebookLeads' as const,
+    icon: Download,
+  },
+  {
+    href: '/produtos/boost/ebook-compras',
+    label: 'Compras Ebook',
+    key: 'ebookPurchases' as const,
+    icon: CreditCard,
+  },
 ]
 
 export default async function BoostOverviewPage() {
@@ -50,10 +91,28 @@ export default async function BoostOverviewPage() {
           <span className="font-semibold text-zinc-800">{role}</span>
           {canWriteBoost(role)
             ? ' · escrita loja/SaaS'
-            : ' · só leitura neste módulo'}
+            : ' · leitura / conteúdo conforme role'}
         </p>
-        <div className="flex gap-3 text-xs font-semibold">
-          <Link href="/produtos/boost/categorias" className="text-sky-700 hover:underline">
+        <div className="flex flex-wrap gap-3 text-xs font-semibold">
+          <Link
+            href="/produtos/boost/analytics"
+            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+          >
+            <BarChart3 className="h-3.5 w-3.5" /> Analytics
+          </Link>
+          <Link href="/produtos/boost/stripe" className="text-sky-700 hover:underline">
+            Stripe
+          </Link>
+          <Link href="/produtos/boost/contas" className="text-sky-700 hover:underline">
+            Contas
+          </Link>
+          <Link href="/equipa" className="text-sky-700 hover:underline">
+            Equipa hub
+          </Link>
+          <Link
+            href="/produtos/boost/categorias"
+            className="text-sky-700 hover:underline"
+          >
             Categorias
           </Link>
           <Link href="/produtos/boost/marcas" className="text-sky-700 hover:underline">
@@ -70,7 +129,7 @@ export default async function BoostOverviewPage() {
       )}
 
       {counts.ok && (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {LINKS.map((item) => {
             const Icon = item.icon
             return (
@@ -93,21 +152,11 @@ export default async function BoostOverviewPage() {
       )}
 
       <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Migrado neste MVP</p>
-        <ul className="mt-2 list-inside list-disc space-y-1">
-          <li>Produtos (CRUD essencial + quick price/stock/destaque)</li>
-          <li>Pedidos (lista + status + delete)</li>
-          <li>Categorias e marcas</li>
-          <li>Códigos de desconto</li>
-          <li>
-            Licenças SaaS Tour (<code>source=boost</code>) + provision / Stripe
-            via Edge Functions
-          </li>
-        </ul>
-        <p className="mt-3 font-semibold text-zinc-900">Ainda no legacy</p>
+        <p className="font-semibold text-zinc-900">Paridade operacional 100%</p>
         <p className="mt-1">
-          Blog, estágios, newsletter, ebook leads/compras, analytics, upload
-          imagens Quill/Storage avançado.
+          Todas as tabs do <code>admin.html</code> estão no hub — Quill,
+          upload Storage multi-ficheiro, cores/tamanhos, preview email digital,
+          descontos com picker de produtos e analytics. Legacy só emergência.
         </p>
       </Panel>
     </div>

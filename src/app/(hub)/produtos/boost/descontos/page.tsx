@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation'
 import { requireBoostModule, canWriteBoost, staffRole } from '@/lib/boost/auth'
-import { listDiscounts } from '@/lib/boost/queries'
-import { deleteDiscount, saveDiscount } from '@/lib/boost/actions'
+import { listDiscounts, listProducts } from '@/lib/boost/queries'
+import { deleteDiscount } from '@/lib/boost/actions'
 import { ActionButton } from '@/components/boost/action-buttons'
-import { SimpleEntityForm } from '@/components/boost/simple-entity-form'
+import { DiscountForm } from '@/components/boost/discount-form'
 import {
   ConfigBanner,
   ErrorBanner,
@@ -13,6 +13,17 @@ import {
   Th,
   Td,
 } from '@/components/boost/ui'
+
+function appliesLabel(d: {
+  applies_to: string
+  category: string | null
+  product_ids: string[] | null
+}) {
+  if (d.applies_to === 'all') return 'Todo o site'
+  if (d.applies_to === 'category') return `Categoria: ${d.category || '—'}`
+  const n = Array.isArray(d.product_ids) ? d.product_ids.length : 0
+  return `Produtos específicos (${n})`
+}
 
 export default async function BoostDiscountsPage({
   searchParams,
@@ -26,12 +37,23 @@ export default async function BoostDiscountsPage({
     return <ErrorBanner message={auth.error} />
   }
   const write = canWriteBoost(staffRole(auth.staff, auth.isBootstrap))
-  const result = await listDiscounts()
+  const [result, productsResult] = await Promise.all([
+    listDiscounts(),
+    listProducts(),
+  ])
 
   if (!result.ok && result.missingConfig) {
     return <ConfigBanner message={result.error} />
   }
   if (!result.ok) return <ErrorBanner message={result.error} />
+
+  const products = productsResult.ok
+    ? productsResult.data.map((p) => ({
+        id: p.id,
+        name: p.name,
+        active: p.active,
+      }))
+    : []
 
   const editing = edit
     ? result.data.find((d) => d.id === edit) || null
@@ -42,56 +64,7 @@ export default async function BoostDiscountsPage({
       <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
         Descontos
       </h2>
-      {write && (
-        <SimpleEntityForm
-          title={editing ? 'Editar código' : 'Novo código'}
-          onCancelHref="/produtos/boost/descontos"
-          action={saveDiscount}
-          hidden={{
-            ...(editing ? { id: editing.id } : {}),
-            applies_to: editing?.applies_to || 'all',
-            type: editing?.type || 'percentage',
-          }}
-          fields={[
-            {
-              name: 'code',
-              label: 'Código',
-              required: true,
-              defaultValue: editing?.code,
-            },
-            {
-              name: 'description',
-              label: 'Descrição',
-              defaultValue: editing?.description || '',
-            },
-            {
-              name: 'value',
-              label: 'Valor (% ou €)',
-              type: 'number',
-              required: true,
-              defaultValue: editing?.value ?? 10,
-            },
-            {
-              name: 'min_purchase',
-              label: 'Mín. compra',
-              type: 'number',
-              defaultValue: editing?.min_purchase ?? 0,
-            },
-            {
-              name: 'max_uses',
-              label: 'Máx. usos',
-              type: 'number',
-              defaultValue: editing?.max_uses ?? '',
-            },
-            {
-              name: 'active',
-              label: 'Ativo',
-              type: 'checkbox',
-              defaultValue: editing?.active ?? true,
-            },
-          ]}
-        />
-      )}
+      {write && <DiscountForm discount={editing} products={products} />}
       <Panel>
         <TableShell>
           <thead>
@@ -113,7 +86,7 @@ export default async function BoostDiscountsPage({
                     ? `${d.value}%`
                     : `€${Number(d.value).toFixed(2)}`}
                 </Td>
-                <Td className="text-xs">{d.applies_to}</Td>
+                <Td className="text-xs">{appliesLabel(d)}</Td>
                 <Td className="text-xs">
                   {d.used_count}/{d.max_uses ?? '∞'}
                 </Td>

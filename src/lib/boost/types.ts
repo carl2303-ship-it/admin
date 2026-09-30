@@ -39,10 +39,12 @@ export type BoostOrder = {
 export type BoostOrderItem = {
   id: string
   order_id: string
-  product_id: string | null
+  product_id?: string | null
   product_name: string | null
   quantity: number
-  price: number
+  price?: number
+  product_price?: number
+  subtotal?: number
 }
 
 export type BoostCategory = {
@@ -60,6 +62,7 @@ export type BoostBrand = {
   slug: string
   description: string | null
   logo_url: string | null
+  website_url: string | null
   display_order: number
   active: boolean
 }
@@ -130,3 +133,68 @@ export const ORDER_STATUSES = [
   'delivered',
   'cancelled',
 ] as const
+
+export type BoostBlogPost = {
+  id: string
+  title: string
+  slug: string
+  author: string | null
+  category: string | null
+  image_url: string | null
+  excerpt: string | null
+  content: string | null
+  published: boolean
+  featured: boolean | null
+  created_at: string
+  updated_at: string | null
+}
+
+export type BoostStageRegistration = {
+  id: string
+  registration_number: string | null
+  customer_name: string | null
+  customer_email: string | null
+  customer_phone: string | null
+  stage_type: string | null
+  stage_date: string | null
+  price: number | null
+  status: string
+  created_at: string
+}
+
+export type BoostNewsletterSubscriber = {
+  id: string
+  email: string
+  active: boolean | null
+  subscribed_at: string | null
+  created_at?: string | null
+}
+
+export type BoostEbookLead = {
+  id: string
+  name: string | null
+  email: string
+  phone: string | null
+  download_count: number | null
+  newsletter_opt_in: boolean | null
+  created_at: string
+}
+
+export type BoostEbookPurchase = {
+  id: string
+  customer_name: string | null
+  customer_email: string | null
+  product_type: string | null
+  amount: number | null
+  status: string | null
+  stripe_session_id: string | null
+  created_at: string
+}
+
+export const STAGE_STATUSES = ['pending', 'confirmed', 'cancelled'] as const
+
+export const STAGE_TYPE_LABELS: Record<string, string> = {
+  lazer: 'Lazer',
+  competicao: 'Competição',
+  elite: 'Elite',
+}

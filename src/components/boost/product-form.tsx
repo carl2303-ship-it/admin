@@ -4,7 +4,18 @@ import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { saveProduct } from '@/lib/boost/actions'
 import type { BoostBrand, BoostCategory, BoostProduct } from '@/lib/boost/types'
+import { AdditionalImagesField, ImageUploadField } from './image-upload'
+import { ColorSizeFields } from './color-size-fields'
+import { QuillEditor } from './quill-editor'
 import { btnGhost, btnPrimary, fieldClass } from './ui'
+
+function additionalUrls(product?: BoostProduct | null): string[] {
+  if (!product?.additional_images) return []
+  if (Array.isArray(product.additional_images)) {
+    return product.additional_images.map(String).filter(Boolean)
+  }
+  return []
+}
 
 export function ProductForm({
   product,
@@ -122,16 +133,20 @@ export function ProductForm({
             className={fieldClass}
           />
         </label>
-        <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
-            Image URL
-          </span>
-          <input
+        <div className="md:col-span-2">
+          <ImageUploadField
             name="image_url"
+            label="Imagem principal"
             defaultValue={product?.image_url || ''}
-            className={fieldClass}
+            folder="products"
           />
-        </label>
+        </div>
+        <div className="md:col-span-2">
+          <AdditionalImagesField
+            name="additional_images"
+            defaultUrls={additionalUrls(product)}
+          />
+        </div>
       </div>
       <label className="block space-y-1">
         <span className="text-xs font-bold uppercase text-zinc-500">
@@ -143,17 +158,20 @@ export function ProductForm({
           className={fieldClass}
         />
       </label>
-      <label className="block space-y-1">
+      <div className="space-y-1">
         <span className="text-xs font-bold uppercase text-zinc-500">
-          Descrição (HTML)
+          Descrição (Quill)
         </span>
-        <textarea
+        <QuillEditor
           name="description"
-          rows={6}
           defaultValue={product?.description || ''}
-          className={fieldClass}
+          placeholder="Escreva a descrição do produto…"
         />
-      </label>
+      </div>
+      <ColorSizeFields
+        defaultColors={product?.colors}
+        defaultSizes={product?.sizes}
+      />
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block space-y-1">
           <span className="text-xs font-bold uppercase text-zinc-500">
@@ -172,6 +190,16 @@ export function ProductForm({
           <input
             name="video_url"
             defaultValue={product?.video_url || ''}
+            className={fieldClass}
+          />
+        </label>
+        <label className="block space-y-1 md:col-span-2">
+          <span className="text-xs font-bold uppercase text-zinc-500">
+            Learn more URL
+          </span>
+          <input
+            name="learn_more_url"
+            defaultValue={product?.learn_more_url || ''}
             className={fieldClass}
           />
         </label>
