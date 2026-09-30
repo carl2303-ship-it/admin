@@ -1,7 +1,12 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { requireBoostModule, canWriteBoost, staffRole } from './auth'
+import {
+  requireBoostModule,
+  canWriteBoost,
+  canWriteBoostContent,
+  staffRole,
+} from './auth'
 import { requireBoostClient, invokeBoostEdgeFunction } from './client'
 import { PLAN_MAX_TOURNAMENTS } from './types'
 
@@ -19,6 +24,23 @@ async function guardWrite(): Promise<
     return { ok: false, error: 'Sem permissão de escrita (owner/commerce).' }
   }
   return { ok: true, boostUserId: auth.staff?.boost_user_id ?? null }
+}
+
+async function guardContentWrite(): Promise<
+  | { ok: true }
+  | { ok: false; error: string }
+> {
+  const auth = await requireBoostModule()
+  if (!auth.user) return { ok: false, error: 'Não autenticado' }
+  if (auth.error && !auth.isBootstrap) return { ok: false, error: auth.error }
+  const role = staffRole(auth.staff, auth.isBootstrap)
+  if (!canWriteBoostContent(role)) {
+    return {
+      ok: false,
+      error: 'Sem permissão de escrita de conteúdo (owner/commerce/content).',
+    }
+  }
+  return { ok: true }
 }
 
 function revalidateBoost(paths: string[] = []) {
@@ -597,6 +619,111 @@ export async function generateSaasPaymentLink(input: {
         ? `Link gerado e email enviado para ${input.ownerEmail}`
         : 'Link gerado',
     }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  }
+}
+
+// --- Blog ---
+
+export async function saveBlogPost(formData: FormData): Promise<ActionResult> {
+  const g = await guardContentWrite()
+  if (!g.ok) return g
+
+  try {
+    const client = requireBoostClient()
+    const id = String(formData.get('id') || '')
+    const title = String(formData.get('title') || '').trim()
+    if (!title) return { ok: false, error: 'Título obrigatório' }
+
+    const content = String(formData.get('content') || '').trim()
+    if (!content || content === '<p><br></p>') {
+      return { ok: false, error: 'Conteúdo obrigatório' }
+    }
+
+    const slugRaw = String(formData.get('slug') || '').trim()
+    const payload = {
+      title,
+      slug: slugRaw || slugify(title),
+      author: String(formData.get('author') || 'BOOST PADEL').trim() || 'BOOST PADEL',
+      category: String(formData.get('category') || 'geral').trim() || 'geral',
+      image_url: String(formData.get('image_url') || '') || null,
+      excerpt: String(formData.get('excerpt') || '') || null,
+      content,
+      published:
+        formData.get('published') === 'on' ||
+        formData.get('published') === 'true',
+      featured:
+        formData.get('featured') === 'on' ||
+        formData.get('featured') === 'true',
+      updated_at: new Date().toISOString(),
+    }
+
+    if (id) {
+      const { error } = await client
+        .from('blog_posts')
+        .update(payload)
+        .eq('id', id)
+      if (error) return { ok: false, error: error.message }
+    } else {
+      const { error } = await client.from('blog_posts').insert(payload)
+      if (error) return { ok: false, error: error.message }
+    }
+
+    revalidateBoost(['/produtos/boost/blog'])
+    return { ok: true }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  }
+}
+
+export async function deleteBlogPost(id: string): Promise<ActionResult> {
+  const g = await guardContentWrite()
+  if (!g.ok) return g
+  try {
+    const client = requireBoostClient()
+    const { error } = await client.from('blog_posts').delete().eq('id', id)
+    if (error) return { ok: false, error: error.message }
+    revalidateBoost(['/produtos/boost/blog'])
+    return { ok: true }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  }
+}
+
+// --- Estágios ---
+
+export async function updateStageStatus(
+  id: string,
+  status: string
+): Promise<ActionResult> {
+  const g = await guardWrite()
+  if (!g.ok) return g
+  try {
+    const client = requireBoostClient()
+    const { error } = await client
+      .from('stage_registrations')
+      .update({ status })
+      .eq('id', id)
+    if (error) return { ok: false, error: error.message }
+    revalidateBoost(['/produtos/boost/estagios'])
+    return { ok: true }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  }
+}
+
+// --- Ebook purchases ---
+
+export async function deleteEbookPurchase(id: string): Promise<ActionResult> {
+  const g = await guardWrite()
+  if (!g.ok) return g
+  try {
+    const client = requireBoostClient()
+    const { error } = await client.from('ebook_purchases').delete().eq('id', id)
+    if (error) return { ok: false, error: error.message }
+    revalidateBoost(['/produtos/boost/ebook-compras'])
+    return { ok: true }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
   }
