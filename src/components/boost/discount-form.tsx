@@ -181,15 +181,22 @@ export function DiscountForm({
       {appliesTo === 'category' && (
         <label className="block space-y-1">
           <span className="text-xs font-bold uppercase text-zinc-500">
-            Nome da categoria
+            Categoria
           </span>
-          <input
+          <select
             name="category"
             defaultValue={discount?.category || ''}
             className={fieldClass}
-            placeholder="ex: vestuario"
             required
-          />
+          >
+            <option value="">— seleccionar —</option>
+            <option value="protetor">Protetores Nomashock</option>
+            <option value="4on">Produtos 4ON</option>
+            <option value="nutricao">Nutrição 4Endurance</option>
+            <option value="vestuario">Vestuário Portugal</option>
+            <option value="digital">Produtos Digitais</option>
+            <option value="estagio">Estágios</option>
+          </select>
         </label>
       )}
 

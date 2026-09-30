@@ -148,8 +148,7 @@ export default async function BoostAnalyticsPage({
           <h3 className="font-bold">Top 5 produtos</h3>
           {a.topProducts.length === 0 ? (
             <p className="mt-3 text-sm text-zinc-500">
-              Sem dados de `order.items` no período (analytics Boost usa items
-              embutidos na encomenda).
+              Sem linhas de produto no período (`order_items` / `orders.items`).
             </p>
           ) : (
             <ul className="mt-3 space-y-2 text-sm">
@@ -165,42 +164,73 @@ export default async function BoostAnalyticsPage({
             </ul>
           )}
         </Panel>
-        <Panel>
-          <div className="border-b border-zinc-100 px-4 py-3 font-bold">
-            Vendas diárias
-          </div>
-          <TableShell>
-            <thead>
-              <tr>
-                <Th>Data</Th>
-                <Th>Vendas</Th>
-                <Th>Receita</Th>
-                <Th>Ticket</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {a.daily.length === 0 && (
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="px-4 py-6 text-center text-zinc-500"
-                  >
-                    Sem vendas
-                  </td>
-                </tr>
-              )}
-              {a.daily.slice(0, 31).map((d) => (
-                <tr key={d.date}>
-                  <Td className="text-xs">{d.date}</Td>
-                  <Td>{d.sales}</Td>
-                  <Td className="font-semibold">€{d.revenue.toFixed(2)}</Td>
-                  <Td>€{d.avg.toFixed(2)}</Td>
-                </tr>
+        <Panel className="p-5">
+          <h3 className="font-bold">Vendas por categoria</h3>
+          {a.byCategory.length === 0 ? (
+            <p className="mt-3 text-sm text-zinc-500">
+              Sem dados de categoria no período.
+            </p>
+          ) : (
+            <ul className="mt-3 space-y-3 text-sm">
+              {a.byCategory.map((c) => (
+                <li key={c.name} className="space-y-1">
+                  <div className="flex justify-between gap-3">
+                    <span className="font-medium">{c.name}</span>
+                    <span className="font-semibold">
+                      €{c.revenue.toFixed(2)}{' '}
+                      <span className="text-zinc-400">
+                        ({c.pct.toFixed(1)}%)
+                      </span>
+                    </span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-zinc-100">
+                    <div
+                      className="h-full rounded-full bg-sky-500"
+                      style={{ width: `${Math.min(100, Math.max(0, c.pct))}%` }}
+                    />
+                  </div>
+                </li>
               ))}
-            </tbody>
-          </TableShell>
+            </ul>
+          )}
         </Panel>
       </div>
+
+      <Panel>
+        <div className="border-b border-zinc-100 px-4 py-3 font-bold">
+          Vendas diárias
+        </div>
+        <TableShell>
+          <thead>
+            <tr>
+              <Th>Data</Th>
+              <Th>Vendas</Th>
+              <Th>Receita</Th>
+              <Th>Ticket</Th>
+            </tr>
+          </thead>
+          <tbody>
+            {a.daily.length === 0 && (
+              <tr>
+                <td
+                  colSpan={4}
+                  className="px-4 py-6 text-center text-zinc-500"
+                >
+                  Sem vendas
+                </td>
+              </tr>
+            )}
+            {a.daily.slice(0, 31).map((d) => (
+              <tr key={d.date}>
+                <Td className="text-xs">{d.date}</Td>
+                <Td>{d.sales}</Td>
+                <Td className="font-semibold">€{d.revenue.toFixed(2)}</Td>
+                <Td>€{d.avg.toFixed(2)}</Td>
+              </tr>
+            ))}
+          </tbody>
+        </TableShell>
+      </Panel>
     </div>
   )
 }
