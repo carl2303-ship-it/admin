@@ -1,17 +1,30 @@
 [build]
   command = "npm run build"
+  # App Router Next.js — o runtime @netlify/plugin-nextjs consome .next
+  # (não uses "out" / static export para este shell com SSR + Route Handlers)
   publish = ".next"
 
 [build.environment]
   NODE_VERSION = "22"
+  # Garante installs reprodutíveis quando package-lock.json está no repo
+  NPM_FLAGS = "--prefer-offline --no-audit"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Domínio de produção (após DNS):
-# admin.sportsevents.app → site Netlify deste repo
+# ---------------------------------------------------------------------------
+# Branch de produção (CRÍTICO)
+# ---------------------------------------------------------------------------
+# A app Next vive na branch `cursor/fase0-1-hub-shell-7566` (PR #1) até merge.
+# Se o site Netlify estiver com Production branch = `main` (só README do
+# autoInit), o deploy fica vazio → página "Page not found" da Netlify.
 #
-# Em Netlify UI:
-# 1. Domain management → Add domain alias admin.sportsevents.app
-# 2. Env vars: copiar de .env.example (todas as chaves server-side)
-# 3. Site URL / Auth redirect: https://admin.sportsevents.app/auth/callback
+# Fix imediato (escolher UM):
+#   A) Site configuration → Build & deploy → Continuous deployment
+#      → Production branch = cursor/fase0-1-hub-shell-7566 → Trigger deploy
+#   B) Merge da PR #1 em `main` (só quando Carlos pedir) e redeploy
+#
+# Domínio: admin.sportsevents.app → Domain management → Add domain alias
+# Env: copiar de .env.example (todas as chaves server-side)
+# Auth redirect: https://admin.sportsevents.app/auth/callback
+# Docs: docs/deploy-dns.md
