@@ -10,14 +10,15 @@ export default function BoostModuleLayout({
     <div className="mx-auto max-w-6xl space-y-5 animate-fade-up">
       <div>
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-sky-600">
-          Módulo · Fase 2
+          Módulo · Paridade Boost
         </p>
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight">
           Boost Store
         </h1>
         <p className="mt-1 max-w-2xl text-sm text-zinc-500">
-          Gestão da loja e licenças SaaS Tour no hub. Dados via service role
-          server-side; Edge Functions Stripe/provision reutilizadas.
+          Gestão completa da loja, conteúdo, marketing, analytics e SaaS Tour no
+          hub. Dados via service role; Stripe/provision via Edge Functions
+          existentes.
         </p>
       </div>
       <BoostModuleNav />
