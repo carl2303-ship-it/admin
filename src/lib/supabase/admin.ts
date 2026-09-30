@@ -29,7 +29,7 @@ export function createSportsEventsServiceClient() {
   return createHubServiceClient()
 }
 
-/** Read-only / bridge Boost — projeto Supabase separado; service role só no servidor. */
+/** Boost Store — projeto Supabase separado; service role só no servidor (KPIs, bridge, módulo Fase 2). */
 export function createBoostServiceClient() {
   return serverOnlyClient(
     process.env.BOOST_SUPABASE_URL,
