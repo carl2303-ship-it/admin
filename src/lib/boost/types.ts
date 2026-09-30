@@ -62,6 +62,7 @@ export type BoostBrand = {
   slug: string
   description: string | null
   logo_url: string | null
+  website_url: string | null
   display_order: number
   active: boolean
 }
