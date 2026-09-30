@@ -4,6 +4,7 @@ import { getOrderDetail, listOrders } from '@/lib/boost/queries'
 import { deleteOrder } from '@/lib/boost/actions'
 import { ActionButton } from '@/components/boost/action-buttons'
 import { OrderStatusSelect } from '@/components/boost/order-status-select'
+import { DigitalEmailPreviewButton } from '@/components/boost/digital-email-preview'
 import {
   ConfigBanner,
   ErrorBanner,
@@ -36,9 +37,12 @@ export default async function BoostOrdersPage({
 
   return (
     <div className="space-y-4">
-      <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
-        Pedidos
-      </h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
+          Pedidos
+        </h2>
+        {write && <DigitalEmailPreviewButton />}
+      </div>
       <Panel>
         <TableShell>
           <thead>
@@ -113,16 +117,22 @@ export default async function BoostOrdersPage({
             {detailResult.data.order.shipping_address || 'Sem morada'}
           </p>
           <ul className="mt-3 space-y-1 text-sm">
-            {detailResult.data.items.map((item) => (
-              <li key={item.id} className="flex justify-between gap-4">
-                <span>
-                  {item.quantity}× {item.product_name || item.product_id}
-                </span>
-                <span className="font-semibold">
-                  €{Number(item.price).toFixed(2)}
-                </span>
-              </li>
-            ))}
+            {detailResult.data.items.map((item) => {
+              const unit =
+                item.price ??
+                (item as { product_price?: number }).product_price ??
+                0
+              return (
+                <li key={item.id} className="flex justify-between gap-4">
+                  <span>
+                    {item.quantity}× {item.product_name || item.product_id}
+                  </span>
+                  <span className="font-semibold">
+                    €{Number(unit).toFixed(2)}
+                  </span>
+                </li>
+              )
+            })}
           </ul>
         </Panel>
       )}
