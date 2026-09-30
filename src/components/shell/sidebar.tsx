@@ -8,6 +8,7 @@ import {
   Building2,
   CalendarDays,
   Megaphone,
+  Users,
   ExternalLink,
   LogOut,
 } from 'lucide-react'
@@ -22,6 +23,7 @@ type NavItem = {
   label: string
   icon: typeof LayoutDashboard
   product: 'dashboard' | 'boost' | 'padel1' | 'sportsevents' | 'content'
+  ownerOnly?: boolean
 }
 
 const NAV: NavItem[] = [
@@ -35,6 +37,13 @@ const NAV: NavItem[] = [
     product: 'sportsevents',
   },
   { href: '/conteudo', label: 'Conteúdo & Social', icon: Megaphone, product: 'content' },
+  {
+    href: '/equipa',
+    label: 'Equipa',
+    icon: Users,
+    product: 'dashboard',
+    ownerOnly: true,
+  },
 ]
 
 type Props = {
@@ -54,9 +63,11 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
     router.refresh()
   }
 
-  const visible = NAV.filter((item) =>
-    role === 'bootstrap' ? true : roleCanAccess(role, item.product)
-  )
+  const visible = NAV.filter((item) => {
+    if (role === 'bootstrap') return true
+    if (item.ownerOnly && role !== 'owner') return false
+    return roleCanAccess(role, item.product)
+  })
 
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col border-r border-zinc-200 bg-zinc-950 text-zinc-100">

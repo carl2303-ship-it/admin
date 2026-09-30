@@ -30,7 +30,7 @@ export function ExportButton({
         URL.revokeObjectURL(link.href)
       }}
     >
-      {pending ? '…' : label}
+      {label}
     </button>
   )
 }

@@ -11,7 +11,15 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/produtos/boost/categorias', label: 'Categorias' },
   { href: '/produtos/boost/marcas', label: 'Marcas' },
   { href: '/produtos/boost/descontos', label: 'Descontos' },
+  { href: '/produtos/boost/blog', label: 'Blog' },
+  { href: '/produtos/boost/estagios', label: 'Estágios' },
+  { href: '/produtos/boost/newsletter', label: 'Newsletter' },
+  { href: '/produtos/boost/ebook-leads', label: 'Leads Ebook' },
+  { href: '/produtos/boost/ebook-compras', label: 'Compras Ebook' },
+  { href: '/produtos/boost/analytics', label: 'Analytics' },
   { href: '/produtos/boost/saas', label: 'SaaS Tour' },
+  { href: '/produtos/boost/stripe', label: 'Stripe' },
+  { href: '/produtos/boost/contas', label: 'Contas' },
 ]
 
 export function BoostModuleNav() {
