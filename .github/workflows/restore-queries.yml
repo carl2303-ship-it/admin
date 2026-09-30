@@ -1,5 +1,10 @@
 name: restore-queries
 on:
+  push:
+    branches: [cursor/paridade-boost-admin-95eb]
+    paths:
+      - 'src/lib/boost/.queries.restore.b64'
+      - '.github/workflows/restore-queries.yml'
   workflow_dispatch:
 jobs:
   restore:
@@ -8,10 +13,13 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: cursor/paridade-boost-admin-95eb
-      - name: Restore queries.ts from sidecar
+      - name: Restore queries.ts from sidecar if present
         run: |
+          set -e
+          if [ ! -f src/lib/boost/.queries.restore.b64 ]; then
+            echo "No sidecar; skip"
+            exit 0
+          fi
           python3 - <<'PY'
           import base64, zlib, pathlib
           b64 = pathlib.Path('src/lib/boost/.queries.restore.b64').read_text().strip()
@@ -20,11 +28,10 @@ jobs:
           print('restored', len(data), 'byCategory' in data.decode())
           PY
           rm -f src/lib/boost/.queries.restore.b64
-      - name: Commit
-        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/lib/boost/queries.ts
           git add -u src/lib/boost/.queries.restore.b64 || true
+          git status
           git commit -m "fix(boost): restore queries.ts from compressed sidecar (byCategory)" || exit 0
           git push
