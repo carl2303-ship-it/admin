@@ -9,7 +9,7 @@ export function BoostLegacyFallback({ note }: { note?: string }) {
         <p className="font-semibold text-zinc-800">Admin legacy (emergência)</p>
         <p className="text-xs text-zinc-600">
           {note ||
-            'Fluxos do dia-a-dia estão no hub. Legacy só para edge cases (Quill rico, upload Storage multi-ficheiro, preview email digital).'}
+            'Fluxos do dia-a-dia estão no hub (paridade 100%). Legacy só emergência técnica / Stripe Dashboard.'}
         </p>
       </div>
       <a
