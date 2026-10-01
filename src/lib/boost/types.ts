@@ -149,19 +149,6 @@ export type BoostBlogPost = {
   updated_at: string | null
 }
 
-export type BoostStageRegistration = {
-  id: string
-  registration_number: string | null
-  customer_name: string | null
-  customer_email: string | null
-  customer_phone: string | null
-  stage_type: string | null
-  stage_date: string | null
-  price: number | null
-  status: string
-  created_at: string
-}
-
 export type BoostNewsletterSubscriber = {
   id: string
   email: string
@@ -189,12 +176,4 @@ export type BoostEbookPurchase = {
   status: string | null
   stripe_session_id: string | null
   created_at: string
-}
-
-export const STAGE_STATUSES = ['pending', 'confirmed', 'cancelled'] as const
-
-export const STAGE_TYPE_LABELS: Record<string, string> = {
-  lazer: 'Lazer',
-  competicao: 'Competição',
-  elite: 'Elite',
 }

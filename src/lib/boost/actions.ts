@@ -832,28 +832,6 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
   }
 }
 
-// --- Estágios ---
-
-export async function updateStageStatus(
-  id: string,
-  status: string
-): Promise<ActionResult> {
-  const g = await guardWrite()
-  if (!g.ok) return g
-  try {
-    const client = requireBoostClient()
-    const { error } = await client
-      .from('stage_registrations')
-      .update({ status })
-      .eq('id', id)
-    if (error) return { ok: false, error: error.message }
-    revalidateBoost(['/produtos/boost/estagios'])
-    return { ok: true }
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
-  }
-}
-
 // --- Ebook purchases ---
 
 export async function deleteEbookPurchase(id: string): Promise<ActionResult> {
