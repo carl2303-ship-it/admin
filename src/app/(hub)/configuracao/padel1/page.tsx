@@ -1,8 +1,16 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ConfigSectionNav, IntegrationTable } from '@/components/config/config-ui'
-import { requireConfigOwner } from '@/lib/config/queries'
+import { ConfigIntentForm } from '@/components/config/config-intent-form'
+import { ConfigIntentsTable } from '@/components/config/intents-table'
+import { StripeDashboardLinks } from '@/components/config/stripe-dashboard-links'
+import { NetlifyEnvPanel } from '@/components/config/netlify-env-panel'
+import {
+  listConfigIntents,
+  requireConfigOwner,
+} from '@/lib/config/queries'
 import { getPadel1ConfigStatus } from '@/lib/config/status'
+import { getNetlifyEnvVisibility } from '@/lib/config/netlify-env'
 import { ErrorBanner, Panel } from '@/components/boost/ui'
 
 export default async function ConfigPadel1Page() {
@@ -11,6 +19,10 @@ export default async function ConfigPadel1Page() {
   if (!gate.allowed) return <ErrorBanner message={gate.error || 'Sem permissão'} />
 
   const status = getPadel1ConfigStatus()
+  const [intents, netlify] = await Promise.all([
+    listConfigIntents('padel1'),
+    getNetlifyEnvVisibility({ product: 'padel1' }),
+  ])
 
   return (
     <div className="mx-auto max-w-5xl space-y-5 animate-fade-up">
@@ -22,9 +34,9 @@ export default async function ConfigPadel1Page() {
           Padel One
         </h1>
         <p className="mt-1 max-w-2xl text-sm text-zinc-500">
-          Estado das ligações que o hub usa para KPIs / bridge / futuro HQ.
-          Stripe da plataforma e módulos de clube continuam no Manager até à
-          Fase 3.
+          Mais do que status: env Netlify do admin, atalhos Stripe HQ e intents
+          para rotação sem perder o contexto no hub. Escrita live Stripe
+          plataforma = Fase 3.
         </p>
       </div>
 
@@ -32,11 +44,26 @@ export default async function ConfigPadel1Page() {
 
       <IntegrationTable items={status.integrations} />
 
+      <StripeDashboardLinks product="padel1" />
+
+      <NetlifyEnvPanel
+        visibility={netlify}
+        title="Env Netlify · Padel1 (site admin)"
+      />
+
+      <ConfigIntentForm
+        product="padel1"
+        title="Intent de config Padel1"
+        description="Regista o que precisa de ser actualizado no Netlify admin ou no projecto padel1 (sem colar o valor do secret)."
+      />
+
+      <ConfigIntentsTable intents={intents} />
+
       <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Próximos passos</p>
+        <p className="font-semibold text-zinc-900">Atalhos no hub</p>
         <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
           <li>
-            Deep-link HQ de emergência:{' '}
+            Produto / KPIs:{' '}
             <Link
               href="/produtos/padel1"
               className="font-semibold text-sky-700 hover:underline"
@@ -45,11 +72,12 @@ export default async function ConfigPadel1Page() {
             </Link>
           </li>
           <li>
-            Escrita de secrets Stripe plataforma no hub: Fase 3 (paridade HQ).
+            HQ de emergência: deep-link{' '}
+            <code>NEXT_PUBLIC_PADEL1_HQ_URL</code> (acima)
           </li>
           <li>
-            Env <code>PADEL1_*</code> do admin → Netlify admin.sportsevents.app
-            (não editável live neste slice).
+            Estágios: <strong>não</strong> fazem parte do Boost — ERP SE em
+            sportsevents.app
           </li>
         </ul>
       </Panel>
