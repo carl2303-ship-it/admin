@@ -102,6 +102,8 @@ export type BoostOrganization = {
   tour_user_id: string | null
   stripe_subscription_id: string | null
   cancel_at_period_end: boolean | null
+  /** Último envio de link de renovação (manual ou cron). Opcional até migration Boost. */
+  renewal_payment_link_sent_at?: string | null
   created_at: string
 }
 

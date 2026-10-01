@@ -8,6 +8,32 @@ import {
   Panel,
 } from '@/components/boost/ui'
 
+function edgeConfigured(): { ok: boolean; message?: string } {
+  const url = Boolean(process.env.BOOST_SUPABASE_URL?.trim())
+  const anon = Boolean(process.env.BOOST_SUPABASE_ANON_KEY?.trim())
+  const edgeAuth =
+    Boolean(process.env.BOOST_EDGE_AUTH_EMAIL?.trim()) &&
+    Boolean(process.env.BOOST_EDGE_AUTH_PASSWORD?.trim())
+  const edgeUser = Boolean(process.env.BOOST_EDGE_USER_ID?.trim())
+
+  if (!url || !anon) {
+    return {
+      ok: false,
+      message:
+        'Edge Boost não configurado: falta BOOST_SUPABASE_URL e/ou BOOST_SUPABASE_ANON_KEY. Sem isto não é possível gerar/enviar links de pagamento SaaS.',
+    }
+  }
+  // stripe-checkout aceita anon; provision precisa de EDGE_* — avisamos se faltar
+  if (!edgeAuth && !edgeUser) {
+    return {
+      ok: false,
+      message:
+        'Falta BOOST_EDGE_AUTH_EMAIL/PASSWORD ou BOOST_EDGE_USER_ID. Links Stripe podem funcionar com anon; provision/credenciais e alguns invokes autenticados falham.',
+    }
+  }
+  return { ok: true }
+}
+
 export default async function BoostSaasPage() {
   const auth = await requireBoostModule()
   if (!auth.user) redirect('/login')
@@ -23,6 +49,7 @@ export default async function BoostSaasPage() {
   if (!result.ok) return <ErrorBanner message={result.error} />
 
   const kpis = saasKpis(result.data)
+  const edge = edgeConfigured()
 
   return (
     <div className="space-y-4">
@@ -31,8 +58,18 @@ export default async function BoostSaasPage() {
       </h2>
       <p className="text-sm text-zinc-500">
         Organizations com <code>source=boost</code>. Provision e links Stripe
-        via Edge Functions existentes — não há lógica Stripe no hub.
+        via Edge Functions existentes — não há lógica Stripe no hub. Cartões
+        activos mostram início/fim do plano; renovação recorrente (sem Stripe
+        auto-cobrança) envia link por email no fim do período (cron diário) ou
+        via «Enviar link de pagamento».
       </p>
+
+      {!edge.ok && edge.message ? (
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+          <p className="font-bold">Configuração Edge incompleta</p>
+          <p className="mt-1">{edge.message}</p>
+        </div>
+      ) : null}
 
       <div className="grid gap-3 sm:grid-cols-3">
         {[

@@ -697,72 +697,37 @@ export async function generateSaasPaymentLink(input: {
   const g = await guardWrite()
   if (!g.ok) return g
 
-  try {
-    const client = requireBoostClient()
-    const { data: org, error: orgError } = await client
-      .from('organizations')
-      .select('*')
-      .eq('id', input.orgId)
-      .eq('source', 'boost')
-      .maybeSingle()
-    if (orgError || !org) {
-      return { ok: false, error: orgError?.message || 'Org não encontrada' }
-    }
+  const { createSaasPaymentLink } = await import('./saas-payment-link')
+  const result = await createSaasPaymentLink({
+    ...input,
+    preferUserId: g.boostUserId,
+  })
+  if (!result.ok) return { ok: false, error: result.error }
 
-    const storeBase =
-      process.env.NEXT_PUBLIC_BOOST_STORE_URL || 'https://boostpadel.store'
-
-    const { data, error } = await invokeBoostEdgeFunction<{
-      url?: string
-      error?: string
-    }>(
-      'stripe-checkout',
-      {
-        productType: 'saas-tour-subscription',
-        planType: input.planType,
-        billingPeriod: input.billingPeriod,
-        organizationName: org.name,
-        organizationSlug: org.slug,
-        ownerEmail: input.ownerEmail,
-        language: org.language || 'pt',
-        currency: input.currency,
-        sendPaymentLinkEmail: input.sendEmail,
-        successUrl: `${storeBase}/tour.html?subscription=success&slug=${encodeURIComponent(org.slug)}`,
-        cancelUrl: `${storeBase}/tour.html#precos`,
-      },
-      { preferUserId: g.boostUserId }
-    )
-
-    if (error) return { ok: false, error }
-    if (!data?.url) return { ok: false, error: 'Stripe não devolveu URL' }
-
-    if (!org.owner_email || org.owner_email !== input.ownerEmail) {
-      await client
-        .from('organizations')
-        .update({ owner_email: input.ownerEmail })
-        .eq('id', org.id)
-    }
-    if (org.plan_type !== input.planType) {
-      await client
-        .from('organizations')
-        .update({
-          plan_type: input.planType,
-          max_tournaments: PLAN_MAX_TOURNAMENTS[input.planType] ?? 15,
-        })
-        .eq('id', org.id)
-    }
-
-    revalidateBoost(['/produtos/boost/saas'])
-    return {
-      ok: true,
-      url: data.url,
-      message: input.sendEmail
-        ? `Link gerado e email enviado para ${input.ownerEmail}`
-        : 'Link gerado',
-    }
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  revalidateBoost(['/produtos/boost/saas'])
+  return {
+    ok: true,
+    url: result.url,
+    message: result.message,
   }
+}
+
+/** Atalho UI: gera + envia email do link de pagamento SaaS. */
+export async function sendSaasPaymentLinkEmail(input: {
+  orgId: string
+  ownerEmail: string
+  planType: string
+  currency: string
+  billingPeriod?: 'mensal' | 'anual'
+}): Promise<ActionResult & { url?: string }> {
+  return generateSaasPaymentLink({
+    orgId: input.orgId,
+    ownerEmail: input.ownerEmail,
+    planType: input.planType,
+    currency: input.currency,
+    billingPeriod: input.billingPeriod || 'mensal',
+    sendEmail: true,
+  })
 }
 
 // --- Blog ---
