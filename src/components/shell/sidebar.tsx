@@ -9,6 +9,7 @@ import {
   CalendarDays,
   Megaphone,
   Users,
+  Settings,
   ExternalLink,
   LogOut,
 } from 'lucide-react'
@@ -37,6 +38,13 @@ const NAV: NavItem[] = [
     product: 'sportsevents',
   },
   { href: '/conteudo', label: 'Conteúdo & Social', icon: Megaphone, product: 'content' },
+  {
+    href: '/configuracao',
+    label: 'Configuração',
+    icon: Settings,
+    product: 'dashboard',
+    ownerOnly: true,
+  },
   {
     href: '/equipa',
     label: 'Equipa',
