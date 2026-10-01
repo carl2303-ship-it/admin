@@ -5,10 +5,19 @@ import { useState, useTransition } from 'react'
 import {
   generateSaasPaymentLink,
   saveSaasLicense,
+  sendSaasPaymentLinkEmail,
   updateSaasPlan,
 } from '@/lib/boost/actions'
 import type { BoostOrganization } from '@/lib/boost/types'
 import { PLAN_LABELS, PLAN_MAX_TOURNAMENTS } from '@/lib/boost/types'
+import {
+  formatSaasDate,
+  inferBillingPeriod,
+  isSaasActiveCard,
+  isSaasExpired,
+  resolveSaasPlanEnd,
+  resolveSaasPlanStart,
+} from '@/lib/boost/saas-dates'
 import { ActionButton } from './action-buttons'
 import { btnPrimary, fieldClass } from './ui'
 import {
@@ -117,6 +126,39 @@ export function SaasCreateForm({ canWrite }: { canWrite: boolean }) {
   )
 }
 
+function PlanPeriodDates({ org }: { org: BoostOrganization }) {
+  const start = resolveSaasPlanStart(org)
+  const endIso = resolveSaasPlanEnd(org)
+  const active = isSaasActiveCard(org)
+
+  if (!active) return null
+
+  return (
+    <dl className="grid grid-cols-2 gap-2 rounded-xl bg-zinc-50 px-3 py-2 text-xs">
+      <div>
+        <dt className="font-bold uppercase text-zinc-400">Início do plano</dt>
+        <dd className="font-semibold text-zinc-800">
+          {formatSaasDate(start.iso)}
+          {start.derived && start.iso ? (
+            <span className="ml-1 font-normal text-zinc-400">(criado em)</span>
+          ) : null}
+        </dd>
+      </div>
+      <div>
+        <dt className="font-bold uppercase text-zinc-400">Fim do plano</dt>
+        <dd className="font-semibold text-zinc-800">
+          {formatSaasDate(endIso)}
+          {org.cancel_at_period_end ? (
+            <span className="ml-1 font-normal text-amber-700">
+              · cancela no fim
+            </span>
+          ) : null}
+        </dd>
+      </div>
+    </dl>
+  )
+}
+
 export function SaasOrgCard({
   org,
   canWrite,
@@ -126,10 +168,9 @@ export function SaasOrgCard({
 }) {
   const router = useRouter()
   const [payUrl, setPayUrl] = useState<string | null>(null)
+  const [payError, setPayError] = useState<string | null>(null)
   const [pending, start] = useTransition()
-  const expired =
-    org.subscription_expires_at &&
-    new Date(org.subscription_expires_at).getTime() < Date.now()
+  const expired = isSaasExpired(org)
 
   return (
     <article className="flex flex-col rounded-2xl border border-zinc-200 bg-white shadow-sm">
@@ -174,6 +215,9 @@ export function SaasOrgCard({
             <dd>{org.tour_user_id ? '✓' : 'pendente'}</dd>
           </div>
         </dl>
+
+        <PlanPeriodDates org={org} />
+
         {canWrite && (
           <>
             <label className="block text-xs">
@@ -211,22 +255,25 @@ export function SaasOrgCard({
               <button
                 type="button"
                 disabled={pending}
-                className="inline-flex items-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800 hover:bg-emerald-100"
+                className="inline-flex items-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800 hover:bg-emerald-100 disabled:opacity-60"
                 onClick={() => {
+                  setPayError(null)
                   const email =
-                    window.prompt('Email para o link Stripe', org.owner_email || '') ||
-                    ''
+                    window.prompt(
+                      'Email para enviar o link de pagamento',
+                      org.owner_email || ''
+                    ) || ''
                   if (!email) return
                   start(async () => {
-                    const r = await generateSaasPaymentLink({
+                    const r = await sendSaasPaymentLinkEmail({
                       orgId: org.id,
                       ownerEmail: email,
                       planType: org.plan_type,
                       currency: org.currency || 'EUR',
-                      billingPeriod: 'mensal',
-                      sendEmail: false,
+                      billingPeriod: inferBillingPeriod(org),
                     })
                     if (!r.ok) {
+                      setPayError(r.error)
                       window.alert(r.error)
                       return
                     }
@@ -236,7 +283,40 @@ export function SaasOrgCard({
                   })
                 }}
               >
-                Link pagamento
+                {pending ? 'A enviar…' : 'Enviar link de pagamento'}
+              </button>
+              <button
+                type="button"
+                disabled={pending}
+                title="Gera o link sem enviar email"
+                className="inline-flex items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-bold text-zinc-700 hover:bg-zinc-100 disabled:opacity-60"
+                onClick={() => {
+                  setPayError(null)
+                  const email =
+                    window.prompt('Email do cliente (link Stripe)', org.owner_email || '') ||
+                    ''
+                  if (!email) return
+                  start(async () => {
+                    const r = await generateSaasPaymentLink({
+                      orgId: org.id,
+                      ownerEmail: email,
+                      planType: org.plan_type,
+                      currency: org.currency || 'EUR',
+                      billingPeriod: inferBillingPeriod(org),
+                      sendEmail: false,
+                    })
+                    if (!r.ok) {
+                      setPayError(r.error)
+                      window.alert(r.error)
+                      return
+                    }
+                    setPayUrl(r.url || null)
+                    if (r.message) window.alert(r.message)
+                    router.refresh()
+                  })
+                }}
+              >
+                Só gerar link
               </button>
               <ActionButton
                 label="Eliminar"
@@ -245,6 +325,11 @@ export function SaasOrgCard({
                 action={() => deleteSaasLicense(org.id)}
               />
             </div>
+            {payError && (
+              <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+                {payError}
+              </p>
+            )}
             {payUrl && (
               <input
                 readOnly
