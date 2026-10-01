@@ -12,7 +12,6 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/produtos/boost/marcas', label: 'Marcas' },
   { href: '/produtos/boost/descontos', label: 'Descontos' },
   { href: '/produtos/boost/blog', label: 'Blog' },
-  { href: '/produtos/boost/estagios', label: 'Estágios' },
   { href: '/produtos/boost/newsletter', label: 'Newsletter' },
   { href: '/produtos/boost/ebook-leads', label: 'Leads Ebook' },
   { href: '/produtos/boost/ebook-compras', label: 'Compras Ebook' },

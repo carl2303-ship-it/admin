@@ -9,7 +9,6 @@ import {
   Percent,
   KeyRound,
   BookOpen,
-  CalendarDays,
   Mail,
   Download,
   CreditCard,
@@ -46,12 +45,6 @@ const LINKS = [
     label: 'Blog',
     key: 'blog' as const,
     icon: BookOpen,
-  },
-  {
-    href: '/produtos/boost/estagios',
-    label: 'Estágios',
-    key: 'stages' as const,
-    icon: CalendarDays,
   },
   {
     href: '/produtos/boost/newsletter',
@@ -152,11 +145,12 @@ export default async function BoostOverviewPage() {
       )}
 
       <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Paridade operacional 100%</p>
+        <p className="font-semibold text-zinc-900">Paridade operacional Boost</p>
         <p className="mt-1">
-          Todas as tabs do <code>admin.html</code> estão no hub — Quill,
-          upload Storage multi-ficheiro, cores/tamanhos, preview email digital,
-          descontos com picker de produtos e analytics. Legacy só emergência.
+          Tabs loja/conteúdo/marketing/SaaS/Stripe no hub — Quill, upload
+          Storage, cores/tamanhos, preview email digital, descontos e analytics.
+          Estágios ficam em SportsEvents (fora do módulo Boost). Legacy só
+          emergência.
         </p>
       </Panel>
     </div>

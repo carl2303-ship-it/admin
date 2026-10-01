@@ -11,7 +11,6 @@ import type {
   BoostOrderItem,
   BoostOrganization,
   BoostProduct,
-  BoostStageRegistration,
 } from './types'
 import { PLAN_PRICES } from './types'
 
@@ -200,7 +199,6 @@ export async function boostModuleCounts(): Promise<
     discounts: number
     saas: number
     blog: number
-    stages: number
     newsletter: number
     ebookLeads: number
     ebookPurchases: number
@@ -214,7 +212,6 @@ export async function boostModuleCounts(): Promise<
       discounts,
       saas,
       blog,
-      stages,
       newsletter,
       ebookLeads,
       ebookPurchases,
@@ -227,9 +224,6 @@ export async function boostModuleCounts(): Promise<
         .select('id', { count: 'exact', head: true })
         .eq('source', 'boost'),
       client.from('blog_posts').select('id', { count: 'exact', head: true }),
-      client
-        .from('stage_registrations')
-        .select('id', { count: 'exact', head: true }),
       client
         .from('newsletter_subscribers')
         .select('id', { count: 'exact', head: true }),
@@ -244,7 +238,6 @@ export async function boostModuleCounts(): Promise<
       discounts.error ||
       saas.error ||
       blog.error ||
-      stages.error ||
       newsletter.error ||
       ebookLeads.error ||
       ebookPurchases.error
@@ -257,7 +250,6 @@ export async function boostModuleCounts(): Promise<
         discounts: discounts.count ?? 0,
         saas: saas.count ?? 0,
         blog: blog.count ?? 0,
-        stages: stages.count ?? 0,
         newsletter: newsletter.count ?? 0,
         ebookLeads: ebookLeads.count ?? 0,
         ebookPurchases: ebookPurchases.count ?? 0,
@@ -277,23 +269,6 @@ export async function listBlogPosts(): Promise<QueryResult<BoostBlogPost[]>> {
       .order('created_at', { ascending: false })
     if (error) return { ok: false, error: error.message }
     return { ok: true, data: (data || []) as BoostBlogPost[] }
-  } catch (e) {
-    return wrapError(e)
-  }
-}
-
-export async function listStageRegistrations(): Promise<
-  QueryResult<BoostStageRegistration[]>
-> {
-  try {
-    const client = requireBoostClient()
-    const { data, error } = await client
-      .from('stage_registrations')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(500)
-    if (error) return { ok: false, error: error.message }
-    return { ok: true, data: (data || []) as BoostStageRegistration[] }
   } catch (e) {
     return wrapError(e)
   }
