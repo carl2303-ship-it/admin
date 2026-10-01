@@ -3,6 +3,10 @@ import { requireHubStaff } from '@/lib/auth/hub-auth'
 import type { HubRole } from '@/lib/auth/roles'
 import { listBoostEdgeSecretNames } from './management-api'
 import {
+  getNetlifyEnvVisibility,
+  type NetlifyEnvVisibility,
+} from './netlify-env'
+import {
   getAllConfigStatuses,
   managementApiConfigured,
   type ProductConfigStatus,
@@ -52,18 +56,23 @@ export async function getConfigOverview(): Promise<
       products: ProductConfigStatus[]
       managementConfigured: boolean
       edgeSecrets: Awaited<ReturnType<typeof listBoostEdgeSecretNames>>
+      netlify: NetlifyEnvVisibility
     }
   | { ok: false; error: string }
 > {
   const gate = await requireConfigOwner()
   if (!gate.allowed) return { ok: false, error: gate.error || 'Sem permissão' }
 
-  const edgeSecrets = await listBoostEdgeSecretNames()
+  const [edgeSecrets, netlify] = await Promise.all([
+    listBoostEdgeSecretNames(),
+    getNetlifyEnvVisibility(),
+  ])
   return {
     ok: true,
     products: getAllConfigStatuses(),
     managementConfigured: managementApiConfigured(),
     edgeSecrets,
+    netlify,
   }
 }
 

@@ -170,6 +170,11 @@ export function getPadel1ConfigStatus(): ProductConfigStatus {
     process.env.NEXT_PUBLIC_PADEL1_HQ_URL,
     'https://manager.padel1.app/#super-admin'
   )
+  const supabaseOk =
+    present(process.env.PADEL1_SUPABASE_URL) &&
+    present(process.env.PADEL1_SUPABASE_ANON_KEY) &&
+    present(process.env.PADEL1_SUPABASE_SERVICE_ROLE_KEY)
+
   const integrations: IntegrationStatus[] = [
     item({
       id: 'padel1-url',
@@ -199,12 +204,31 @@ export function getPadel1ConfigStatus(): ProductConfigStatus {
       fixHint: 'Netlify admin → PADEL1_SUPABASE_SERVICE_ROLE_KEY',
     }),
     item({
+      id: 'padel1-bundle',
+      label: 'Pacote KPIs / bridge Padel1',
+      connected: supabaseOk,
+      detail: supabaseOk
+        ? 'URL + anon + service role OK para leitura hub'
+        : 'Falta pelo menos uma de PADEL1_SUPABASE_*',
+      fixHint: 'Completar trio PADEL1_* no Netlify admin',
+    }),
+    item({
       id: 'padel1-hq',
       label: 'HQ deep-link',
       connected: present(process.env.NEXT_PUBLIC_PADEL1_HQ_URL),
       detail: hq,
       publicUrl: hq,
       fixHint: 'Netlify admin → NEXT_PUBLIC_PADEL1_HQ_URL',
+    }),
+    item({
+      id: 'padel1-stripe-external',
+      label: 'Stripe plataforma (HQ)',
+      connected: false,
+      detail:
+        'Secrets Stripe HQ vivem no projecto padel1 / Manager — fora do env admin (Fase 3 write)',
+      publicUrl: 'https://dashboard.stripe.com',
+      fixHint:
+        'Dashboard Stripe da conta Padel1 + intent no hub /configuracao/padel1',
     }),
   ]
 
@@ -222,6 +246,11 @@ export function getSportsEventsConfigStatus(): ProductConfigStatus {
     process.env.NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL,
     'https://sportsevents.app/admin'
   )
+  const authOk =
+    present(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+    present(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) &&
+    present(process.env.SUPABASE_SERVICE_ROLE_KEY)
+
   const integrations: IntegrationStatus[] = [
     item({
       id: 'se-url',
@@ -251,6 +280,15 @@ export function getSportsEventsConfigStatus(): ProductConfigStatus {
       fixHint: 'Netlify admin → SUPABASE_SERVICE_ROLE_KEY',
     }),
     item({
+      id: 'se-auth-bundle',
+      label: 'Auth hub + hub_staff',
+      connected: authOk,
+      detail: authOk
+        ? 'URL + anon + service role OK'
+        : 'Completar trio SUPABASE_* do SE no Netlify admin',
+      fixHint: 'Netlify admin → NEXT_PUBLIC_SUPABASE_* + SERVICE_ROLE',
+    }),
+    item({
       id: 'se-admin',
       label: 'ERP deep-link',
       connected: present(process.env.NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL),
@@ -260,11 +298,21 @@ export function getSportsEventsConfigStatus(): ProductConfigStatus {
     }),
     item({
       id: 'se-stripe-external',
-      label: 'Stripe / Meta / AI (site SE)',
+      label: 'Stripe Connect (site SE)',
       connected: false,
       detail:
-        'Secrets do site público vivem no Netlify sportsevents.app — fora do env do hub',
-      fixHint: 'Netlify sportsevents.app ou ERP /admin/definicoes (Fase 4)',
+        'Secrets Stripe do site público no Netlify sportsevents.app (não admin)',
+      publicUrl: 'https://dashboard.stripe.com',
+      fixHint: 'Netlify sportsevents.app + intent em /configuracao/sportsevents',
+    }),
+    item({
+      id: 'se-meta-ai',
+      label: 'Meta / AI (site SE)',
+      connected: false,
+      detail:
+        'META_* / OpenAI / AI Gateway no Netlify sportsevents.app até Fase 4',
+      publicUrl: 'https://app.netlify.com',
+      fixHint: 'Netlify sportsevents.app → env do site público',
     }),
   ]
 
@@ -332,6 +380,21 @@ export function getHubConfigStatus(): ProductConfigStatus {
         ? 'Token presente (server-only)'
         : 'Ausente — rotação Edge Boost só via checklist',
       fixHint: 'PAT em SUPABASE_ACCESS_TOKEN ou BOOST_SUPABASE_ACCESS_TOKEN',
+    }),
+    item({
+      id: 'hub-netlify-api',
+      label: 'Netlify API (env visibility)',
+      connected:
+        present(process.env.NETLIFY_AUTH_TOKEN) &&
+        present(process.env.NETLIFY_ACCOUNT_ID),
+      detail:
+        present(process.env.NETLIFY_AUTH_TOKEN) &&
+        present(process.env.NETLIFY_ACCOUNT_ID)
+          ? 'Token + account id OK — hub lista nomes de env'
+          : 'Sem NETLIFY_AUTH_TOKEN / NETLIFY_ACCOUNT_ID — só presença runtime',
+      publicUrl: 'https://app.netlify.com/user/applications#personal-access-tokens',
+      fixHint:
+        'Netlify → Personal access token + account id (+ SITE_ID opcional)',
     }),
   ]
 
