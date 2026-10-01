@@ -12,6 +12,10 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Cron diário (UTC): renovação SaaS Tour → payment link email
+# Função: netlify/functions/saas-renewal-cron.mts
+# Requer SAAS_RENEWAL_CRON_SECRET (ou CRON_SECRET) + BOOST_* no site admin.
+
 # ---------------------------------------------------------------------------
 # Branch de produção (CRÍTICO)
 # ---------------------------------------------------------------------------
@@ -20,3 +24,4 @@
 # Env: copiar de .env.example (todas as chaves server-side, incl. BOOST_*)
 # Auth redirect: https://admin.sportsevents.app/auth/callback
 # Docs: docs/deploy-dns.md · docs/boost-module.md
+# Cron SaaS: docs/boost-module.md § Renovação automática

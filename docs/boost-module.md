@@ -23,6 +23,30 @@ UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia
 - `provision-saas-license`
 - `stripe-checkout` (`saas-tour-subscription` a partir do hub)
 
+## SaaS Tour — datas e renovação
+
+### Datas no card activo
+
+- **Início do plano:** `contract_start`; se vazio → deriva de `created_at` (UI marca “(criado em)”); se ambos vazios → `—`.
+- **Fim do plano:** `subscription_expires_at`; se vazio → `—`.
+- Badge «cancela no fim» quando `cancel_at_period_end`.
+
+### Enviar link de pagamento (manual)
+
+Botão **Enviar link de pagamento** em `/produtos/boost/saas` → server action → Edge `stripe-checkout` com `sendPaymentLinkEmail: true` (mesmo caminho do admin Boost).
+
+Requer no Netlify admin: `BOOST_SUPABASE_URL`, `BOOST_SUPABASE_ANON_KEY`, service role, e preferencialmente `BOOST_EDGE_*`. A UI mostra aviso âmbar se Edge estiver incompleta.
+
+### Renovação automática (cron Netlify)
+
+1. Scheduled function `netlify/functions/saas-renewal-cron.mts` (`@daily`, UTC).
+2. Chama `POST /api/cron/saas-renewals` com `Authorization: Bearer SAAS_RENEWAL_CRON_SECRET`.
+3. Para cada org `source=boost` activa, com email + `subscription_expires_at` na janela (±1–2 dias), **sem** Stripe a auto-renovar (`stripe_subscription_id` com `cancel_at_period_end=false` é saltada), gera+envia payment link e grava `renewal_payment_link_sent_at`.
+
+Env: `SAAS_RENEWAL_CRON_SECRET` (ou `CRON_SECRET`).
+
+Migration Boost (coluna): `supabase/migrations/20261001150000_organizations_renewal_payment_link_sent_at.sql`.
+
 ## Rotas
 
 | Rota | Tab admin.html |
