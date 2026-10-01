@@ -178,6 +178,85 @@ async function insertIntents(args: {
   return { ok: true }
 }
 
+const ALLOWED_INTENT_SECRETS: Record<
+  'padel1' | 'sportsevents' | 'hub',
+  Set<string>
+> = {
+  padel1: new Set([
+    'PADEL1_SUPABASE_URL',
+    'PADEL1_SUPABASE_ANON_KEY',
+    'PADEL1_SUPABASE_SERVICE_ROLE_KEY',
+    'NEXT_PUBLIC_PADEL1_HQ_URL',
+    'PADEL1_STRIPE_SECRET_KEY',
+    'PADEL1_STRIPE_WEBHOOK_SECRET',
+  ]),
+  sportsevents: new Set([
+    'NEXT_PUBLIC_SUPABASE_URL',
+    'NEXT_PUBLIC_SUPABASE_ANON_KEY',
+    'SUPABASE_SERVICE_ROLE_KEY',
+    'NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL',
+    'SE_STRIPE_SECRET_KEY',
+    'SE_STRIPE_WEBHOOK_SECRET',
+    'META_ACCESS_TOKEN',
+    'OPENAI_API_KEY',
+  ]),
+  hub: new Set([
+    'NEXT_PUBLIC_SITE_URL',
+    'SUPABASE_ACCESS_TOKEN',
+    'NETLIFY_AUTH_TOKEN',
+    'NETLIFY_ACCOUNT_ID',
+    'NETLIFY_SITE_ID',
+    'BRIDGE_LINK_TTL_SECONDS',
+  ]),
+}
+
+/**
+ * Regista intent operacional (nome + nota, sem valor).
+ * Usado em Padel1 / SE / Hub enquanto escrita live de env não existe.
+ */
+export async function createConfigIntent(
+  formData: FormData
+): Promise<ConfigActionResult> {
+  const gate = await requireConfigOwner()
+  if (!gate.allowed || !gate.user) {
+    return { ok: false, error: gate.error || 'Sem permissão' }
+  }
+
+  const product = String(formData.get('product') || '').trim() as
+    | 'padel1'
+    | 'sportsevents'
+    | 'hub'
+  const secretName = String(formData.get('secret_name') || '').trim()
+  const note = String(formData.get('note') || '').trim()
+
+  if (product !== 'padel1' && product !== 'sportsevents' && product !== 'hub') {
+    return { ok: false, error: 'Produto inválido' }
+  }
+  if (!secretName || !ALLOWED_INTENT_SECRETS[product].has(secretName)) {
+    return { ok: false, error: 'Integração / secret não permitido' }
+  }
+  if (!note || note.length < 3) {
+    return { ok: false, error: 'Nota obrigatória (mín. 3 caracteres)' }
+  }
+
+  const intentResult = await insertIntents({
+    product,
+    secretNames: [secretName],
+    note,
+    userId: gate.user.id,
+    status: 'pending',
+  })
+  if (!intentResult.ok) return intentResult
+
+  revalidateConfig()
+  return {
+    ok: true,
+    appliedVia: 'intent',
+    message:
+      'Intent registado (sem valor). Aplica no Netlify / dashboard externo e marca como aplicado.',
+  }
+}
+
 export async function resolveConfigIntent(
   formData: FormData
 ): Promise<ConfigActionResult> {
