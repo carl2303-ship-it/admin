@@ -1,8 +1,16 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ConfigSectionNav, IntegrationTable } from '@/components/config/config-ui'
-import { requireConfigOwner } from '@/lib/config/queries'
+import { ConfigIntentForm } from '@/components/config/config-intent-form'
+import { ConfigIntentsTable } from '@/components/config/intents-table'
+import { StripeDashboardLinks } from '@/components/config/stripe-dashboard-links'
+import { NetlifyEnvPanel } from '@/components/config/netlify-env-panel'
+import {
+  listConfigIntents,
+  requireConfigOwner,
+} from '@/lib/config/queries'
 import { getSportsEventsConfigStatus } from '@/lib/config/status'
+import { getNetlifyEnvVisibility } from '@/lib/config/netlify-env'
 import { ErrorBanner, Panel } from '@/components/boost/ui'
 
 export default async function ConfigSportsEventsPage() {
@@ -11,6 +19,10 @@ export default async function ConfigSportsEventsPage() {
   if (!gate.allowed) return <ErrorBanner message={gate.error || 'Sem permissão'} />
 
   const status = getSportsEventsConfigStatus()
+  const [intents, netlify] = await Promise.all([
+    listConfigIntents('sportsevents'),
+    getNetlifyEnvVisibility({ product: 'sportsevents' }),
+  ])
 
   return (
     <div className="mx-auto max-w-5xl space-y-5 animate-fade-up">
@@ -22,15 +34,30 @@ export default async function ConfigSportsEventsPage() {
           SportsEvents
         </h1>
         <p className="mt-1 max-w-2xl text-sm text-zinc-500">
-          Auth e dados SE partilham o mesmo Supabase com o hub. Stripe Connect,
-          Meta e AI do site público vivem no Netlify de sportsevents.app até à
-          Fase 4. Estágios = ERP SE, não módulo Boost.
+          Auth e dados SE partilham o Supabase com o hub. Aqui vês o pacote Auth,
+          intents para Stripe Connect / Meta / AI do site público, e env do
+          admin. Estágios = ERP SE, não módulo Boost.
         </p>
       </div>
 
       <ConfigSectionNav active="sportsevents" />
 
       <IntegrationTable items={status.integrations} />
+
+      <StripeDashboardLinks product="sportsevents" />
+
+      <NetlifyEnvPanel
+        visibility={netlify}
+        title="Env Netlify · SE Auth (site admin)"
+      />
+
+      <ConfigIntentForm
+        product="sportsevents"
+        title="Intent de config SportsEvents"
+        description="Para mudanças no Netlify admin (Auth) ou no Netlify sportsevents.app (Stripe/Meta/AI). O valor do secret não é guardado."
+      />
+
+      <ConfigIntentsTable intents={intents} />
 
       <Panel className="p-5 text-sm text-zinc-600">
         <p className="font-semibold text-zinc-900">Onde configurar o resto</p>
@@ -56,7 +83,13 @@ export default async function ConfigSportsEventsPage() {
             </Link>
           </li>
           <li>
-            Estágios e calendário: sportsevents.app (fora do Boost).
+            Estágios e calendário: sportsevents.app (fora do Boost / hub
+            estágios).
+          </li>
+          <li>
+            Migration intents:{' '}
+            <code>20260930170000_create_hub_config_intents.sql</code> no project
+            SE.
           </li>
         </ul>
       </Panel>
