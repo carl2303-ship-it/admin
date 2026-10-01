@@ -3,6 +3,9 @@ import {
   ConfigSectionNav,
   ProductStatusCard,
 } from '@/components/config/config-ui'
+import { AllStripeDashboardShortcuts } from '@/components/config/stripe-dashboard-links'
+import { NetlifyEnvPanel } from '@/components/config/netlify-env-panel'
+import { OpsChecklistBanner } from '@/components/config/ops-checklist'
 import { getConfigOverview } from '@/lib/config/queries'
 import { ErrorBanner, Panel, StatusPill } from '@/components/boost/ui'
 
@@ -30,13 +33,15 @@ export default async function ConfiguracaoPage() {
           Configuração
         </h1>
         <p className="mt-1 max-w-2xl text-sm text-zinc-500">
-          Um sítio para ver o estado das integrações de Boost, Padel1,
-          SportsEvents e do próprio hub. Segredos nunca são mostrados — só
-          ligado / em falta.
+          Estado das integrações, env Netlify do admin, atalhos Stripe e intents
+          ops — sem saltar para dashboards no dia-a-dia. Segredos nunca são
+          mostrados.
         </p>
       </div>
 
       <ConfigSectionNav active="overview" />
+
+      <OpsChecklistBanner />
 
       <Panel className="p-4">
         <div className="flex flex-wrap items-center gap-3 text-sm">
@@ -48,11 +53,17 @@ export default async function ConfiguracaoPage() {
             activeLabel="Management API pronta"
             inactiveLabel="Só checklist / intent"
           />
+          <span className="font-semibold text-zinc-800">Netlify env</span>
+          <StatusPill
+            active={overview.netlify.apiConfigured && !overview.netlify.apiError}
+            activeLabel="API + runtime"
+            inactiveLabel="Só runtime"
+          />
         </div>
         <p className="mt-2 text-xs text-zinc-500">
-          Secrets Stripe continuam no Edge Boost. O hub actualiza-os via
-          Management API se existir PAT; caso contrário regista intent +
-          checklist. Estágios ficam em sportsevents.app.
+          Secrets Stripe Boost continuam no Edge. Env do admin continua no
+          Netlify (visibilidade aqui; escrita live no slice seguinte). Estágios
+          ficam em sportsevents.app.
         </p>
       </Panel>
 
@@ -65,6 +76,10 @@ export default async function ConfiguracaoPage() {
           />
         ))}
       </div>
+
+      <AllStripeDashboardShortcuts />
+
+      <NetlifyEnvPanel visibility={overview.netlify} compact />
     </div>
   )
 }
