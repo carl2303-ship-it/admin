@@ -1,1 +1,1 @@
-file:///tmp/actions-content.txt
+/home/ubuntu/work/admin/src/lib/boost/actions.ts
