@@ -182,14 +182,30 @@ export type BoostEbookPurchase = {
 
 export type EbookFunnelStatus = 'draft' | 'active' | 'archived'
 
+/** Kinds genéricos do funnel builder (+ legados PADEL IQ ainda aceites na DB). */
 export type EbookFunnelAssetKind =
   | 'ebook_pdf'
+  | 'upsell'
+  | 'downsell'
+  | 'thankyou_bonus'
+  | 'cover'
+  | 'landing_image'
+  | 'other'
+  // legado (DB / emails / thank-you)
   | 'cheat_sheet'
   | 'mental_cheat_sheet'
   | 'audio'
   | 'upsell_video'
-  | 'cover'
-  | 'other'
+
+export type EbookFunnelLandingBody = {
+  benefits?: string[]
+  body_markdown?: string
+  tone?: string
+  language?: string
+  images?: string[]
+  generated_at?: string
+  source_description?: string
+}
 
 export type BoostEbookFunnel = {
   id: string
@@ -205,6 +221,7 @@ export type BoostEbookFunnel = {
   headline: string
   subheadline: string
   cta_label: string
+  landing_body: EbookFunnelLandingBody | null
   status: EbookFunnelStatus
   created_at: string
   updated_at: string
@@ -224,23 +241,60 @@ export type BoostEbookFunnelAsset = {
 
 export const EBOOK_FUNNEL_LANGUAGES = ['pt', 'en', 'es', 'it', 'fr'] as const
 
+/** Slots de upload no hub (kinds genéricos). */
 export const EBOOK_FUNNEL_ASSET_KINDS: {
   kind: EbookFunnelAssetKind
   label: string
   accept: string
+  multiple?: boolean
+  hint?: string
 }[] = [
-  { kind: 'ebook_pdf', label: 'PDF do ebook', accept: 'application/pdf' },
-  { kind: 'cheat_sheet', label: 'Cheat sheet', accept: 'application/pdf' },
   {
-    kind: 'mental_cheat_sheet',
-    label: 'Cheat sheet mental (upsell)',
+    kind: 'ebook_pdf',
+    label: 'PDF ebook (produto digital principal)',
     accept: 'application/pdf',
   },
-  { kind: 'audio', label: 'Áudio pré-jogo', accept: 'audio/mpeg,audio/mp3' },
   {
-    kind: 'upsell_video',
-    label: 'Vídeo upsell (mp4)',
-    accept: 'video/mp4,video/quicktime',
+    kind: 'upsell',
+    label: 'Upsell (ficheiro / vídeo / oferta)',
+    accept:
+      'application/pdf,video/mp4,video/quicktime,image/jpeg,image/png,image/webp',
   },
-  { kind: 'cover', label: 'Capa / imagem', accept: 'image/jpeg,image/png,image/webp' },
+  {
+    kind: 'downsell',
+    label: 'Downsell (opcional)',
+    accept:
+      'application/pdf,video/mp4,video/quicktime,image/jpeg,image/png,image/webp',
+  },
+  {
+    kind: 'thankyou_bonus',
+    label: 'Materiais thank-you / bónus',
+    accept:
+      'application/pdf,audio/mpeg,audio/mp3,image/jpeg,image/png,image/webp',
+  },
+  {
+    kind: 'cover',
+    label: 'Capa / imagem hero',
+    accept: 'image/jpeg,image/png,image/webp',
+  },
+  {
+    kind: 'landing_image',
+    label: 'Imagens da landing (galeria)',
+    accept: 'image/jpeg,image/png,image/webp',
+    hint: 'Imagem principal da galeria. Para várias fotos, usa «Gerar landing com AI» (ficam em landing_body.images).',
+  },
 ]
+
+/** Mapeia kinds legados → canónicos (leitura / labels). */
+export const EBOOK_FUNNEL_KIND_ALIASES: Record<string, EbookFunnelAssetKind> = {
+  cheat_sheet: 'thankyou_bonus',
+  mental_cheat_sheet: 'thankyou_bonus',
+  audio: 'thankyou_bonus',
+  upsell_video: 'upsell',
+}
+
+export function canonicalFunnelAssetKind(
+  kind: string
+): EbookFunnelAssetKind | string {
+  return EBOOK_FUNNEL_KIND_ALIASES[kind] || kind
+}
