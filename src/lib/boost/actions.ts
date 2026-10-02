@@ -38,5 +38,10 @@ export {
   setEbookFunnelStatus,
   uploadEbookFunnelAsset,
   generateEbookFunnelLanding,
-  deleteEbookFunnelAsset
+  deleteEbookFunnelAsset,
 } from './actions-funnels'
+
+export {
+  importLegacyPadelIqFunnel,
+  publishEbookFunnelToStore,
+} from './actions-funnel-store'
