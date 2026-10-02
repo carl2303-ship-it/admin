@@ -8,6 +8,7 @@ import {
   slugify,
   type ActionResult,
 } from './actions-shared'
+import { publishEbookFunnelToStore } from './actions-funnel-store'
 
 // --- Ebook funnels ---
 
@@ -154,6 +155,17 @@ export async function updateEbookFunnel(
 
     if (error) return { ok: false, error: error.message }
 
+    if (status === 'active') {
+      const pub = await publishEbookFunnelToStore(id)
+      if (!pub.ok) {
+        revalidateBoost([`/produtos/boost/funis`, `/produtos/boost/funis/${id}`])
+        return {
+          ok: true,
+          message: `Funil actualizado, mas loja: ${pub.error}`,
+        }
+      }
+    }
+
     revalidateBoost([`/produtos/boost/funis`, `/produtos/boost/funis/${id}`])
     return { ok: true, message: 'Funil actualizado' }
   } catch (e) {
@@ -174,6 +186,16 @@ export async function setEbookFunnelStatus(
       .update({ status })
       .eq('id', id)
     if (error) return { ok: false, error: error.message }
+    if (status === 'active') {
+      const pub = await publishEbookFunnelToStore(id)
+      if (!pub.ok) {
+        revalidateBoost(['/produtos/boost/funis', `/produtos/boost/funis/${id}`])
+        return {
+          ok: true,
+          message: `Estado activo, mas loja: ${pub.error}`,
+        }
+      }
+    }
     revalidateBoost(['/produtos/boost/funis', `/produtos/boost/funis/${id}`])
     return { ok: true }
   } catch (e) {
