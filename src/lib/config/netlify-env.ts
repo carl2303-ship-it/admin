@@ -120,6 +120,12 @@ export const ADMIN_NETLIFY_ENV_CATALOG: Omit<
     secret: false,
   },
   {
+    key: 'NEXT_PUBLIC_TOUR_APP_URL',
+    label: 'App Tour URL (login + entrada com marca)',
+    product: 'boost',
+    secret: false,
+  },
+  {
     key: 'NEXT_PUBLIC_BOOST_ADMIN_URL',
     label: 'Boost admin deep-link',
     product: 'boost',
