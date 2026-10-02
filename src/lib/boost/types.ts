@@ -15,6 +15,8 @@ export type BoostProduct = {
   is_digital: boolean
   download_url: string | null
   learn_more_url: string | null
+  /** Slug do ebook_funnels quando o produto é a ficha loja de um funil */
+  funnel_slug?: string | null
   category_id: string | null
   brand_id: string | null
   colors: unknown
