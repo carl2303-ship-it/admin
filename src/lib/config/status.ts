@@ -76,6 +76,10 @@ export function getBoostConfigStatus(): ProductConfigStatus {
     process.env.NEXT_PUBLIC_BOOST_STORE_URL,
     'https://boostpadel.store'
   )
+  const tourAppUrl = publicOrMissing(
+    process.env.NEXT_PUBLIC_TOUR_APP_URL,
+    'https://tour.padel1.app'
+  )
   const adminUrl = publicOrMissing(
     process.env.NEXT_PUBLIC_BOOST_ADMIN_URL,
     'https://boostpadel.store/admin.html'
@@ -135,6 +139,15 @@ export function getBoostConfigStatus(): ProductConfigStatus {
       detail: storeUrl,
       publicUrl: storeUrl,
       fixHint: 'Netlify admin → NEXT_PUBLIC_BOOST_STORE_URL',
+    }),
+    item({
+      id: 'tour-app-url',
+      label: 'App Tour URL',
+      connected: present(process.env.NEXT_PUBLIC_TOUR_APP_URL),
+      detail: tourAppUrl,
+      publicUrl: tourAppUrl,
+      fixHint:
+        'Netlify admin → NEXT_PUBLIC_TOUR_APP_URL=https://tour.padel1.app (default no código se vazio)',
     }),
     item({
       id: 'boost-admin-deeplink',
