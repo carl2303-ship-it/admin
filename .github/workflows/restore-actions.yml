@@ -3,8 +3,10 @@ on:
   push:
     branches: [cursor/ebook-funnel-builder-2a82]
     paths:
-      - 'src/lib/boost/.actions.restore.b64.part0'
-      - 'src/lib/boost/.actions.restore.b64.part1'
+      - 'src/lib/boost/.actions.restore.b64.p0'
+      - 'src/lib/boost/.actions.restore.b64.p1'
+      - 'src/lib/boost/.actions.restore.b64.p2'
+      - 'src/lib/boost/.actions.restore.b64.p3'
       - '.github/workflows/restore-actions.yml'
   workflow_dispatch:
 jobs:
@@ -17,27 +19,30 @@ jobs:
       - name: Restore actions.ts from sidecar parts
         run: |
           set -e
-          P0=src/lib/boost/.actions.restore.b64.part0
-          P1=src/lib/boost/.actions.restore.b64.part1
-          if [ ! -f "$P0" ] || [ ! -f "$P1" ]; then
-            echo "Sidecar parts missing; skip"
-            exit 0
-          fi
+          for i in 0 1 2 3; do
+            f="src/lib/boost/.actions.restore.b64.p$i"
+            if [ ! -f "$f" ]; then
+              echo "Sidecar part missing: $f; skip"
+              exit 0
+            fi
+          done
           python3 - <<'PY'
-          import base64, zlib, pathlib
-          p0 = pathlib.Path('src/lib/boost/.actions.restore.b64.part0').read_text().strip()
-          p1 = pathlib.Path('src/lib/boost/.actions.restore.b64.part1').read_text().strip()
-          data = zlib.decompress(base64.b64decode(p0 + p1))
-          pathlib.Path('src/lib/boost/actions.ts').write_bytes(data)
+          import base64, zlib, pathlib, hashlib
+          parts = [pathlib.Path(f'src/lib/boost/.actions.restore.b64.p{i}').read_text().strip() for i in range(4)]
+          data = zlib.decompress(base64.b64decode(''.join(parts)))
+          expected = '847f0bf8fe4b82a438097a181675e7e4a08cb9e31af9326d2d15b1d081c94fb3'
+          got = hashlib.sha256(data).hexdigest()
+          print('restored', len(data), got)
+          assert got == expected, (got, expected)
           text = data.decode()
-          print('restored', len(data), 'createEbookFunnel' in text, 'deleteEbookFunnelAsset' in text)
           assert 'createEbookFunnel' in text
+          pathlib.Path('src/lib/boost/actions.ts').write_bytes(data)
           PY
-          rm -f "$P0" "$P1" src/lib/boost/.actions.restore.b64 || true
+          rm -f src/lib/boost/.actions.restore.b64.p[0-3] src/lib/boost/.actions.restore.b64.part[01] src/lib/boost/.actions.restore.b64 || true
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/lib/boost/actions.ts
-          git add -u src/lib/boost/.actions.restore.b64.part0 src/lib/boost/.actions.restore.b64.part1 src/lib/boost/.actions.restore.b64 || true
+          git add -u src/lib/boost/ || true
           git status
           git commit -m "feat(boost): actions/queries/types funis ebook" || exit 0
           git push
