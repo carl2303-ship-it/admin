@@ -1,4 +1,5 @@
-'use server'
+// Barrel — sem "use server" aqui (Next só permite export de async fns em ficheiros "use server").
+// Cada módulo actions-*.ts tem "use server".
 
 export type { ActionResult } from './actions-shared'
 
@@ -16,7 +17,7 @@ export {
   deleteBrand,
   saveDiscount,
   getDigitalProductsForEmailPreview,
-  deleteDiscount
+  deleteDiscount,
 } from './actions-commerce'
 
 export {
@@ -29,7 +30,7 @@ export {
   sendSaasPaymentLinkEmail,
   saveBlogPost,
   deleteBlogPost,
-  deleteEbookPurchase
+  deleteEbookPurchase,
 } from './actions-saas'
 
 export {
