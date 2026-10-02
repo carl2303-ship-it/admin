@@ -10,16 +10,19 @@ import { getEbookFunnel } from '@/lib/boost/queries'
 import { FunnelEditForm } from '@/components/boost/funnel-forms'
 import { FunnelAssetUploader } from '@/components/boost/funnel-assets'
 import { FunnelAiLanding } from '@/components/boost/funnel-ai-landing'
+import { PublishFunnelToStoreButton } from '@/components/boost/funnel-store-actions'
+import {
+  LEGACY_PADEL_IQ,
+  funnelPublicUrls,
+  legacyPadelIqUrls,
+  storeBaseUrl,
+} from '@/lib/boost/legacy-padel-iq'
 import {
   ConfigBanner,
   ErrorBanner,
   Panel,
   StatusPill,
 } from '@/components/boost/ui'
-
-const STORE_BASE =
-  process.env.NEXT_PUBLIC_BOOST_STORE_URL?.replace(/\/$/, '') ||
-  'https://boostpadel.store'
 
 export default async function BoostEbookFunnelDetailPage({
   params,
@@ -46,9 +49,11 @@ export default async function BoostEbookFunnelDetailPage({
 
   const { funnel, assets } = result.data
   const languages = funnel.languages?.length ? funnel.languages : ['pt']
-  const publicUrl = `${STORE_BASE}/funnel.html?slug=${encodeURIComponent(funnel.slug)}`
-  const upsellUrl = `${STORE_BASE}/funnel-upsell.html?slug=${encodeURIComponent(funnel.slug)}`
-  const thankYouUrl = `${STORE_BASE}/funnel-thank-you.html?slug=${encodeURIComponent(funnel.slug)}`
+  const dynamic = funnelPublicUrls(funnel.slug)
+  const isLegacy = funnel.slug === LEGACY_PADEL_IQ.slug
+  const legacy = isLegacy ? legacyPadelIqUrls() : null
+  const storeCta = isLegacy ? legacy!.landing : dynamic.landing
+  const storeDigital = `${storeBaseUrl()}/digital.html`
 
   return (
     <div className="space-y-6">
@@ -67,11 +72,16 @@ export default async function BoostEbookFunnelDetailPage({
             Slug <code className="rounded bg-zinc-100 px-1">{funnel.slug}</code>
           </p>
         </div>
-        <StatusPill
-          active={funnel.status === 'active'}
-          activeLabel="Activo"
-          inactiveLabel={funnel.status === 'archived' ? 'Arquivado' : 'Rascunho'}
-        />
+        <div className="flex flex-wrap items-center gap-2">
+          <StatusPill
+            active={funnel.status === 'active'}
+            activeLabel="Activo"
+            inactiveLabel={
+              funnel.status === 'archived' ? 'Arquivado' : 'Rascunho'
+            }
+          />
+          {write ? <PublishFunnelToStoreButton funnelId={funnel.id} /> : null}
+        </div>
       </div>
 
       <Panel className="space-y-2 p-4 text-sm">
@@ -89,40 +99,130 @@ export default async function BoostEbookFunnelDetailPage({
             {funnel.upsell_product_type}
           </code>
         </p>
-        <p className="pt-2 font-bold text-zinc-800">URLs públicas</p>
+
+        <p className="pt-2 font-bold text-zinc-800">URLs públicas (dinâmicas)</p>
         <ul className="list-inside list-disc space-y-1 text-sky-800">
           <li>
-            <a href={publicUrl} target="_blank" rel="noreferrer" className="underline">
-              Landing
-            </a>
-          </li>
-          <li>
-            <a href={upsellUrl} target="_blank" rel="noreferrer" className="underline">
-              Upsell OTO
-            </a>
-          </li>
-          <li>
             <a
-              href={thankYouUrl}
+              href={dynamic.landing}
               target="_blank"
               rel="noreferrer"
               className="underline"
             >
-              Thank-you
+              Landing — {dynamic.landing}
+            </a>
+          </li>
+          <li>
+            <a
+              href={dynamic.upsell}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              Upsell OTO — {dynamic.upsell}
+            </a>
+          </li>
+          <li>
+            <a
+              href={dynamic.thankYou}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              Thank-you — {dynamic.thankYou}
             </a>
           </li>
         </ul>
+
+        {legacy ? (
+          <>
+            <p className="pt-2 font-bold text-zinc-800">
+              URLs legado (landing rica HTML estático)
+            </p>
+            <ul className="list-inside list-disc space-y-1 text-sky-800">
+              <li>
+                <a
+                  href={legacy.landing}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  Landing — {legacy.landing}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={legacy.upsell}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  Upsell — {legacy.upsell}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={legacy.thankYou}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  Thank-you — {legacy.thankYou}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={legacy.upsellThankYou}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  Thank-you upsell — {legacy.upsellThankYou}
+                </a>
+              </li>
+            </ul>
+          </>
+        ) : null}
+
+        <p className="pt-2 font-bold text-zinc-800">Loja Boost</p>
+        <ul className="list-inside list-disc space-y-1 text-emerald-800">
+          <li>
+            Grelha digitais:{' '}
+            <a
+              href={storeDigital}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              {storeDigital}
+            </a>
+          </li>
+          <li>
+            CTA «Saber mais» →{' '}
+            <a
+              href={storeCta}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              {storeCta}
+            </a>
+          </li>
+        </ul>
+
         {funnel.status !== 'active' ? (
           <p className="mt-2 text-amber-800">
-            O funil está em <strong>{funnel.status}</strong>. A landing pública
+            O funil está em <strong>{funnel.status}</strong>. A landing dinâmica
             só lê funis <strong>active</strong> — activa no formulário abaixo.
           </p>
         ) : null}
       </Panel>
 
-      {write ? <FunnelEditForm funnel={funnel} /> : null}
+      {write ? (
+        <FunnelAiLanding funnel={funnel} canWrite={writeContent || write} />
+      ) : null}
 
-      <FunnelAiLanding funnel={funnel} canWrite={writeContent} />
+      {write ? <FunnelEditForm funnel={funnel} /> : null}
 
       <div>
         <h3 className="mb-3 font-[family-name:var(--font-display)] text-lg font-bold">
