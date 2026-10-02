@@ -1,8 +1,9 @@
 -- ============================================================================
 -- Ebook funnels — kinds genéricos + landing_body (AI)
 -- Boost Supabase (gmpyjnufuvsoewbtirsg)
--- Data: 2026-10-02
--- Idempotente: seguro re-correr no SQL Editor.
+-- Data: 2026-10-02 (corrigido: sem colisão thankyou_bonus)
+-- Idempotente: seguro re-correr no SQL Editor mesmo se a versão
+-- anterior falhou a meio (landing_body / kind check já podem existir).
 -- ============================================================================
 
 -- 1) Coluna landing_body (JSON da landing gerada por AI)
@@ -17,6 +18,11 @@ DO $$
 DECLARE
   constraint_name text;
 BEGIN
+  -- Drop explícito do nome canónico (re-runs)
+  ALTER TABLE public.ebook_funnel_assets
+    DROP CONSTRAINT IF EXISTS ebook_funnel_assets_kind_check;
+
+  -- Drop qualquer outro CHECK que mencione kind
   SELECT con.conname INTO constraint_name
   FROM pg_constraint con
   JOIN pg_class rel ON rel.oid = con.conrelid
@@ -24,7 +30,8 @@ BEGIN
   WHERE nsp.nspname = 'public'
     AND rel.relname = 'ebook_funnel_assets'
     AND con.contype = 'c'
-    AND pg_get_constraintdef(con.oid) ILIKE '%kind%';
+    AND pg_get_constraintdef(con.oid) ILIKE '%kind%'
+  LIMIT 1;
 
   IF constraint_name IS NOT NULL THEN
     EXECUTE format('ALTER TABLE public.ebook_funnel_assets DROP CONSTRAINT %I', constraint_name);
@@ -41,12 +48,15 @@ BEGIN
       'cover',
       'landing_image',
       'other',
-      -- legado (backward compatible)
+      -- legado (backward compatible — ficam se não migrarem)
       'cheat_sheet',
       'mental_cheat_sheet',
       'audio',
       'upsell_video'
     ));
+EXCEPTION
+  WHEN duplicate_object THEN
+    NULL; -- já existe com o nome certo
 END
 $$;
 
@@ -69,7 +79,8 @@ BEGIN
 END
 $$;
 
--- 4) Migração suave de kinds legados → genéricos (sem colisões)
+-- 4) Migração suave de kinds legados → genéricos (SEM colisões)
+-- 4a) upsell_video → upsell (só se ainda não houver upsell)
 UPDATE public.ebook_funnel_assets a
 SET kind = 'upsell', updated_at = now()
 WHERE a.kind = 'upsell_video'
@@ -80,35 +91,43 @@ WHERE a.kind = 'upsell_video'
       AND b.kind = 'upsell'
   );
 
+-- 4b) UMA só linha legado → thankyou_bonus por (funnel_id, language).
+--     Prioridade: cheat_sheet > audio > mental_cheat_sheet.
+--     Os restantes ficam com o kind legado (ainda válido no CHECK).
+--     Se thankyou_bonus já existir (migração parcial), não toca em nada.
+WITH ranked AS (
+  SELECT
+    id,
+    ROW_NUMBER() OVER (
+      PARTITION BY funnel_id, language
+      ORDER BY
+        CASE kind
+          WHEN 'cheat_sheet' THEN 1
+          WHEN 'audio' THEN 2
+          WHEN 'mental_cheat_sheet' THEN 3
+          ELSE 9
+        END,
+        created_at ASC NULLS LAST
+    ) AS rn
+  FROM public.ebook_funnel_assets
+  WHERE kind IN ('cheat_sheet', 'audio', 'mental_cheat_sheet')
+),
+candidates AS (
+  SELECT r.id
+  FROM ranked r
+  JOIN public.ebook_funnel_assets a ON a.id = r.id
+  WHERE r.rn = 1
+    AND NOT EXISTS (
+      SELECT 1 FROM public.ebook_funnel_assets b
+      WHERE b.funnel_id = a.funnel_id
+        AND b.language = a.language
+        AND b.kind = 'thankyou_bonus'
+    )
+)
 UPDATE public.ebook_funnel_assets a
 SET kind = 'thankyou_bonus', updated_at = now()
-WHERE a.kind = 'cheat_sheet'
-  AND NOT EXISTS (
-    SELECT 1 FROM public.ebook_funnel_assets b
-    WHERE b.funnel_id = a.funnel_id
-      AND b.language = a.language
-      AND b.kind = 'thankyou_bonus'
-  );
-
-UPDATE public.ebook_funnel_assets a
-SET kind = 'thankyou_bonus', updated_at = now()
-WHERE a.kind = 'audio'
-  AND NOT EXISTS (
-    SELECT 1 FROM public.ebook_funnel_assets b
-    WHERE b.funnel_id = a.funnel_id
-      AND b.language = a.language
-      AND b.kind = 'thankyou_bonus'
-  );
-
-UPDATE public.ebook_funnel_assets a
-SET kind = 'thankyou_bonus', updated_at = now()
-WHERE a.kind = 'mental_cheat_sheet'
-  AND NOT EXISTS (
-    SELECT 1 FROM public.ebook_funnel_assets b
-    WHERE b.funnel_id = a.funnel_id
-      AND b.language = a.language
-      AND b.kind = 'thankyou_bonus'
-  );
+FROM candidates c
+WHERE a.id = c.id;
 
 COMMENT ON TABLE public.ebook_funnel_assets IS
   'Materiais por idioma/kind (genéricos: ebook_pdf, upsell, downsell, thankyou_bonus, cover, landing_image). Legados ainda aceites. Galeria multi → landing_body.images.';
