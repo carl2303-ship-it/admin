@@ -17,6 +17,7 @@ UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia
 - `NEXT_PUBLIC_BOOST_ADMIN_URL` — deep-link emergência
 - `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` ou `BOOST_EDGE_USER_ID`
 - `NEXT_PUBLIC_BOOST_STORE_URL`
+- `NEXT_PUBLIC_TOUR_APP_URL` — base da App Tour nos cards SaaS (default `https://tour.padel1.app`; **não** `tour.boostpadel.store`)
 
 ## Edge Functions (reutilizadas)
 
@@ -84,11 +85,24 @@ Para **visibilidade** (`/produtos/boost/stripe`) + gerar payment links SaaS:
 | `BOOST_SUPABASE_ANON_KEY` | Invoke Edge (`stripe-checkout`, provision) |
 | `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` **ou** `BOOST_EDGE_USER_ID` | JWT para EFs autenticadas |
 | `NEXT_PUBLIC_BOOST_STORE_URL` | Link loja na UI Stripe |
+| `NEXT_PUBLIC_TOUR_APP_URL` | Base App Tour nos cards SaaS (default `https://tour.padel1.app`) |
+
+### URLs Tour nos cards SaaS (`/produtos/boost/saas`)
+
+| Label UI | URL | Significado |
+|----------|-----|-------------|
+| **App Tour (login)** | `{TOUR_APP_URL}` | Onde o organizador faz login |
+| **Entrada com marca** | `{TOUR_APP_URL}/{slug}` | Mesma app com cores/marca do org (via `organizationTheme` no padel-one-tour) |
+
+**«Página pública» (legado):** o email de credenciais Boost e o link do slug no admin antigo apontavam para `tour.boostpadel.store/{slug}`. Não era um site marketing separado — era a App Tour com tema do organizador. O hub renomeou para **Entrada com marca** e usa `tour.padel1.app`.
+
+Os emails de credenciais (botão «Credenciais») são enviados pela Edge Function Boost `provision-saas-license` → `sendTourCredentialsEmail`. Esse template também precisa do domínio correcto (repo `boostpadel`).
 
 | Só no Boost (Supabase Edge / Netlify Boost) | Para quê |
-|---------------------------------------------|---------| 
+|---------------------------------------------|---------|
 | `STRIPE_SECRET_KEY` | Checkout / manage subscription nas EFs |
 | `STRIPE_WEBHOOK_SECRET` | Webhook Stripe nas EFs |
+| `TOUR_APP_URL` (opcional na Edge) | Override no email de credenciais; default `https://tour.padel1.app` |
 
 Inventário detalhado + checkboxes: Project store `docs/paridade-boost-admin.md`.
 
