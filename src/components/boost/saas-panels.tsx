@@ -25,6 +25,7 @@ import {
   resendSaasCredentials,
   toggleSaasStatus,
 } from '@/lib/boost/actions'
+import { getTourBrandedUrl, getTourLoginUrl } from '@/lib/boost/tour-urls'
 
 export function SaasCreateForm({ canWrite }: { canWrite: boolean }) {
   const router = useRouter()
@@ -186,14 +187,7 @@ export function SaasOrgCard({
             <h3 className="truncate font-[family-name:var(--font-display)] text-lg font-bold">
               {org.name}
             </h3>
-            <a
-              href={`https://tour.boostpadel.store/${org.slug}`}
-              target="_blank"
-              rel="noreferrer"
-              className="font-mono text-xs text-sky-600 hover:underline"
-            >
-              {org.slug}
-            </a>
+            <p className="font-mono text-xs text-zinc-500">{org.slug}</p>
           </div>
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${
@@ -211,8 +205,42 @@ export function SaasOrgCard({
             <dd className="break-all">{org.owner_email || '—'}</dd>
           </div>
           <div>
-            <dt className="font-bold uppercase text-zinc-400">Login Tour</dt>
+            <dt className="font-bold uppercase text-zinc-400">Conta Tour</dt>
             <dd>{org.tour_user_id ? '✓' : 'pendente'}</dd>
+          </div>
+          <div className="col-span-2">
+            <dt className="font-bold uppercase text-zinc-400">
+              App Tour (login)
+            </dt>
+            <dd>
+              <a
+                href={getTourLoginUrl()}
+                target="_blank"
+                rel="noreferrer"
+                className="break-all text-sky-600 hover:underline"
+              >
+                {getTourLoginUrl()}
+              </a>
+            </dd>
+          </div>
+          <div className="col-span-2">
+            <dt className="font-bold uppercase text-zinc-400">
+              Entrada com marca
+            </dt>
+            <dd>
+              <a
+                href={getTourBrandedUrl(org.slug)}
+                target="_blank"
+                rel="noreferrer"
+                className="break-all font-mono text-sky-600 hover:underline"
+              >
+                {getTourBrandedUrl(org.slug)}
+              </a>
+              <p className="mt-0.5 text-[11px] font-normal normal-case tracking-normal text-zinc-400">
+                Mesma App Tour com as cores/marca deste organizador (antes
+                chamado «página pública»).
+              </p>
+            </dd>
           </div>
         </dl>
 
