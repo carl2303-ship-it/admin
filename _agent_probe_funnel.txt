@@ -1,3 +1,0 @@
-// --- Ebook funnels ---
-
-const FUNNEL_LANGS = new Set(['pt', 'en', 'es', 'it', 'fr'])
