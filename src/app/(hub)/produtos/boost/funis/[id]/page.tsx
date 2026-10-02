@@ -9,6 +9,7 @@ import {
 import { getEbookFunnel } from '@/lib/boost/queries'
 import { FunnelEditForm } from '@/components/boost/funnel-forms'
 import { FunnelAssetUploader } from '@/components/boost/funnel-assets'
+import { FunnelAiLanding } from '@/components/boost/funnel-ai-landing'
 import {
   ConfigBanner,
   ErrorBanner,
@@ -120,6 +121,8 @@ export default async function BoostEbookFunnelDetailPage({
       </Panel>
 
       {write ? <FunnelEditForm funnel={funnel} /> : null}
+
+      <FunnelAiLanding funnel={funnel} canWrite={writeContent} />
 
       <div>
         <h3 className="mb-3 font-[family-name:var(--font-display)] text-lg font-bold">

@@ -7,8 +7,22 @@ import {
   uploadEbookFunnelAsset,
 } from '@/lib/boost/actions'
 import type { BoostEbookFunnelAsset } from '@/lib/boost/types'
-import { EBOOK_FUNNEL_ASSET_KINDS } from '@/lib/boost/types'
+import {
+  EBOOK_FUNNEL_ASSET_KINDS,
+  canonicalFunnelAssetKind,
+} from '@/lib/boost/types'
 import { btnGhost, btnPrimary } from './ui'
+
+function assetsForKind(
+  assets: BoostEbookFunnelAsset[],
+  kind: string
+): BoostEbookFunnelAsset[] {
+  return assets.filter((a) => {
+    if (a.kind === kind) return true
+    // Legado: mostrar cheat_sheet/audio etc. no slot thankyou_bonus / upsell
+    return canonicalFunnelAssetKind(a.kind) === kind && a.kind !== kind
+  })
+}
 
 export function FunnelAssetUploader({
   funnelId,
@@ -26,16 +40,15 @@ export function FunnelAssetUploader({
   const [error, setError] = useState<string | null>(null)
   const [, start] = useTransition()
 
-  const byKind = new Map(assets.map((a) => [a.kind, a]))
-
   return (
     <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
       <h4 className="font-bold text-zinc-800">
         Materiais — {language.toUpperCase()}
       </h4>
       <ul className="space-y-3">
-        {EBOOK_FUNNEL_ASSET_KINDS.map(({ kind, label, accept }) => {
-          const existing = byKind.get(kind)
+        {EBOOK_FUNNEL_ASSET_KINDS.map(({ kind, label, accept, multiple, hint }) => {
+          const existingList = assetsForKind(assets, kind)
+          const existingSingle = multiple ? null : existingList[0] || null
           return (
             <li
               key={kind}
@@ -43,14 +56,69 @@ export function FunnelAssetUploader({
             >
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-zinc-800">{label}</p>
-                {existing ? (
+                {hint ? (
+                  <p className="text-xs text-zinc-400">{hint}</p>
+                ) : null}
+                {multiple ? (
+                  existingList.length ? (
+                    <ul className="mt-1 space-y-1">
+                      {existingList.map((ex) => (
+                        <li key={ex.id} className="flex items-center gap-2">
+                          <a
+                            href={ex.public_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="truncate text-xs text-sky-700 underline"
+                          >
+                            {ex.file_name || ex.storage_path}
+                            {ex.kind !== kind ? (
+                              <span className="ml-1 text-zinc-400">
+                                (legado: {ex.kind})
+                              </span>
+                            ) : null}
+                          </a>
+                          {canWrite ? (
+                            <button
+                              type="button"
+                              className="text-xs text-zinc-500 underline"
+                              disabled={pendingKind !== null}
+                              onClick={() => {
+                                start(async () => {
+                                  setError(null)
+                                  const result = await deleteEbookFunnelAsset(
+                                    ex.id,
+                                    funnelId
+                                  )
+                                  if (!result.ok) {
+                                    setError(result.error)
+                                    return
+                                  }
+                                  router.refresh()
+                                })
+                              }}
+                            >
+                              Remover
+                            </button>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-xs text-zinc-400">Ainda sem imagens</p>
+                  )
+                ) : existingSingle ? (
                   <a
-                    href={existing.public_url}
+                    href={existingSingle.public_url}
                     target="_blank"
                     rel="noreferrer"
                     className="truncate text-xs text-sky-700 underline"
                   >
-                    {existing.file_name || existing.storage_path}
+                    {existingSingle.file_name || existingSingle.storage_path}
+                    {existingSingle.kind !== kind ? (
+                      <span className="ml-1 text-zinc-400">
+                        (legado: {existingSingle.kind})
+                      </span>
+                    ) : null}
                   </a>
                 ) : (
                   <p className="text-xs text-zinc-400">Ainda sem ficheiro</p>
@@ -69,32 +137,36 @@ export function FunnelAssetUploader({
                     <input
                       type="file"
                       accept={accept}
+                      multiple={Boolean(multiple)}
                       className="hidden"
                       disabled={pendingKind !== null}
                       onChange={(e) => {
-                        const file = e.target.files?.[0]
-                        if (!file) return
-                        const fd = new FormData()
-                        fd.set('file', file)
-                        fd.set('funnel_id', funnelId)
-                        fd.set('language', language)
-                        fd.set('kind', kind)
+                        const files = Array.from(e.target.files || [])
+                        if (!files.length) return
                         setPendingKind(kind)
                         start(async () => {
                           setError(null)
-                          const result = await uploadEbookFunnelAsset(fd)
-                          setPendingKind(null)
-                          if (!result.ok) {
-                            setError(result.error)
-                            return
+                          for (const file of files) {
+                            const fd = new FormData()
+                            fd.set('file', file)
+                            fd.set('funnel_id', funnelId)
+                            fd.set('language', language)
+                            fd.set('kind', kind)
+                            const result = await uploadEbookFunnelAsset(fd)
+                            if (!result.ok) {
+                              setError(result.error)
+                              setPendingKind(null)
+                              return
+                            }
                           }
+                          setPendingKind(null)
                           router.refresh()
                         })
                         e.target.value = ''
                       }}
                     />
                   </label>
-                  {existing ? (
+                  {!multiple && existingSingle ? (
                     <button
                       type="button"
                       className={btnGhost}
@@ -103,7 +175,7 @@ export function FunnelAssetUploader({
                         start(async () => {
                           setError(null)
                           const result = await deleteEbookFunnelAsset(
-                            existing.id,
+                            existingSingle.id,
                             funnelId
                           )
                           if (!result.ok) {
