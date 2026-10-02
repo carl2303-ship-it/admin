@@ -72,7 +72,7 @@ export function TableShell({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function Th({ children }: { children: React.ReactNode }) {
+export function Th({ children }: { children?: React.ReactNode }) {
   return (
     <th className="border-b border-zinc-100 bg-zinc-50/80 px-4 py-3 text-xs font-bold uppercase tracking-wider text-zinc-500">
       {children}
@@ -83,12 +83,17 @@ export function Th({ children }: { children: React.ReactNode }) {
 export function Td({
   children,
   className,
+  colSpan,
 }: {
   children: React.ReactNode
   className?: string
+  colSpan?: number
 }) {
   return (
-    <td className={cn('border-b border-zinc-50 px-4 py-3 align-middle', className)}>
+    <td
+      colSpan={colSpan}
+      className={cn('border-b border-zinc-50 px-4 py-3 align-middle', className)}
+    >
       {children}
     </td>
   )

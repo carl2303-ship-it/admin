@@ -179,3 +179,68 @@ export type BoostEbookPurchase = {
   stripe_session_id: string | null
   created_at: string
 }
+
+export type EbookFunnelStatus = 'draft' | 'active' | 'archived'
+
+export type EbookFunnelAssetKind =
+  | 'ebook_pdf'
+  | 'cheat_sheet'
+  | 'mental_cheat_sheet'
+  | 'audio'
+  | 'upsell_video'
+  | 'cover'
+  | 'other'
+
+export type BoostEbookFunnel = {
+  id: string
+  title: string
+  slug: string
+  ebook_price_cents: number
+  upsell_price_cents: number
+  ebook_product_type: string
+  upsell_product_type: string
+  stripe_ebook_name: string
+  stripe_upsell_name: string
+  languages: string[]
+  headline: string
+  subheadline: string
+  cta_label: string
+  status: EbookFunnelStatus
+  created_at: string
+  updated_at: string
+}
+
+export type BoostEbookFunnelAsset = {
+  id: string
+  funnel_id: string
+  language: string
+  kind: EbookFunnelAssetKind
+  storage_path: string
+  public_url: string
+  file_name: string | null
+  created_at: string
+  updated_at: string
+}
+
+export const EBOOK_FUNNEL_LANGUAGES = ['pt', 'en', 'es', 'it', 'fr'] as const
+
+export const EBOOK_FUNNEL_ASSET_KINDS: {
+  kind: EbookFunnelAssetKind
+  label: string
+  accept: string
+}[] = [
+  { kind: 'ebook_pdf', label: 'PDF do ebook', accept: 'application/pdf' },
+  { kind: 'cheat_sheet', label: 'Cheat sheet', accept: 'application/pdf' },
+  {
+    kind: 'mental_cheat_sheet',
+    label: 'Cheat sheet mental (upsell)',
+    accept: 'application/pdf',
+  },
+  { kind: 'audio', label: 'Áudio pré-jogo', accept: 'audio/mpeg,audio/mp3' },
+  {
+    kind: 'upsell_video',
+    label: 'Vídeo upsell (mp4)',
+    accept: 'video/mp4,video/quicktime',
+  },
+  { kind: 'cover', label: 'Capa / imagem', accept: 'image/jpeg,image/png,image/webp' },
+]

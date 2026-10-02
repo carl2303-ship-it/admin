@@ -4,6 +4,8 @@ import type {
   BoostBrand,
   BoostCategory,
   BoostDiscount,
+  BoostEbookFunnel,
+  BoostEbookFunnelAsset,
   BoostEbookLead,
   BoostEbookPurchase,
   BoostNewsletterSubscriber,
@@ -318,6 +320,56 @@ export async function listEbookPurchases(): Promise<
       .limit(2000)
     if (error) return { ok: false, error: error.message }
     return { ok: true, data: (data || []) as BoostEbookPurchase[] }
+  } catch (e) {
+    return wrapError(e)
+  }
+}
+
+export async function listEbookFunnels(): Promise<
+  QueryResult<BoostEbookFunnel[]>
+> {
+  try {
+    const client = requireBoostClient()
+    const { data, error } = await client
+      .from('ebook_funnels')
+      .select('*')
+      .order('created_at', { ascending: false })
+    if (error) return { ok: false, error: error.message }
+    return { ok: true, data: (data || []) as BoostEbookFunnel[] }
+  } catch (e) {
+    return wrapError(e)
+  }
+}
+
+export async function getEbookFunnel(
+  id: string
+): Promise<
+  QueryResult<{ funnel: BoostEbookFunnel; assets: BoostEbookFunnelAsset[] } | null>
+> {
+  try {
+    const client = requireBoostClient()
+    const { data: funnel, error } = await client
+      .from('ebook_funnels')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle()
+    if (error) return { ok: false, error: error.message }
+    if (!funnel) return { ok: true, data: null }
+
+    const { data: assets, error: assetsError } = await client
+      .from('ebook_funnel_assets')
+      .select('*')
+      .eq('funnel_id', id)
+      .order('language', { ascending: true })
+    if (assetsError) return { ok: false, error: assetsError.message }
+
+    return {
+      ok: true,
+      data: {
+        funnel: funnel as BoostEbookFunnel,
+        assets: (assets || []) as BoostEbookFunnelAsset[],
+      },
+    }
   } catch (e) {
     return wrapError(e)
   }
