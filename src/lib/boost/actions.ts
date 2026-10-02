@@ -1,1 +1,42 @@
-LOAD_FROM_/tmp/FINAL-create-actions.json
+'use server'
+
+export type { ActionResult } from './actions-shared'
+
+export {
+  uploadBoostImage,
+  saveProduct,
+  quickUpdateProduct,
+  deleteProduct,
+  duplicateProduct,
+  updateOrderStatus,
+  deleteOrder,
+  saveCategory,
+  deleteCategory,
+  saveBrand,
+  deleteBrand,
+  saveDiscount,
+  getDigitalProductsForEmailPreview,
+  deleteDiscount
+} from './actions-commerce'
+
+export {
+  saveSaasLicense,
+  toggleSaasStatus,
+  updateSaasPlan,
+  deleteSaasLicense,
+  resendSaasCredentials,
+  generateSaasPaymentLink,
+  sendSaasPaymentLinkEmail,
+  saveBlogPost,
+  deleteBlogPost,
+  deleteEbookPurchase
+} from './actions-saas'
+
+export {
+  createEbookFunnel,
+  updateEbookFunnel,
+  setEbookFunnelStatus,
+  uploadEbookFunnelAsset,
+  generateEbookFunnelLanding,
+  deleteEbookFunnelAsset
+} from './actions-funnels'
