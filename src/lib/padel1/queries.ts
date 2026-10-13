@@ -1,1 +1,2 @@
-PLACEHOLDER_REPLACE_WITH_FULL
+export * from './queries-a'
+export * from './queries-b'
