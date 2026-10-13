@@ -92,3 +92,5 @@ export function ClubFormFields({
     </div>
   )
 }
+
+export { ClubDetail } from './clubs-panel-club-detail'
