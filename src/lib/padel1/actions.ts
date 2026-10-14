@@ -12,6 +12,8 @@ export {
   sendCheckoutEmail,
   loadClientModulesAction,
   loadClubKeysAction,
+  uploadPadel1ClubPhoto,
+  deleteClub,
   setClientModule,
 } from './actions-a'
 export {
