@@ -1,3 +1,11 @@
+export type ActionResult =
+  | { ok: true; message?: string; data?: Record<string, unknown> }
+  | { ok: false; error: string }
+
+export type QueryResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; error: string; missingConfig?: boolean }
+
 export type Padel1Club = {
   id: string
   owner_id: string | null
