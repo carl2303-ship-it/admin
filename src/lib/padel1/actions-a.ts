@@ -8,11 +8,7 @@ import {
   staffRole,
 } from './auth'
 import { getClientModules, listClubLicenseKeys } from './queries'
-import type { Padel1ClubForm } from './types'
-
-export type ActionResult =
-  | { ok: true; message?: string; data?: Record<string, unknown> }
-  | { ok: false; error: string }
+import type { ActionResult, Padel1ClubForm } from './types'
 
 async function guardWrite(): Promise<
   { ok: true } | { ok: false; error: string }
@@ -343,6 +339,54 @@ export async function loadClubKeysAction(clubId: string) {
     return { ok: false as const, error: auth.error }
   }
   return listClubLicenseKeys(clubId)
+}
+
+/** Upload logo/fotos — bucket `club-photos`, path `hq/…` (paridade HQClubManagement). */
+export async function uploadPadel1ClubPhoto(
+  formData: FormData
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  const g = await guardWrite()
+  if (!g.ok) return g
+
+  try {
+    const file = formData.get('file')
+    if (!(file instanceof File) || file.size === 0) {
+      return { ok: false, error: 'Ficheiro em falta' }
+    }
+    if (!file.type.startsWith('image/')) {
+      return { ok: false, error: 'Erro upload: tipo inválido' }
+    }
+
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+    const path = `hq/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+
+    const client = requirePadel1Client()
+    const buffer = Buffer.from(await file.arrayBuffer())
+    const { error } = await client.storage.from('club-photos').upload(path, buffer, {
+      contentType: file.type,
+      upsert: true,
+    })
+    if (error) return { ok: false, error: `Erro upload: ${error.message}` }
+
+    const { data } = client.storage.from('club-photos').getPublicUrl(path)
+    return { ok: true, url: data.publicUrl }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro upload' }
+  }
+}
+
+export async function deleteClub(clubId: string): Promise<ActionResult> {
+  const g = await guardWrite()
+  if (!g.ok) return g
+  try {
+    const client = requirePadel1Client()
+    const { error } = await client.from('clubs').delete().eq('id', clubId)
+    if (error) return { ok: false, error: error.message }
+    revalidatePadel1(['/produtos/padel1/clubes'])
+    return { ok: true, message: 'Clube eliminado.' }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  }
 }
 
 export async function setClientModule(input: {
