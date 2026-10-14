@@ -29,6 +29,11 @@ export function createSportsEventsServiceClient() {
   return createHubServiceClient()
 }
 
+/** Alias legado SportsEvents (`createServiceClient` nas APIs/libs SE). */
+export function createServiceClient() {
+  return createHubServiceClient()
+}
+
 /** Boost Store — projeto Supabase separado; service role só no servidor (KPIs, bridge, módulo Fase 2). */
 export function createBoostServiceClient() {
   return serverOnlyClient(
