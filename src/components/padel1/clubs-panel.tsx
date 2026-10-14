@@ -187,9 +187,24 @@ export function ClubsPanel({
                   <Td>
                     <button
                       type="button"
-                      className="text-left font-semibold text-violet-700 hover:underline"
+                      className="flex items-center gap-2 text-left font-semibold text-violet-700 hover:underline"
                       onClick={() => expand(club)}
                     >
+                      {club.logo_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={club.logo_url}
+                          alt=""
+                          className="h-8 w-8 shrink-0 rounded-lg object-cover"
+                        />
+                      ) : (
+                        <span
+                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-200 text-[10px] text-zinc-500"
+                          aria-hidden
+                        >
+                          —
+                        </span>
+                      )}
                       {club.name}
                     </button>
                   </Td>

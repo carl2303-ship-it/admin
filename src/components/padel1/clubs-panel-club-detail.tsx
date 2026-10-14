@@ -4,6 +4,7 @@ import { useState } from 'react'
 import {
   assignClubOwner,
   createPlatformCheckout,
+  deleteClub,
   generateLicenseKey,
   removeClubOwner,
   sendCheckoutEmail,
@@ -94,9 +95,30 @@ export function ClubDetail({
   const [planName, setPlanName] = useState('Bronze')
   const [duration, setDuration] = useState(12)
   const [billing, setBilling] = useState<'month' | 'year'>('year')
+  const [deleteConfirm, setDeleteConfirm] = useState(false)
 
   return (
     <div className="space-y-4 py-2 text-sm">
+      {(club.photo_url_1 || club.photo_url_2) && (
+        <div className="flex flex-wrap gap-2">
+          {club.photo_url_1 && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={club.photo_url_1}
+              alt=""
+              className="h-20 rounded-lg border border-zinc-200 object-cover"
+            />
+          )}
+          {club.photo_url_2 && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={club.photo_url_2}
+              alt=""
+              className="h-20 rounded-lg border border-zinc-200 object-cover"
+            />
+          )}
+        </div>
+      )}
       <div className="grid gap-2 sm:grid-cols-3">
         <p>
           <span className="text-zinc-500">Email:</span> {club.email || '—'}
@@ -150,7 +172,11 @@ export function ClubDetail({
               disabled={pending}
               onClick={() =>
                 run(async () => {
-                  if (!window.confirm('Remover owner deste clube?')) {
+                  if (
+                    !window.confirm(
+                      'Remover o dono deste clube? Volta a ser uma ficha não associada.'
+                    )
+                  ) {
                     return { ok: true }
                   }
                   return removeClubOwner(club.id)
@@ -158,6 +184,41 @@ export function ClubDetail({
               }
             >
               Remover owner
+            </button>
+          )}
+          {deleteConfirm ? (
+            <>
+              <button
+                type="button"
+                className={btnDanger}
+                disabled={pending}
+                onClick={() =>
+                  run(async () => {
+                    const r = await deleteClub(club.id)
+                    if (r.ok) setDeleteConfirm(false)
+                    return r
+                  })
+                }
+              >
+                Confirmar eliminação
+              </button>
+              <button
+                type="button"
+                className={btnGhost}
+                disabled={pending}
+                onClick={() => setDeleteConfirm(false)}
+              >
+                Cancelar
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className={btnDanger}
+              disabled={pending}
+              onClick={() => setDeleteConfirm(true)}
+            >
+              Eliminar clube
             </button>
           )}
         </div>
