@@ -1,37 +1,33 @@
-import { requireHubAccess } from '@/lib/auth/hub-auth'
-import { getDeepLink } from '@/lib/products/deep-links'
-import { PRODUCT_GAPS } from '@/lib/products/bridge'
-import { ProductLaunchCard } from '@/components/shell/product-launch-card'
 import { redirect } from 'next/navigation'
+import {
+  requireSportsEventsModule,
+  canWriteSportsEvents,
+  staffRole,
+} from '@/lib/sportsevents/auth'
+import { EnterpriseShell } from '@/components/sportsevents/EnterpriseShell'
 
-export default async function SportsEventsProductPage() {
-  const auth = await requireHubAccess('sportsevents')
+export default async function SportsEventsCalendarPage() {
+  const auth = await requireSportsEventsModule()
   if (!auth.user) redirect('/login')
   if (auth.error && !auth.isBootstrap) {
     return (
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
+      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-sm text-amber-900">
         {auth.error}
       </div>
     )
   }
 
-  const link = getDeepLink('sportsevents')
+  const role = staffRole(auth.staff, auth.isBootstrap)
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 animate-fade-up">
-      <div>
-        <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold">
-          SportsEvents ERP
-        </h1>
-        <p className="mt-2 text-sm text-zinc-500">
-          Calendário, CRM, parceiros e blog. Incorporação UI = Fase 4.
-        </p>
-      </div>
-      <ProductLaunchCard
-        link={link}
-        bridgeHref="/api/bridge/sportsevents"
-        bridgeNote={PRODUCT_GAPS.sportsevents}
-      />
+    <div className="space-y-3">
+      <p className="text-sm text-zinc-500">
+        Acesso: <span className="font-semibold text-zinc-800">{role}</span>
+        {canWriteSportsEvents(role)
+          ? ' · escrita SE (owner/ops/commerce)'
+          : ' · só leitura'}
+      </p>
+      <EnterpriseShell initialTab="kpis" hideChromeNav />
     </div>
   )
 }
