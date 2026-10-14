@@ -1,3 +1,19 @@
 export type { QueryResult } from './types'
-export * from './queries-a'
-export * from './queries-b'
+export {
+  padel1ModuleCounts,
+  getDashboardKpis,
+  listClubs,
+  getClubDetail,
+  listClubLicenseKeys,
+  listPlatformModules,
+  listPlatformPacks,
+} from './queries-a'
+export {
+  getClientModules,
+  listPlayerTransactions,
+  listPlatformPayments,
+  listClubsForSelect,
+  getMetrics,
+  listCombinedUsers,
+  getSettings,
+} from './queries-b'
