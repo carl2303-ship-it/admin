@@ -69,7 +69,7 @@ const PRODUCT_GAPS: Record<ProductId, string> = {
   padel1:
     'HQ exige super_admins. Magic link só autentica; o user destino tem de ser SA. Sem exchange token no Manager.',
   sportsevents:
-    'Auth partilhado com o hub. Ainda exige staff_members no ERP. Redirect URLs do callback hub no dashboard SE.',
+    'ERP já no hub (/produtos/sportsevents). Bridge só emergência → sportsevents.app/admin. Auth = hub_staff.',
 }
 
 export async function resolveBridge(
