@@ -12,6 +12,7 @@ import {
 } from '@/lib/padel1/actions'
 import type { Padel1Club, Padel1ClubForm, Padel1LicenseKey } from '@/lib/padel1/types'
 import { ModuleToggles } from './module-toggles'
+import { ClubPhotoFields } from './club-photo-fields'
 import {
   btnDanger,
   btnGhost,
@@ -56,7 +57,6 @@ export function ClubFormFields({
           ['phone', 'Telefone'],
           ['email', 'Email'],
           ['website', 'Website'],
-          ['logo_url', 'Logo URL'],
         ] as const
       ).map(([key, label]) => (
         <label key={key} className="text-xs font-semibold text-zinc-600">
@@ -77,6 +77,7 @@ export function ClubFormFields({
           onChange={(e) => set('description', e.target.value)}
         />
       </label>
+      <ClubPhotoFields form={form} setForm={setForm} />
       <label className="text-xs font-semibold text-zinc-600">
         Plano
         <select
