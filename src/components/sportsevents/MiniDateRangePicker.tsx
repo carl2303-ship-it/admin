@@ -17,7 +17,7 @@ function parseIso(iso: string): Date | null {
 
 function formatPt(iso: string) {
   const d = parseIso(iso)
-  if (!d) return '\u2014'
+  if (!d) return '—'
   return d.toLocaleDateString('pt-PT', {
     day: '2-digit',
     month: 'short',
@@ -29,9 +29,9 @@ function buildGrid(year: number, monthIndex: number) {
   const first = new Date(year, monthIndex, 1)
   const startPad = (first.getDay() + 6) % 7
   const daysInMonth = new Date(year, monthIndex + 1, 0).getDate()
-  const cells: Array\u003c{ iso: string | null; day: number | null }\u003e = []
-  for (let i = 0; i \u003c startPad; i++) cells.push({ iso: null, day: null })
-  for (let day = 1; day \u003c= daysInMonth; day++) {
+  const cells: Array<{ iso: string | null; day: number | null }> = []
+  for (let i = 0; i < startPad; i++) cells.push({ iso: null, day: null })
+  for (let day = 1; day <= daysInMonth; day++) {
     cells.push({ iso: toIso(new Date(year, monthIndex, day)), day })
   }
   while (cells.length % 7 !== 0) cells.push({ iso: null, day: null })
@@ -41,7 +41,7 @@ function buildGrid(year: number, monthIndex: number) {
 type Props = {
   startDate: string
   endDate: string
-  onChange: (next: { startDate: string; endDate: string }) =\u003e void
+  onChange: (next: { startDate: string; endDate: string }) => void
   fixedNights?: number
   className?: string
 }
@@ -53,17 +53,17 @@ export function MiniDateRangePicker({
   fixedNights = 0,
   className = '',
 }: Props) {
-  const rootRef = useRef\u003cHTMLDivElement\u003e(null)
+  const rootRef = useRef<HTMLDivElement>(null)
   const initial = parseIso(startDate) || new Date()
   const [open, setOpen] = useState(false)
-  const [picking, setPicking] = useState\u003c'start' | 'end'\u003e('start')
+  const [picking, setPicking] = useState<'start' | 'end'>('start')
   const [cursor, setCursor] = useState({
     year: initial.getFullYear(),
     month: initial.getMonth(),
   })
 
   const cells = useMemo(
-    () =\u003e buildGrid(cursor.year, cursor.month),
+    () => buildGrid(cursor.year, cursor.month),
     [cursor.year, cursor.month]
   )
 
@@ -73,17 +73,17 @@ export function MiniDateRangePicker({
   )
   const todayIso = toIso(new Date())
 
-  useEffect(() =\u003e {
+  useEffect(() => {
     if (!open) return
     function onDoc(e: MouseEvent) {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false)
     }
     document.addEventListener('mousedown', onDoc)
-    return () =\u003e document.removeEventListener('mousedown', onDoc)
+    return () => document.removeEventListener('mousedown', onDoc)
   }, [open])
 
   function shiftMonth(delta: number) {
-    setCursor((prev) =\u003e {
+    setCursor((prev) => {
       const d = new Date(prev.year, prev.month + delta, 1)
       return { year: d.getFullYear(), month: d.getMonth() }
     })
@@ -104,19 +104,19 @@ export function MiniDateRangePicker({
   }
 
   function pickDay(iso: string) {
-    if (fixedNights \u003e 0) {
+    if (fixedNights > 0) {
       onChange({ startDate: iso, endDate: addNights(iso, fixedNights) })
       setOpen(false)
       return
     }
 
     if (picking === 'start' || !startDate) {
-      onChange({ startDate: iso, endDate: endDate && endDate \u003e= iso ? endDate : '' })
+      onChange({ startDate: iso, endDate: endDate && endDate >= iso ? endDate : '' })
       setPicking('end')
       return
     }
 
-    if (iso \u003c startDate) {
+    if (iso < startDate) {
       onChange({ startDate: iso, endDate: startDate })
     } else {
       onChange({ startDate, endDate: iso })
@@ -127,35 +127,35 @@ export function MiniDateRangePicker({
 
   function inRange(iso: string) {
     if (!startDate || !endDate) return false
-    return iso \u003e= startDate && iso \u003c= endDate
+    return iso >= startDate && iso <= endDate
   }
 
   return (
-    \u003cdiv ref={rootRef} className={`relative ${className}`}\u003e
-      \u003cdiv className="grid grid-cols-2 gap-2"\u003e
-        \u003cbutton
+    <div ref={rootRef} className={`relative ${className}`}>
+      <div className="grid grid-cols-2 gap-2">
+        <button
           type="button"
-          onClick={() =\u003e openFor('start')}
+          onClick={() => openFor('start')}
           className={`flex items-center gap-2 rounded-xl border bg-slate-950 px-2.5 py-2 text-left transition-colors ${
             open && picking === 'start'
               ? 'border-cyan-500/50'
               : 'border-slate-700 hover:border-slate-500'
           }`}
-        \u003e
-          \u003cCalendarDays className="w-3.5 h-3.5 text-slate-500 shrink-0" /\u003e
-          \u003cspan className="min-w-0"\u003e
-            \u003cspan className="block text-[9px] font-bold uppercase tracking-wider text-slate-500"\u003e
-              In\u00edcio
-            \u003c/span\u003e
-            \u003cspan className="block text-[11px] font-semibold text-white truncate"\u003e
+        >
+          <CalendarDays className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+          <span className="min-w-0">
+            <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">
+              Início
+            </span>
+            <span className="block text-[11px] font-semibold text-white truncate">
               {formatPt(startDate)}
-            \u003c/span\u003e
-          \u003c/span\u003e
-        \u003c/button\u003e
-        \u003cbutton
+            </span>
+          </span>
+        </button>
+        <button
           type="button"
-          onClick={() =\u003e {
-            if (fixedNights \u003e 0) openFor('start')
+          onClick={() => {
+            if (fixedNights > 0) openFor('start')
             else openFor(startDate ? 'end' : 'start')
           }}
           className={`flex items-center gap-2 rounded-xl border bg-slate-950 px-2.5 py-2 text-left transition-colors ${
@@ -163,74 +163,74 @@ export function MiniDateRangePicker({
               ? 'border-cyan-500/50'
               : 'border-slate-700 hover:border-slate-500'
           }`}
-        \u003e
-          \u003cCalendarDays className="w-3.5 h-3.5 text-slate-500 shrink-0" /\u003e
-          \u003cspan className="min-w-0"\u003e
-            \u003cspan className="block text-[9px] font-bold uppercase tracking-wider text-slate-500"\u003e
-              Fim{fixedNights \u003e 0 ? ` \u00b7 ${fixedNights}n` : ''}
-            \u003c/span\u003e
-            \u003cspan className="block text-[11px] font-semibold text-white truncate"\u003e
+        >
+          <CalendarDays className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+          <span className="min-w-0">
+            <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">
+              Fim{fixedNights > 0 ? ` · ${fixedNights}n` : ''}
+            </span>
+            <span className="block text-[11px] font-semibold text-white truncate">
               {formatPt(endDate)}
-            \u003c/span\u003e
-          \u003c/span\u003e
-        \u003c/button\u003e
-      \u003c/div\u003e
+            </span>
+          </span>
+        </button>
+      </div>
 
       {open && (
-        \u003cdiv className="absolute z-30 mt-1.5 w-[220px] rounded-xl border border-slate-700 bg-slate-950 shadow-xl shadow-black/40 p-2"\u003e
-          \u003cdiv className="flex items-center justify-between mb-1"\u003e
-            \u003cbutton
+        <div className="absolute z-30 mt-1.5 w-[220px] rounded-xl border border-slate-700 bg-slate-950 shadow-xl shadow-black/40 p-2">
+          <div className="flex items-center justify-between mb-1">
+            <button
               type="button"
-              onClick={() =\u003e shiftMonth(-1)}
+              onClick={() => shiftMonth(-1)}
               className="p-0.5 rounded text-slate-400 hover:text-cyan-300"
-              aria-label="M\u00eas anterior"
-            \u003e
-              \u003cChevronLeft className="w-3.5 h-3.5" /\u003e
-            \u003c/button\u003e
-            \u003cspan className="text-[10px] font-bold text-white capitalize"\u003e
+              aria-label="Mês anterior"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+            <span className="text-[10px] font-bold text-white capitalize">
               {monthLabel}
-            \u003c/span\u003e
-            \u003cbutton
+            </span>
+            <button
               type="button"
-              onClick={() =\u003e shiftMonth(1)}
+              onClick={() => shiftMonth(1)}
               className="p-0.5 rounded text-slate-400 hover:text-cyan-300"
-              aria-label="M\u00eas seguinte"
-            \u003e
-              \u003cChevronRight className="w-3.5 h-3.5" /\u003e
-            \u003c/button\u003e
-          \u003c/div\u003e
+              aria-label="Mês seguinte"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
 
-          \u003cp className="text-[9px] text-slate-500 mb-1 px-0.5"\u003e
-            {fixedNights \u003e 0
-              ? 'Escolhe o in\u00edcio'
+          <p className="text-[9px] text-slate-500 mb-1 px-0.5">
+            {fixedNights > 0
+              ? 'Escolhe o início'
               : picking === 'end'
                 ? 'Escolhe o fim'
-                : 'Escolhe o in\u00edcio'}
-          \u003c/p\u003e
+                : 'Escolhe o início'}
+          </p>
 
-          \u003cdiv className="grid grid-cols-7 gap-px mb-0.5"\u003e
-            {WEEKDAYS.map((d, i) =\u003e (
-              \u003cdiv
+          <div className="grid grid-cols-7 gap-px mb-0.5">
+            {WEEKDAYS.map((d, i) => (
+              <div
                 key={`${d}-${i}`}
                 className="h-5 flex items-center justify-center text-[8px] font-bold text-slate-600"
-              \u003e
+              >
                 {d}
-              \u003c/div\u003e
+              </div>
             ))}
-          \u003c/div\u003e
+          </div>
 
-          \u003cdiv className="grid grid-cols-7 gap-px"\u003e
-            {cells.map((cell, idx) =\u003e {
-              if (!cell.iso) return \u003cdiv key={`e-${idx}`} className="h-6" /\u003e
+          <div className="grid grid-cols-7 gap-px">
+            {cells.map((cell, idx) => {
+              if (!cell.iso) return <div key={`e-${idx}`} className="h-6" />
               const isStart = cell.iso === startDate
               const isEnd = cell.iso === endDate
               const ranged = inRange(cell.iso)
               const isToday = cell.iso === todayIso
               return (
-                \u003cbutton
+                <button
                   key={cell.iso}
                   type="button"
-                  onClick={() =\u003e pickDay(cell.iso!)}
+                  onClick={() => pickDay(cell.iso!)}
                   className={`h-6 w-full rounded text-[10px] font-semibold ${
                     isStart || isEnd
                       ? 'bg-cyan-500 text-slate-950'
@@ -240,14 +240,14 @@ export function MiniDateRangePicker({
                           ? 'text-cyan-300 hover:bg-slate-800'
                           : 'text-slate-300 hover:bg-slate-800'
                   }`}
-                \u003e
+                >
                   {cell.day}
-                \u003c/button\u003e
+                </button>
               )
             })}
-          \u003c/div\u003e
-        \u003c/div\u003e
+          </div>
+        </div>
       )}
-    \u003c/div\u003e
+    </div>
   )
 }
