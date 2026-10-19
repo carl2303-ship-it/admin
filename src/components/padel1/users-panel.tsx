@@ -114,7 +114,7 @@ export function UsersPanel({
             >
               <span>
                 <span className="font-semibold">{sa.name}</span>{' '}
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-slate-400">
                   {sa.user_id.slice(0, 8)}…
                 </span>
               </span>
@@ -183,7 +183,7 @@ export function UsersPanel({
                 <Td className="font-semibold">{u.name}</Td>
                 <Td>
                   <div>{u.email}</div>
-                  <div className="text-xs text-zinc-500">{u.phone}</div>
+                  <div className="text-xs text-slate-400">{u.phone}</div>
                 </Td>
                 <Td>{ROLE_LABEL[u.role]}</Td>
                 <Td>{u.rewardPoints}</Td>
@@ -205,7 +205,7 @@ export function UsersPanel({
         >
           Anterior
         </button>
-        <span className="self-center text-xs text-zinc-500">
+        <span className="self-center text-xs text-slate-400">
           Página {page + 1} / {Math.max(1, Math.ceil(filtered.length / PAGE))}
         </span>
         <button
