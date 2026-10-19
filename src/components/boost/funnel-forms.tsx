@@ -31,7 +31,7 @@ export function FunnelCreateForm() {
 
   return (
     <form
-      className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+      className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950 p-5"
       action={(fd) => {
         fd.set('languages', langs.join(','))
         start(async () => {
@@ -55,20 +55,20 @@ export function FunnelCreateForm() {
       <h3 className="font-[family-name:var(--font-display)] text-lg font-bold">
         Novo funil ebook
       </h3>
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-slate-400">
         Cria o funil com preços e idiomas. Os productType Stripe são gerados
         automaticamente (<code>ebook_&lt;slug&gt;</code> /{' '}
         <code>upsell_&lt;slug&gt;</code>).
       </p>
       <div className="grid gap-3 md:grid-cols-2">
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Título
           </span>
           <input name="title" required className={fieldClass} />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Slug (URL)
           </span>
           <input
@@ -78,7 +78,7 @@ export function FunnelCreateForm() {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Preço ebook (€)
           </span>
           <input
@@ -92,7 +92,7 @@ export function FunnelCreateForm() {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Preço upsell (€)
           </span>
           <input
@@ -106,19 +106,19 @@ export function FunnelCreateForm() {
           />
         </label>
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Headline landing
           </span>
           <input name="headline" className={fieldClass} />
         </label>
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Subheadline
           </span>
           <textarea name="subheadline" rows={2} className={fieldClass} />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Texto CTA
           </span>
           <input
@@ -128,7 +128,7 @@ export function FunnelCreateForm() {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Nome Stripe (ebook)
           </span>
           <input
@@ -138,21 +138,21 @@ export function FunnelCreateForm() {
           />
         </label>
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Nome Stripe (upsell)
           </span>
           <input name="stripe_upsell_name" className={fieldClass} />
         </label>
       </div>
       <div>
-        <p className="mb-2 text-xs font-bold uppercase text-zinc-500">
+        <p className="mb-2 text-xs font-bold uppercase text-slate-400">
           Idiomas
         </p>
         <div className="flex flex-wrap gap-2">
           {EBOOK_FUNNEL_LANGUAGES.map((code) => (
             <label
               key={code}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 py-1.5 text-sm"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 px-2.5 py-1.5 text-sm"
             >
               <input
                 type="checkbox"
@@ -190,7 +190,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
 
   return (
     <form
-      className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+      className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950 p-5"
       action={(fd) => {
         fd.set('languages', langs.join(','))
         start(async () => {
@@ -210,7 +210,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
       </h3>
       <div className="grid gap-3 md:grid-cols-2">
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Título
           </span>
           <input
@@ -221,7 +221,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Preço ebook (€)
           </span>
           <input
@@ -235,7 +235,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Preço upsell (€)
           </span>
           <input
@@ -249,7 +249,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
           />
         </label>
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Headline
           </span>
           <input
@@ -259,7 +259,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
           />
         </label>
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Subheadline
           </span>
           <textarea
@@ -270,7 +270,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">CTA</span>
+          <span className="text-xs font-bold uppercase text-slate-400">CTA</span>
           <input
             name="cta_label"
             defaultValue={funnel.cta_label}
@@ -278,7 +278,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Estado
           </span>
           <select
@@ -292,7 +292,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
           </select>
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Nome Stripe ebook
           </span>
           <input
@@ -302,7 +302,7 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Nome Stripe upsell
           </span>
           <input
@@ -313,14 +313,14 @@ export function FunnelEditForm({ funnel }: { funnel: BoostEbookFunnel }) {
         </label>
       </div>
       <div>
-        <p className="mb-2 text-xs font-bold uppercase text-zinc-500">
+        <p className="mb-2 text-xs font-bold uppercase text-slate-400">
           Idiomas
         </p>
         <div className="flex flex-wrap gap-2">
           {EBOOK_FUNNEL_LANGUAGES.map((code) => (
             <label
               key={code}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 py-1.5 text-sm"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 px-2.5 py-1.5 text-sm"
             >
               <input
                 type="checkbox"
