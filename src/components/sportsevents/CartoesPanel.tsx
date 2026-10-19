@@ -303,7 +303,7 @@ export function CartoesPanel() {
           </div>
         ) : null}
         {okMsg ? (
-          <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200 flex items-center gap-2">
+          <div className="rounded-xl border border-emerald-500/30 bg-cyan-500/10 px-4 py-3 text-sm text-emerald-200 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
             {okMsg}
           </div>
@@ -341,7 +341,7 @@ export function CartoesPanel() {
                         <span
                           className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
                             c.active
-                              ? 'bg-emerald-500/15 text-emerald-300'
+                              ? 'bg-cyan-500/15 text-emerald-300'
                               : 'bg-slate-700 text-slate-400'
                           }`}
                         >
@@ -715,7 +715,7 @@ export function CartoesPanel() {
                 <img
                   src={qrDataUrl}
                   alt={`QR ${qrSlug}`}
-                  className="w-40 h-40 rounded-xl bg-white p-2"
+                  className="w-40 h-40 rounded-xl bg-slate-950 p-2"
                 />
                 <div className="space-y-2 text-center sm:text-left">
                   <p className="text-sm font-bold text-white">
