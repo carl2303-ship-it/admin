@@ -1,1 +1,1 @@
-LOAD_FROM_TMP_SE_PUSH_BATCH_2_FILE0
+/home/ubuntu/admin/src/components/sportsevents/BlogAdminPanel.tsx
