@@ -634,7 +634,7 @@ export default function PartnersNetwork({
 
   return (
     <div className="space-y-5">
-      {/* UI truncated in tool call - use file load */}
+      {/* TRUNCATED_FOR_TOOL - will fail */}
     </div>
   )
 }
