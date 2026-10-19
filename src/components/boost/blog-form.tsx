@@ -15,7 +15,7 @@ export function BlogForm({ post }: { post?: BoostBlogPost | null }) {
 
   return (
     <form
-      className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+      className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950 p-5"
       action={(fd) => {
         start(async () => {
           setError(null)
@@ -35,7 +35,7 @@ export function BlogForm({ post }: { post?: BoostBlogPost | null }) {
       {post?.id && <input type="hidden" name="id" value={post.id} />}
       <div className="grid gap-3 md:grid-cols-2">
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Título
           </span>
           <input
@@ -46,7 +46,7 @@ export function BlogForm({ post }: { post?: BoostBlogPost | null }) {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Autor
           </span>
           <input
@@ -56,7 +56,7 @@ export function BlogForm({ post }: { post?: BoostBlogPost | null }) {
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Categoria
           </span>
           <input
@@ -74,7 +74,7 @@ export function BlogForm({ post }: { post?: BoostBlogPost | null }) {
           />
         </div>
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Excerpt
           </span>
           <textarea
@@ -86,7 +86,7 @@ export function BlogForm({ post }: { post?: BoostBlogPost | null }) {
         </label>
       </div>
       <div className="space-y-1">
-        <span className="text-xs font-bold uppercase text-zinc-500">
+        <span className="text-xs font-bold uppercase text-slate-400">
           Conteúdo (Quill)
         </span>
         <QuillEditor

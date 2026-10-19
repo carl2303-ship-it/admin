@@ -69,7 +69,7 @@ export default async function BoostEbookLeadsPage() {
           ['Últimos 7 dias', kpis.recent],
         ].map(([label, value]) => (
           <Panel key={String(label)} className="p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
               {label}
             </p>
             <p className="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold">
@@ -93,7 +93,7 @@ export default async function BoostEbookLeadsPage() {
           <tbody>
             {leads.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-slate-400">
                   Sem leads
                 </td>
               </tr>
@@ -115,7 +115,7 @@ export default async function BoostEbookLeadsPage() {
                     inactiveLabel="Não"
                   />
                 </Td>
-                <Td className="text-xs text-zinc-500">
+                <Td className="text-xs text-slate-400">
                   {new Date(l.created_at).toLocaleDateString('pt-PT')}
                 </Td>
               </tr>
