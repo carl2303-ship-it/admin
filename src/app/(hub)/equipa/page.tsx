@@ -47,27 +47,19 @@ export default async function EquipaPage({
     : null
 
   return (
-    <div className="mx-auto max-w-5xl space-y-5 animate-fade-up">
-      <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-600">
-          Hub · Contas
-        </p>
-        <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight">
-          Equipa (hub_staff)
-        </h1>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-500">
-          Contas da equipa global em Auth SportsEvents + tabela{' '}
-          <code>hub_staff</code>. O admin Boost antigo não tinha gestão de
-          staff — isto é o controlo de acessos do hub.
-        </p>
-      </div>
+    <div className="w-full space-y-5 animate-fade-up">
+      <p className="max-w-2xl text-sm text-slate-400">
+        Contas da equipa global em Auth SportsEvents + tabela{' '}
+        <code className="text-cyan-300">hub_staff</code>. Controlo de acessos
+        do hub.
+      </p>
 
       {auth.isBootstrap && (
         <Panel className="p-5">
-          <p className="font-semibold text-amber-900">
+          <p className="font-semibold text-amber-100">
             Bootstrap: ainda não há hub_staff
           </p>
-          <p className="mt-1 text-sm text-zinc-600">
+          <p className="mt-1 text-sm text-slate-400">
             Regista a tua conta actual ({auth.user.email}) como owner.
           </p>
           <form
@@ -172,7 +164,7 @@ export default async function EquipaPage({
           <tbody>
             {list.data.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-slate-400">
                   Sem staff
                 </td>
               </tr>
@@ -187,7 +179,7 @@ export default async function EquipaPage({
                 <Td>
                   <StatusPill active={s.active} />
                 </Td>
-                <Td className="font-mono text-[10px] text-zinc-400">
+                <Td className="font-mono text-[10px] text-slate-500">
                   <div>B: {s.boost_user_id || '—'}</div>
                   <div>P1: {s.padel1_user_id || '—'}</div>
                 </Td>
@@ -196,7 +188,7 @@ export default async function EquipaPage({
                     <div className="flex flex-wrap gap-2">
                       <a
                         href={`/equipa?edit=${s.id}`}
-                        className="text-xs font-bold text-sky-700 hover:underline"
+                        className="text-xs font-bold text-cyan-400 hover:underline"
                       >
                         Editar
                       </a>
