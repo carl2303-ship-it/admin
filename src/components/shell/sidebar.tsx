@@ -78,12 +78,12 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
   })
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-zinc-200 bg-zinc-950 text-zinc-100">
-      <div className="border-b border-zinc-800 px-5 py-6">
+    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-slate-800 bg-black text-slate-100">
+      <div className="border-b border-slate-800 px-5 py-6">
         <p className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight">
-          PADEL <span className="text-emerald-400">HUB</span>
+          PADEL <span className="text-cyan-400">HUB</span>
         </p>
-        <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-zinc-500">
+        <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-amber-400/80">
           admin.sportsevents.app
         </p>
       </div>
@@ -100,8 +100,8 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                 active
-                  ? 'bg-emerald-500/15 text-emerald-300'
-                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100'
+                  ? 'bg-cyan-500/15 text-cyan-300'
+                  : 'text-slate-400 hover:bg-slate-900 hover:text-slate-100'
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -111,17 +111,17 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
         })}
       </nav>
 
-      <div className="border-t border-zinc-800 px-4 py-4">
-        <p className="truncate text-sm font-medium text-zinc-200">
+      <div className="border-t border-slate-800 px-4 py-4">
+        <p className="truncate text-sm font-medium text-slate-200">
           {staffName || staffEmail}
         </p>
-        <p className="mt-0.5 text-[11px] text-zinc-500">
+        <p className="mt-0.5 text-[11px] text-amber-400/70">
           {role === 'bootstrap' ? 'Bootstrap' : roleLabel(role)}
         </p>
         <button
           type="button"
           onClick={logout}
-          className="mt-3 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-xs text-zinc-400 transition hover:bg-zinc-900 hover:text-zinc-100"
+          className="mt-3 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-xs text-slate-400 transition hover:bg-slate-900 hover:text-slate-100"
         >
           <LogOut className="h-3.5 w-3.5" />
           Terminar sessão
@@ -130,7 +130,7 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
           href="https://sportsevents.app"
           target="_blank"
           rel="noreferrer"
-          className="mt-2 flex items-center gap-1.5 px-2 text-[10px] text-zinc-600 hover:text-zinc-400"
+          className="mt-2 flex items-center gap-1.5 px-2 text-[10px] text-slate-600 hover:text-cyan-400"
         >
           sportsevents.app <ExternalLink className="h-3 w-3" />
         </a>
