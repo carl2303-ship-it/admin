@@ -73,7 +73,7 @@ export default async function BoostEbookPurchasesPage() {
           ['Receita', `€${kpis.revenue.toFixed(2)}`],
         ].map(([label, value]) => (
           <Panel key={label} className="p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
               {label}
             </p>
             <p className="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold">
@@ -98,7 +98,7 @@ export default async function BoostEbookPurchasesPage() {
           <tbody>
             {purchases.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
                   Sem compras
                 </td>
               </tr>
@@ -107,7 +107,7 @@ export default async function BoostEbookPurchasesPage() {
               <tr key={p.id}>
                 <Td>
                   <p className="font-semibold">{p.customer_name || '—'}</p>
-                  <p className="text-xs text-zinc-400">{p.customer_email}</p>
+                  <p className="text-xs text-slate-500">{p.customer_email}</p>
                 </Td>
                 <Td>
                   <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-bold text-sky-800">
@@ -118,10 +118,10 @@ export default async function BoostEbookPurchasesPage() {
                   €{Number(p.amount || 0).toFixed(2)}
                 </Td>
                 <Td>{p.status}</Td>
-                <Td className="text-xs text-zinc-500">
+                <Td className="text-xs text-slate-400">
                   {new Date(p.created_at).toLocaleString('pt-PT')}
                 </Td>
-                <Td className="max-w-[8rem] truncate font-mono text-[10px] text-zinc-400">
+                <Td className="max-w-[8rem] truncate font-mono text-[10px] text-slate-500">
                   {p.stripe_session_id || '—'}
                 </Td>
                 <Td>
