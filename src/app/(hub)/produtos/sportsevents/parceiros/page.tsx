@@ -7,7 +7,7 @@ export default async function SeParceirosPage() {
   if (!auth.user) redirect('/login')
   if (auth.error && !auth.isBootstrap) {
     return (
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
+      <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6 text-amber-100">
         {auth.error}
       </div>
     )

@@ -11,7 +11,7 @@ export default async function SportsEventsCalendarPage() {
   if (!auth.user) redirect('/login')
   if (auth.error && !auth.isBootstrap) {
     return (
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-sm text-amber-900">
+      <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6 text-sm text-amber-100">
         {auth.error}
       </div>
     )
@@ -21,8 +21,8 @@ export default async function SportsEventsCalendarPage() {
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-zinc-500">
-        Acesso: <span className="font-semibold text-zinc-800">{role}</span>
+      <p className="text-sm text-slate-400">
+        Acesso: <span className="font-semibold text-slate-200">{role}</span>
         {canWriteSportsEvents(role)
           ? ' · escrita SE (owner/ops/commerce)'
           : ' · só leitura'}
