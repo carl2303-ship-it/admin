@@ -79,7 +79,7 @@ export function ConfigIntentForm({
       <h3 className="font-[family-name:var(--font-display)] text-lg font-bold">
         {title}
       </h3>
-      <p className="mt-2 text-sm text-zinc-600">{description}</p>
+      <p className="mt-2 text-sm text-slate-400">{description}</p>
       <p className="mt-2 text-xs text-amber-800">
         O hub <strong>não</strong> guarda o valor do secret — só o nome + nota
         para checklist ops.
@@ -104,7 +104,7 @@ export function ConfigIntentForm({
       >
         <input type="hidden" name="product" value={product} />
         <div>
-          <label className="mb-1 block text-xs font-bold uppercase text-zinc-500">
+          <label className="mb-1 block text-xs font-bold uppercase text-slate-400">
             Integração / secret
           </label>
           <select name="secret_name" required className={fieldClass} defaultValue="">
@@ -119,7 +119,7 @@ export function ConfigIntentForm({
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-bold uppercase text-zinc-500">
+          <label className="mb-1 block text-xs font-bold uppercase text-slate-400">
             Nota / o que fazer
           </label>
           <input

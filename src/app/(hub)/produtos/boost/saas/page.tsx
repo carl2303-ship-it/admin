@@ -56,7 +56,7 @@ export default async function BoostSaasPage() {
       <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
         Licenças SaaS Tour
       </h2>
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-slate-400">
         Organizations com <code>source=boost</code>. Provision e links Stripe
         via Edge Functions existentes — não há lógica Stripe no hub. Cartões
         activos mostram início/fim do plano; renovação recorrente (sem Stripe
@@ -65,7 +65,7 @@ export default async function BoostSaasPage() {
       </p>
 
       {!edge.ok && edge.message ? (
-        <div className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
           <p className="font-bold">Configuração Edge incompleta</p>
           <p className="mt-1">{edge.message}</p>
         </div>
@@ -78,7 +78,7 @@ export default async function BoostSaasPage() {
           { label: 'Em risco', value: kpis.atRisk },
         ].map((k) => (
           <Panel key={k.label} className="p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
               {k.label}
             </p>
             <p className="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold">
@@ -91,7 +91,7 @@ export default async function BoostSaasPage() {
       <SaasCreateForm canWrite={write} />
 
       {result.data.length === 0 ? (
-        <Panel className="p-8 text-center text-zinc-500">
+        <Panel className="p-8 text-center text-slate-400">
           Nenhuma licença Boost. Cria a primeira ou usa o admin legacy.
         </Panel>
       ) : (
