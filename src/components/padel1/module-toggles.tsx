@@ -53,13 +53,13 @@ export function ModuleToggles({
   const enabled = (code: string) => clientMods[code]?.enabled === true
 
   if (loading) {
-    return <p className="text-xs text-zinc-500">A carregar módulos…</p>
+    return <p className="text-xs text-slate-400">A carregar módulos…</p>
   }
 
   return (
-    <div className="space-y-3 border-t border-zinc-100 pt-3">
+    <div className="space-y-3 border-t border-slate-800 pt-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-zinc-800">Módulos activos</p>
+        <p className="text-sm font-semibold text-slate-200">Módulos activos</p>
         {canWrite && entityType === 'club' && (
           <div className="flex flex-wrap gap-2">
             <button
@@ -131,13 +131,13 @@ export function ModuleToggles({
           return (
             <div
               key={mod.code}
-              className="flex items-center justify-between gap-2 rounded-lg border border-zinc-200 px-3 py-2"
+              className="flex items-center justify-between gap-2 rounded-lg border border-slate-800 px-3 py-2"
             >
               <div>
-                <p className="text-sm font-semibold text-zinc-800">{mod.name}</p>
-                <p className="text-[11px] text-zinc-500">{mod.code}</p>
+                <p className="text-sm font-semibold text-slate-200">{mod.name}</p>
+                <p className="text-[11px] text-slate-400">{mod.code}</p>
                 {blocked && (
-                  <p className="text-[11px] text-amber-700">
+                  <p className="text-[11px] text-amber-400">
                     Requer: {(mod.requires_modules || []).join(', ')}
                   </p>
                 )}
@@ -163,7 +163,7 @@ export function ModuleToggles({
                   {on ? 'On' : 'Off'}
                 </button>
               ) : (
-                <span className="text-xs font-bold text-zinc-500">
+                <span className="text-xs font-bold text-slate-400">
                   {on ? 'On' : 'Off'}
                 </span>
               )}
