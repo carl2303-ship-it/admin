@@ -206,7 +206,7 @@ export function TransactionsPanel({
                     </Td>
                     <Td>
                       <div className="font-semibold">{t.player_name}</div>
-                      <div className="text-xs text-zinc-500">
+                      <div className="text-xs text-slate-400">
                         {t.player_phone}
                       </div>
                     </Td>
@@ -215,7 +215,7 @@ export function TransactionsPanel({
                         t.transaction_type}
                     </Td>
                     <Td>€{Number(t.amount).toFixed(2)}</Td>
-                    <Td className="max-w-[200px] truncate text-zinc-500">
+                    <Td className="max-w-[200px] truncate text-slate-400">
                       {t.notes || '—'}
                     </Td>
                   </tr>
@@ -248,7 +248,7 @@ export function TransactionsPanel({
                     <div className="font-semibold">
                       {p.payer_name || '—'}
                     </div>
-                    <div className="text-xs text-zinc-500">
+                    <div className="text-xs text-slate-400">
                       {p.payer_email}
                     </div>
                   </Td>
