@@ -27,20 +27,20 @@ export default async function ConfigBoostPage() {
   ])
 
   return (
-    <div className="mx-auto max-w-5xl space-y-5 animate-fade-up">
+    <div className="w-full space-y-5 animate-fade-up">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-sky-600">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-400">
           Configuração · Boost
         </p>
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight">
           Boost Store
         </h1>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-500">
+        <p className="mt-1 max-w-2xl text-sm text-slate-400">
           Estado das env do hub para Boost + rotação Stripe nas Edge Functions +
           atalhos Dashboard. Ops do dia-a-dia em{' '}
           <Link
             href="/produtos/boost/stripe"
-            className="font-semibold text-sky-700 hover:underline"
+            className="font-semibold text-cyan-400 hover:underline"
           >
             /produtos/boost/stripe
           </Link>
@@ -50,8 +50,8 @@ export default async function ConfigBoostPage() {
 
       <ConfigSectionNav active="boost" />
 
-      <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Modelo actual</p>
+      <Panel className="p-5 text-sm text-slate-400">
+        <p className="font-semibold text-white">Modelo actual</p>
         <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
           <li>
             <code>STRIPE_SECRET_KEY</code> / webhook vivem nos{' '}

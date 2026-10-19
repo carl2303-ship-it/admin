@@ -24,20 +24,12 @@ export default async function ConfiguracaoPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-5 animate-fade-up">
-      <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-600">
-          PADEL HUB · Central
-        </p>
-        <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight">
-          Configuração
-        </h1>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-500">
-          Estado das integrações, env Netlify do admin, atalhos Stripe e intents
-          ops — sem saltar para dashboards no dia-a-dia. Segredos nunca são
-          mostrados.
-        </p>
-      </div>
+    <div className="w-full space-y-5 animate-fade-up">
+      <p className="max-w-2xl text-sm text-slate-400">
+        Estado das integrações, env Netlify do admin, atalhos Stripe e intents
+        ops — sem saltar para dashboards no dia-a-dia. Segredos nunca são
+        mostrados.
+      </p>
 
       <ConfigSectionNav active="overview" />
 
@@ -45,7 +37,7 @@ export default async function ConfiguracaoPage() {
 
       <Panel className="p-4">
         <div className="flex flex-wrap items-center gap-3 text-sm">
-          <span className="font-semibold text-zinc-800">
+          <span className="font-semibold text-slate-200">
             Escrita Edge Boost (Stripe)
           </span>
           <StatusPill
@@ -53,14 +45,14 @@ export default async function ConfiguracaoPage() {
             activeLabel="Management API pronta"
             inactiveLabel="Só checklist / intent"
           />
-          <span className="font-semibold text-zinc-800">Netlify env</span>
+          <span className="font-semibold text-slate-200">Netlify env</span>
           <StatusPill
             active={overview.netlify.apiConfigured && !overview.netlify.apiError}
             activeLabel="API + runtime"
             inactiveLabel="Só runtime"
           />
         </div>
-        <p className="mt-2 text-xs text-zinc-500">
+        <p className="mt-2 text-xs text-slate-400">
           Secrets Stripe Boost continuam no Edge. Env do admin continua no
           Netlify (visibilidade aqui; escrita live no slice seguinte). Estágios
           ficam em sportsevents.app.

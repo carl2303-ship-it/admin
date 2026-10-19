@@ -25,15 +25,15 @@ export default async function ConfigPadel1Page() {
   ])
 
   return (
-    <div className="mx-auto max-w-5xl space-y-5 animate-fade-up">
+    <div className="w-full space-y-5 animate-fade-up">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-violet-600">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-400">
           Configuração · Padel1
         </p>
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight">
           Padel One
         </h1>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-500">
+        <p className="mt-1 max-w-2xl text-sm text-slate-400">
           Mais do que status: env Netlify do admin, atalhos Stripe HQ e intents
           para rotação sem perder o contexto no hub. Escrita live Stripe
           plataforma = Fase 3.
@@ -59,14 +59,14 @@ export default async function ConfigPadel1Page() {
 
       <ConfigIntentsTable intents={intents} />
 
-      <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Atalhos no hub</p>
+      <Panel className="p-5 text-sm text-slate-400">
+        <p className="font-semibold text-white">Atalhos no hub</p>
         <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
           <li>
             Produto / KPIs:{' '}
             <Link
               href="/produtos/padel1"
-              className="font-semibold text-sky-700 hover:underline"
+              className="font-semibold text-cyan-400 hover:underline"
             >
               /produtos/padel1
             </Link>

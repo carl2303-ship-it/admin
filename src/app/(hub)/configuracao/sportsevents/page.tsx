@@ -25,15 +25,15 @@ export default async function ConfigSportsEventsPage() {
   ])
 
   return (
-    <div className="mx-auto max-w-5xl space-y-5 animate-fade-up">
+    <div className="w-full space-y-5 animate-fade-up">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-700">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-400">
           Configuração · SportsEvents
         </p>
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight">
           SportsEvents
         </h1>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-500">
+        <p className="mt-1 max-w-2xl text-sm text-slate-400">
           Auth e dados SE partilham o Supabase com o hub. Aqui vês o pacote Auth,
           intents para Stripe Connect / Meta / AI do site público, e env do
           admin. Estágios = ERP SE, não módulo Boost.
@@ -59,8 +59,8 @@ export default async function ConfigSportsEventsPage() {
 
       <ConfigIntentsTable intents={intents} />
 
-      <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Onde configurar o resto</p>
+      <Panel className="p-5 text-sm text-slate-400">
+        <p className="font-semibold text-white">Onde configurar o resto</p>
         <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
           <li>
             ERP / definições legacy:{' '}
@@ -68,7 +68,7 @@ export default async function ConfigSportsEventsPage() {
               href="https://sportsevents.app/admin"
               target="_blank"
               rel="noreferrer"
-              className="font-semibold text-sky-700 hover:underline"
+              className="font-semibold text-cyan-400 hover:underline"
             >
               sportsevents.app/admin
             </a>
@@ -77,7 +77,7 @@ export default async function ConfigSportsEventsPage() {
             Deep-link no hub:{' '}
             <Link
               href="/produtos/sportsevents"
-              className="font-semibold text-sky-700 hover:underline"
+              className="font-semibold text-cyan-400 hover:underline"
             >
               /produtos/sportsevents
             </Link>

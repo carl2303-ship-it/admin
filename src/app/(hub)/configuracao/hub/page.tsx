@@ -25,15 +25,15 @@ export default async function ConfigHubPage() {
   ])
 
   return (
-    <div className="mx-auto max-w-5xl space-y-5 animate-fade-up">
+    <div className="w-full space-y-5 animate-fade-up">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-600">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-400">
           Configuração · Hub
         </p>
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight">
           Hub (staff / env)
         </h1>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-500">
+        <p className="mt-1 max-w-2xl text-sm text-slate-400">
           Contas globais (<code>hub_staff</code>), Auth SE, PAT Management API e
           tokens Netlify para visibilidade de env.
         </p>
@@ -58,13 +58,13 @@ export default async function ConfigHubPage() {
 
       <ConfigIntentsTable intents={intents} />
 
-      <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Atalhos</p>
+      <Panel className="p-5 text-sm text-slate-400">
+        <p className="font-semibold text-white">Atalhos</p>
         <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
           <li>
             <Link
               href="/equipa"
-              className="font-semibold text-sky-700 hover:underline"
+              className="font-semibold text-cyan-400 hover:underline"
             >
               /equipa
             </Link>{' '}
