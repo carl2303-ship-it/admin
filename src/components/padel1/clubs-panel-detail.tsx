@@ -59,7 +59,7 @@ export function ClubFormFields({
           ['website', 'Website'],
         ] as const
       ).map(([key, label]) => (
-        <label key={key} className="text-xs font-semibold text-zinc-600">
+        <label key={key} className="text-xs font-semibold text-slate-400">
           {label}
           <input
             className={`${fieldClass} mt-1`}
@@ -68,7 +68,7 @@ export function ClubFormFields({
           />
         </label>
       ))}
-      <label className="text-xs font-semibold text-zinc-600 sm:col-span-2">
+      <label className="text-xs font-semibold text-slate-400 sm:col-span-2">
         Descrição
         <textarea
           className={`${fieldClass} mt-1`}
@@ -78,7 +78,7 @@ export function ClubFormFields({
         />
       </label>
       <ClubPhotoFields form={form} setForm={setForm} />
-      <label className="text-xs font-semibold text-zinc-600">
+      <label className="text-xs font-semibold text-slate-400">
         Plano
         <select
           className={`${fieldClass} mt-1`}
