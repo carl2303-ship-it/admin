@@ -40,7 +40,7 @@ export default async function Padel1MetricasPage() {
           { label: 'Expiram em 30d', value: m.expiringSoon },
         ].map((k) => (
           <Panel key={k.label} className="p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
               {k.label}
             </p>
             <p className="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold">
@@ -53,7 +53,7 @@ export default async function Padel1MetricasPage() {
       <div className="grid gap-3 lg:grid-cols-3">
         <Panel className="p-4">
           <p className="text-sm font-semibold">Planos</p>
-          <ul className="mt-2 space-y-1 text-sm text-zinc-600">
+          <ul className="mt-2 space-y-1 text-sm text-slate-400">
             <li>Bronze: {m.planCounts.bronze}</li>
             <li>Silver: {m.planCounts.silver}</li>
             <li>Gold: {m.planCounts.gold}</li>
@@ -61,7 +61,7 @@ export default async function Padel1MetricasPage() {
         </Panel>
         <Panel className="p-4">
           <p className="text-sm font-semibold">Receita mensal (plataforma)</p>
-          <ul className="mt-2 max-h-48 space-y-1 overflow-y-auto text-sm text-zinc-600">
+          <ul className="mt-2 max-h-48 space-y-1 overflow-y-auto text-sm text-slate-400">
             {m.monthlyRevenue.length === 0 && <li>—</li>}
             {m.monthlyRevenue.map((r) => (
               <li key={r.month}>
@@ -72,7 +72,7 @@ export default async function Padel1MetricasPage() {
         </Panel>
         <Panel className="p-4">
           <p className="text-sm font-semibold">Crescimento clubes / mês</p>
-          <ul className="mt-2 max-h-48 space-y-1 overflow-y-auto text-sm text-zinc-600">
+          <ul className="mt-2 max-h-48 space-y-1 overflow-y-auto text-sm text-slate-400">
             {m.monthlyClubGrowth.length === 0 && <li>—</li>}
             {m.monthlyClubGrowth.map((r) => (
               <li key={r.month}>

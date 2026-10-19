@@ -44,24 +44,24 @@ export function OpsChecklistBanner({
   title?: string
 }) {
   return (
-    <Panel className="border-amber-200 bg-gradient-to-br from-amber-50/80 to-white p-5">
+    <Panel className="border-amber-500/30 bg-gradient-to-br from-amber-50/80 to-white p-5">
       <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-amber-800">
         Pós-merge / setup
       </p>
-      <h3 className="mt-1 font-[family-name:var(--font-display)] text-lg font-bold text-zinc-900">
+      <h3 className="mt-1 font-[family-name:var(--font-display)] text-lg font-bold text-white">
         {title}
       </h3>
       <ol className="mt-3 space-y-3">
         {items.map((item, idx) => (
           <li key={item.id} className="flex gap-3 text-sm">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-950">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-100">
               {idx + 1}
             </span>
             <div className="min-w-0">
-              <p className="font-semibold text-zinc-900">{item.title}</p>
-              <p className="mt-0.5 text-xs text-zinc-600">{item.detail}</p>
+              <p className="font-semibold text-white">{item.title}</p>
+              <p className="mt-0.5 text-xs text-slate-400">{item.detail}</p>
               {item.doneHint && (
-                <p className="mt-1 text-[11px] text-emerald-700">
+                <p className="mt-1 text-[11px] text-cyan-300">
                   OK quando: {item.doneHint}
                 </p>
               )}
@@ -71,14 +71,14 @@ export function OpsChecklistBanner({
                     href={item.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-1 inline-block text-xs font-semibold text-sky-700 hover:underline"
+                    className="mt-1 inline-block text-xs font-semibold text-cyan-400 hover:underline"
                   >
                     Abrir
                   </a>
                 ) : (
                   <Link
                     href={item.href}
-                    className="mt-1 inline-block text-xs font-semibold text-sky-700 hover:underline"
+                    className="mt-1 inline-block text-xs font-semibold text-cyan-400 hover:underline"
                   >
                     Ir
                   </Link>

@@ -55,7 +55,7 @@ export default async function ConteudoNewsletterPage() {
           <tbody>
             {result.data.length === 0 && (
               <tr>
-                <td colSpan={3} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={3} className="px-4 py-8 text-center text-slate-400">
                   Sem subscritores
                 </td>
               </tr>
@@ -63,7 +63,7 @@ export default async function ConteudoNewsletterPage() {
             {result.data.map((s) => (
               <tr key={s.id}>
                 <Td className="font-semibold">{s.email}</Td>
-                <Td className="text-xs text-zinc-500">
+                <Td className="text-xs text-slate-400">
                   {s.subscribed_at
                     ? new Date(s.subscribed_at).toLocaleString('pt-PT')
                     : '—'}
