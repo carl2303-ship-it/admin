@@ -29,16 +29,16 @@ export function BoostStripeSecretsForm({
       <h3 className="font-[family-name:var(--font-display)] text-lg font-bold">
         Rotação Stripe (Edge Boost)
       </h3>
-      <p className="mt-2 text-sm text-zinc-600">
-        Os secrets <code className="rounded bg-zinc-100 px-1">STRIPE_*</code>{' '}
+      <p className="mt-2 text-sm text-slate-400">
+        Os secrets <code className="rounded bg-slate-800 px-1">STRIPE_*</code>{' '}
         vivem no projeto Supabase Boost (Edge Functions). O hub só as invoca —
         nunca embute a key no Netlify admin nem no browser.
       </p>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-xl border border-zinc-100 bg-zinc-50 px-3 py-2 text-xs">
-          <p className="font-bold text-zinc-700">STRIPE_SECRET_KEY (Edge)</p>
-          <p className="mt-1 text-zinc-500">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 text-xs">
+          <p className="font-bold text-slate-300">STRIPE_SECRET_KEY (Edge)</p>
+          <p className="mt-1 text-slate-400">
             {stripeSecretPresent === null
               ? 'Desconhecido (sem Management API)'
               : stripeSecretPresent
@@ -46,9 +46,9 @@ export function BoostStripeSecretsForm({
                 : 'Não listado no project Boost'}
           </p>
         </div>
-        <div className="rounded-xl border border-zinc-100 bg-zinc-50 px-3 py-2 text-xs">
-          <p className="font-bold text-zinc-700">STRIPE_WEBHOOK_SECRET (Edge)</p>
-          <p className="mt-1 text-zinc-500">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 text-xs">
+          <p className="font-bold text-slate-300">STRIPE_WEBHOOK_SECRET (Edge)</p>
+          <p className="mt-1 text-slate-400">
             {stripeWebhookPresent === null
               ? 'Desconhecido (sem Management API)'
               : stripeWebhookPresent
@@ -59,7 +59,7 @@ export function BoostStripeSecretsForm({
       </div>
 
       {edgeSecretsError && (
-        <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+        <p className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
           {edgeSecretsError}
         </p>
       )}
@@ -67,8 +67,8 @@ export function BoostStripeSecretsForm({
       <div
         className={
           managementConfigured
-            ? 'mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-900'
-            : 'mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900'
+            ? 'mt-4 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-200'
+            : 'mt-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100'
         }
       >
         {managementConfigured ? (
@@ -112,7 +112,7 @@ export function BoostStripeSecretsForm({
         }}
       >
         <div>
-          <label className="mb-1 block text-xs font-bold uppercase text-zinc-500">
+          <label className="mb-1 block text-xs font-bold uppercase text-slate-400">
             STRIPE_SECRET_KEY (novo valor)
           </label>
           <input
@@ -125,7 +125,7 @@ export function BoostStripeSecretsForm({
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-bold uppercase text-zinc-500">
+          <label className="mb-1 block text-xs font-bold uppercase text-slate-400">
             STRIPE_WEBHOOK_SECRET (opcional)
           </label>
           <input
@@ -138,7 +138,7 @@ export function BoostStripeSecretsForm({
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-bold uppercase text-zinc-500">
+          <label className="mb-1 block text-xs font-bold uppercase text-slate-400">
             Nota (visível no intent)
           </label>
           <input
@@ -158,8 +158,8 @@ export function BoostStripeSecretsForm({
       </form>
 
       {!managementConfigured && (
-        <div className="mt-5 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-700">
-          <p className="font-bold text-zinc-900">Checklist — rodar Stripe no Boost</p>
+        <div className="mt-5 rounded-xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-300">
+          <p className="font-bold text-white">Checklist — rodar Stripe no Boost</p>
           <ol className="mt-2 list-decimal space-y-1 pl-5 text-xs">
             <li>
               Abre o project Supabase Boost → Edge Functions → Secrets
@@ -177,7 +177,7 @@ export function BoostStripeSecretsForm({
               Testa um link SaaS em{' '}
               <a
                 href="/produtos/boost/saas"
-                className="font-semibold text-sky-700 hover:underline"
+                className="font-semibold text-cyan-400 hover:underline"
               >
                 /produtos/boost/saas
               </a>
