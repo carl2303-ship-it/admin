@@ -1,1 +1,1 @@
-LOAD_FROM_TMP_BATCH4_SIM
+@file:/tmp/fix-SimuladorPanel.tsx.json:content
