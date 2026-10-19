@@ -68,8 +68,8 @@ export function ClubPhotoFields({
               alt=""
               className={
                 field === 'logo_url'
-                  ? 'h-12 w-12 rounded-lg border border-zinc-200 object-cover'
-                  : 'h-20 max-w-[140px] rounded-lg border border-zinc-200 object-cover'
+                  ? 'h-12 w-12 rounded-lg border border-slate-800 object-cover'
+                  : 'h-20 max-w-[140px] rounded-lg border border-slate-800 object-cover'
               }
             />
             <button
@@ -101,8 +101,8 @@ export function ClubPhotoFields({
   }
 
   return (
-    <div className="sm:col-span-2 space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-3">
-      <p className="text-xs font-bold uppercase tracking-wide text-zinc-500">
+    <div className="sm:col-span-2 space-y-3 rounded-xl border border-slate-800 bg-slate-900/80 p-3">
+      <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
         Logo e fotos (upload club-photos)
       </p>
       <div className="flex flex-wrap gap-6">
@@ -110,9 +110,9 @@ export function ClubPhotoFields({
         <div>{slot('photo_url_1', 'Foto 1', photo1Ref, 'photo')}</div>
         <div>{slot('photo_url_2', 'Foto 2', photo2Ref, 'photo')}</div>
       </div>
-      <p className="text-[11px] text-zinc-500">
+      <p className="text-[11px] text-slate-400">
         Mesmo fluxo do HQ: ficheiro → bucket{' '}
-        <code className="rounded bg-white px-1">club-photos/hq/…</code>
+        <code className="rounded bg-slate-950 px-1">club-photos/hq/…</code>
       </p>
     </div>
   )
