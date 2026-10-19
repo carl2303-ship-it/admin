@@ -59,10 +59,10 @@ export default async function Padel1OverviewPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-zinc-500">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-slate-400">
         <p>
           Acesso:{' '}
-          <span className="font-semibold text-zinc-800">{role}</span>
+          <span className="font-semibold text-slate-200">{role}</span>
           {canWritePadel1(role)
             ? ' · escrita HQ (owner/platform)'
             : ' · só leitura'}
@@ -111,7 +111,7 @@ export default async function Padel1OverviewPage() {
             },
           ].map((k) => (
             <Panel key={k.label} className="p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
                 {k.label}
               </p>
               <p className="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold">
@@ -130,12 +130,12 @@ export default async function Padel1OverviewPage() {
               <Link key={item.href} href={item.href}>
                 <Panel className="p-4 transition hover:border-violet-300 hover:shadow-md">
                   <div className="flex items-center justify-between">
-                    <Icon className="h-5 w-5 text-violet-600" />
+                    <Icon className="h-5 w-5 text-cyan-400" />
                     <span className="font-[family-name:var(--font-display)] text-2xl font-bold">
                       {counts.data[item.key]}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm font-semibold text-zinc-700">
+                  <p className="mt-2 text-sm font-semibold text-slate-300">
                     {item.label}
                   </p>
                 </Panel>
@@ -148,20 +148,20 @@ export default async function Padel1OverviewPage() {
       {kpis.ok && (
         <div className="grid gap-3 lg:grid-cols-2">
           <Panel className="p-4">
-            <p className="text-sm font-semibold text-zinc-900">
+            <p className="text-sm font-semibold text-white">
               Clubes por plano
             </p>
-            <ul className="mt-2 space-y-1 text-sm text-zinc-600">
+            <ul className="mt-2 space-y-1 text-sm text-slate-400">
               <li>Bronze: {kpis.data.planCounts.bronze}</li>
               <li>Silver: {kpis.data.planCounts.silver}</li>
               <li>Gold: {kpis.data.planCounts.gold}</li>
             </ul>
           </Panel>
           <Panel className="p-4">
-            <p className="text-sm font-semibold text-zinc-900">
+            <p className="text-sm font-semibold text-white">
               Volume por tipo (txn)
             </p>
-            <ul className="mt-2 max-h-40 space-y-1 overflow-y-auto text-sm text-zinc-600">
+            <ul className="mt-2 max-h-40 space-y-1 overflow-y-auto text-sm text-slate-400">
               {kpis.data.txnsByType.length === 0 && <li>—</li>}
               {kpis.data.txnsByType.map((t) => (
                 <li key={t.type}>
@@ -173,13 +173,14 @@ export default async function Padel1OverviewPage() {
         </div>
       )}
 
-      <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Paridade HQ Manager</p>
+      <Panel className="p-5 text-sm text-slate-400">
+        <p className="font-semibold text-white">Paridade HQ Manager</p>
         <p className="mt-1">
           Dashboard, Clubes (CRUD, owner, licenças, checkout, módulos), Módulos,
-          Packs, Transações, Métricas, ROI torneios, Utilizadores/super_admins e
+          Packs, Transações, Métricas, Utilizadores/super_admins e
           Configurações Stripe/planos — no hub com gate{' '}
-          <code>hub_staff</code> (roles owner/platform).
+          <code>hub_staff</code> (roles owner/platform). ROI / rentabilidade de
+          torneios só em SportsEvents.
         </p>
       </Panel>
     </div>
