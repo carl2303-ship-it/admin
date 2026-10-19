@@ -71,7 +71,7 @@ export function SettingsPanel({
 
       {tab === 'stripe' && (
         <Panel className="space-y-3 p-4">
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-slate-400">
             Credenciais em <code>platform_stripe_config</code> (projecto
             padel1). O hub nunca mostra o valor actual dos secrets — só
             presença. Preenche para criar/rodar.
@@ -93,12 +93,12 @@ export function SettingsPanel({
               inactiveLabel="Webhook em falta"
             />
             {stripe?.publishablePreview && (
-              <span className="text-zinc-500">
+              <span className="text-slate-400">
                 PK: {stripe.publishablePreview}
               </span>
             )}
             {stripe?.updated_at && (
-              <span className="text-zinc-500">
+              <span className="text-slate-400">
                 Actualizado{' '}
                 {new Date(stripe.updated_at).toLocaleString('pt-PT')}
               </span>
