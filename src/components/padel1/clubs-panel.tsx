@@ -199,7 +199,7 @@ export function ClubsPanel({
                         />
                       ) : (
                         <span
-                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-200 text-[10px] text-zinc-500"
+                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-200 text-[10px] text-slate-400"
                           aria-hidden
                         >
                           —
@@ -268,7 +268,7 @@ export function ClubsPanel({
                 </tr>
                 {expanded === club.id && (
                   <tr>
-                    <Td colSpan={6} className="bg-zinc-50/80">
+                    <Td colSpan={6} className="bg-slate-900/80">
                       <ClubDetail
                         club={club}
                         canWrite={canWrite}
@@ -297,7 +297,7 @@ export function ClubsPanel({
             ))}
             {filtered.length === 0 && (
               <tr>
-                <Td colSpan={6} className="text-zinc-500">
+                <Td colSpan={6} className="text-slate-400">
                   Nenhum clube.
                 </Td>
               </tr>
