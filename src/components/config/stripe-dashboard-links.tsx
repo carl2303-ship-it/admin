@@ -24,8 +24,8 @@ export function StripeDashboardLinks({
           <h3 className="font-[family-name:var(--font-display)] text-lg font-bold">
             {ctx.title}
           </h3>
-          <p className="mt-1 text-sm text-zinc-600">{ctx.blurb}</p>
-          <p className="mt-2 text-xs text-zinc-500">
+          <p className="mt-1 text-sm text-slate-400">{ctx.blurb}</p>
+          <p className="mt-2 text-xs text-slate-400">
             Secrets vivem em: <strong>{ctx.secretsLiveIn}</strong>
           </p>
         </div>
@@ -43,15 +43,15 @@ export function StripeDashboardLinks({
             href={link.href}
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 transition hover:border-sky-300 hover:bg-sky-50"
+            className="rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 transition hover:border-cyan-500/40 hover:bg-slate-900"
           >
-            <p className="text-sm font-semibold text-zinc-900">{link.label}</p>
-            <p className="mt-0.5 text-[11px] text-zinc-500">{link.description}</p>
+            <p className="text-sm font-semibold text-white">{link.label}</p>
+            <p className="mt-0.5 text-[11px] text-slate-400">{link.description}</p>
           </a>
         ))}
       </div>
 
-      <p className="mt-3 text-[11px] text-zinc-400">
+      <p className="mt-3 text-[11px] text-slate-500">
         Links abrem dashboard.stripe.com
         {testMode ? ' (modo test)' : ' (modo live)'}. Garante que estás na conta
         Stripe correcta do produto.
@@ -66,7 +66,7 @@ export function AllStripeDashboardShortcuts() {
       <h3 className="font-[family-name:var(--font-display)] text-lg font-bold">
         Stripe Dashboard (por produto)
       </h3>
-      <p className="mt-1 text-sm text-zinc-600">
+      <p className="mt-1 text-sm text-slate-400">
         Atalhos para configurar sem sair do fluxo do hub. Cada produto pode ter
         conta Stripe própria.
       </p>
@@ -74,23 +74,23 @@ export function AllStripeDashboardShortcuts() {
         {PRODUCT_STRIPE_CONTEXTS.map((ctx) => (
           <div
             key={ctx.product}
-            className="rounded-xl border border-zinc-200 bg-zinc-50 p-3"
+            className="rounded-xl border border-slate-800 bg-slate-900 p-3"
           >
-            <p className="text-sm font-bold text-zinc-900">{ctx.title}</p>
-            <p className="mt-1 text-[11px] text-zinc-500">{ctx.blurb}</p>
+            <p className="text-sm font-bold text-white">{ctx.title}</p>
+            <p className="mt-1 text-[11px] text-slate-400">{ctx.blurb}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <a
                 href="https://dashboard.stripe.com"
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs font-semibold text-sky-700 hover:underline"
+                className="text-xs font-semibold text-cyan-400 hover:underline"
               >
                 Abrir Stripe
               </a>
               {ctx.hubOpsHref && (
                 <Link
                   href={`/configuracao/${ctx.product}`}
-                  className="text-xs font-semibold text-sky-700 hover:underline"
+                  className="text-xs font-semibold text-cyan-400 hover:underline"
                 >
                   Config {ctx.product}
                 </Link>

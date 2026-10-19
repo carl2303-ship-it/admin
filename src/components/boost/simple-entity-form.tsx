@@ -32,7 +32,7 @@ export function SimpleEntityForm({
 
   return (
     <form
-      className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+      className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950 p-5"
       action={(fd) => {
         start(async () => {
           setError(null)
@@ -73,7 +73,7 @@ export function SimpleEntityForm({
           if (f.type === 'textarea') {
             return (
               <label key={f.name} className="block space-y-1 md:col-span-2">
-                <span className="text-xs font-bold uppercase text-zinc-500">
+                <span className="text-xs font-bold uppercase text-slate-400">
                   {f.label}
                 </span>
                 <textarea
@@ -87,7 +87,7 @@ export function SimpleEntityForm({
           }
           return (
             <label key={f.name} className="block space-y-1">
-              <span className="text-xs font-bold uppercase text-zinc-500">
+              <span className="text-xs font-bold uppercase text-slate-400">
                 {f.label}
               </span>
               <input

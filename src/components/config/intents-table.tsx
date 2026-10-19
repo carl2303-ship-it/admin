@@ -52,7 +52,7 @@ export function ConfigIntentsTable({
               <tr>
                 <td
                   colSpan={5}
-                  className="px-4 py-8 text-center text-zinc-500"
+                  className="px-4 py-8 text-center text-slate-400"
                 >
                   Sem intents
                 </td>
@@ -68,7 +68,7 @@ export function ConfigIntentsTable({
                     inactiveLabel={row.status}
                   />
                 </Td>
-                <Td className="max-w-[14rem] truncate text-xs text-zinc-500">
+                <Td className="max-w-[14rem] truncate text-xs text-slate-400">
                   {row.note || '—'}
                 </Td>
                 <Td className="text-xs">
@@ -103,7 +103,7 @@ export function ConfigIntentsTable({
                       </form>
                     </div>
                   ) : (
-                    <span className="text-xs text-zinc-400">—</span>
+                    <span className="text-xs text-slate-500">—</span>
                   )}
                 </Td>
               </tr>
