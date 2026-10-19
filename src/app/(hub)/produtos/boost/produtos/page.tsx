@@ -62,14 +62,14 @@ export default async function BoostProductsPage() {
               <tr>
                 <td
                   colSpan={6}
-                  className="border-b border-zinc-50 px-4 py-8 text-center text-zinc-500"
+                  className="border-b border-zinc-50 px-4 py-8 text-center text-slate-400"
                 >
                   Nenhum produto
                 </td>
               </tr>
             )}
             {result.data.map((p) => (
-              <tr key={p.id} className="hover:bg-zinc-50/80">
+              <tr key={p.id} className="hover:bg-slate-900/80">
                 <Td>
                   <div className="flex items-center gap-3">
                     {p.image_url ? (
@@ -80,16 +80,16 @@ export default async function BoostProductsPage() {
                         className="h-10 w-10 rounded-lg object-cover"
                       />
                     ) : (
-                      <div className="h-10 w-10 rounded-lg bg-zinc-100" />
+                      <div className="h-10 w-10 rounded-lg bg-slate-800" />
                     )}
                     <div>
                       <p className="font-semibold">{p.name}</p>
-                      <p className="text-xs text-zinc-400">{p.slug}</p>
+                      <p className="text-xs text-slate-500">{p.slug}</p>
                     </div>
                   </div>
                 </Td>
                 <Td>{p.category?.name || '—'}</Td>
-                <Td className="font-bold text-sky-700">
+                <Td className="font-bold text-cyan-400">
                   €{Number(p.price).toFixed(2)}
                 </Td>
                 <Td>{p.stock ?? 0}</Td>
@@ -97,7 +97,7 @@ export default async function BoostProductsPage() {
                   <div className="flex flex-col gap-1">
                     <StatusPill active={p.active} />
                     {p.is_featured && (
-                      <span className="text-[10px] font-bold text-amber-700">
+                      <span className="text-[10px] font-bold text-amber-400">
                         ★ destaque
                       </span>
                     )}
@@ -109,7 +109,7 @@ export default async function BoostProductsPage() {
                       <>
                         <Link
                           href={`/produtos/boost/produtos/${p.id}`}
-                          className="text-xs font-bold text-sky-700 hover:underline"
+                          className="text-xs font-bold text-cyan-400 hover:underline"
                         >
                           Editar
                         </Link>
