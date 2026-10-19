@@ -106,7 +106,7 @@ export function ClubDetail({
             <img
               src={club.photo_url_1}
               alt=""
-              className="h-20 rounded-lg border border-zinc-200 object-cover"
+              className="h-20 rounded-lg border border-slate-800 object-cover"
             />
           )}
           {club.photo_url_2 && (
@@ -114,30 +114,30 @@ export function ClubDetail({
             <img
               src={club.photo_url_2}
               alt=""
-              className="h-20 rounded-lg border border-zinc-200 object-cover"
+              className="h-20 rounded-lg border border-slate-800 object-cover"
             />
           )}
         </div>
       )}
       <div className="grid gap-2 sm:grid-cols-3">
         <p>
-          <span className="text-zinc-500">Email:</span> {club.email || '—'}
+          <span className="text-slate-400">Email:</span> {club.email || '—'}
         </p>
         <p>
-          <span className="text-zinc-500">Telefone:</span> {club.phone || '—'}
+          <span className="text-slate-400">Telefone:</span> {club.phone || '—'}
         </p>
         <p>
-          <span className="text-zinc-500">Owner:</span>{' '}
+          <span className="text-slate-400">Owner:</span>{' '}
           {club.owner_id ? `${club.owner_id.slice(0, 8)}…` : '—'}
         </p>
         <p>
-          <span className="text-zinc-500">Contrato:</span>{' '}
+          <span className="text-slate-400">Contrato:</span>{' '}
           {club.contract_expires_at
             ? new Date(club.contract_expires_at).toLocaleDateString('pt-PT')
             : '—'}
         </p>
         <p>
-          <span className="text-zinc-500">Website:</span> {club.website || '—'}
+          <span className="text-slate-400">Website:</span> {club.website || '—'}
         </p>
       </div>
 
@@ -225,7 +225,7 @@ export function ClubDetail({
       )}
 
       {editId === club.id && canWrite && (
-        <div className="space-y-2 rounded-xl border border-zinc-200 bg-white p-3">
+        <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950 p-3">
           <ClubFormFields form={editForm} setForm={setEditForm} />
           <div className="flex gap-2">
             <button
@@ -254,7 +254,7 @@ export function ClubDetail({
       )}
 
       {ownerClubId === club.id && canWrite && (
-        <div className="space-y-2 rounded-xl border border-zinc-200 bg-white p-3">
+        <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950 p-3">
           <p className="font-semibold">Atribuir owner</p>
           <input
             className={fieldClass}
@@ -311,7 +311,7 @@ export function ClubDetail({
       )}
 
       {canWrite && (
-        <div className="grid gap-2 rounded-xl border border-zinc-200 bg-white p-3 sm:grid-cols-4">
+        <div className="grid gap-2 rounded-xl border border-slate-800 bg-slate-950 p-3 sm:grid-cols-4">
           <label className="text-xs font-semibold">
             Início contrato
             <input
@@ -352,7 +352,7 @@ export function ClubDetail({
       )}
 
       {canWrite && (
-        <div className="space-y-2 rounded-xl border border-zinc-200 bg-white p-3">
+        <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950 p-3">
           <p className="font-semibold">Licença / checkout</p>
           <div className="flex flex-wrap gap-2">
             <select
@@ -440,7 +440,7 @@ export function ClubDetail({
             <p className="break-all text-xs text-violet-700">{checkoutUrl}</p>
           )}
           {keys.length > 0 && (
-            <ul className="space-y-1 text-xs text-zinc-600">
+            <ul className="space-y-1 text-xs text-slate-400">
               {keys.map((k) => (
                 <li key={k.id}>
                   <code>{k.license_key}</code> · {k.plan_name} · {k.status}
