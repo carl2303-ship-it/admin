@@ -546,7 +546,7 @@ export function EnterpriseShell({
                       {e.published && e.slug && (
                         <Link
                           href={`https://sportsevents.app/eventos/${e.slug}`}
-                          className="flex-1 text-center text-[11px] font-semibold rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-emerald-400 hover:bg-emerald-500/20"
+                          className="flex-1 text-center text-[11px] font-semibold rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-emerald-400 hover:bg-cyan-400/20"
                         >
                           Ver no site
                         </Link>
