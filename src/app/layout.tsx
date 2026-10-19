@@ -28,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       lang="pt"
       className={`${display.variable} ${body.variable} h-full antialiased`}
     >
-      <body className="min-h-full font-[family-name:var(--font-body)] text-zinc-900">
+      <body className="min-h-full bg-black font-[family-name:var(--font-body)] text-slate-100">
         {children}
       </body>
     </html>
