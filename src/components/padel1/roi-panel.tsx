@@ -97,7 +97,7 @@ export function RoiPanel() {
           },
         ].map((k) => (
           <Panel key={k.label} className="p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
               {k.label}
             </p>
             <p className="mt-1 font-[family-name:var(--font-display)] text-2xl font-bold">
@@ -122,7 +122,7 @@ export function RoiPanel() {
               {fields.map((field) => (
                 <label
                   key={field.key}
-                  className="text-xs font-semibold text-zinc-600"
+                  className="text-xs font-semibold text-slate-400"
                 >
                   {field.label}
                   <input
@@ -155,7 +155,7 @@ export function RoiPanel() {
       >
         Reset defaults
       </button>
-      <p className="text-xs text-zinc-500">
+      <p className="text-xs text-slate-400">
         Dados só no browser (localStorage{' '}
         <code>{STORAGE_KEY}</code>) — igual ao HQ do Manager.
       </p>
