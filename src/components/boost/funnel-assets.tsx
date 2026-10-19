@@ -41,8 +41,8 @@ export function FunnelAssetUploader({
   const [, start] = useTransition()
 
   return (
-    <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-      <h4 className="font-bold text-zinc-800">
+    <div className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950 p-4">
+      <h4 className="font-bold text-slate-200">
         Materiais — {language.toUpperCase()}
       </h4>
       <ul className="space-y-3">
@@ -52,12 +52,12 @@ export function FunnelAssetUploader({
           return (
             <li
               key={kind}
-              className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 pb-3 last:border-0"
+              className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 last:border-0"
             >
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-zinc-800">{label}</p>
+                <p className="text-sm font-semibold text-slate-200">{label}</p>
                 {hint ? (
-                  <p className="text-xs text-zinc-400">{hint}</p>
+                  <p className="text-xs text-slate-500">{hint}</p>
                 ) : null}
                 {multiple ? (
                   existingList.length ? (
@@ -68,11 +68,11 @@ export function FunnelAssetUploader({
                             href={ex.public_url}
                             target="_blank"
                             rel="noreferrer"
-                            className="truncate text-xs text-sky-700 underline"
+                            className="truncate text-xs text-cyan-400 underline"
                           >
                             {ex.file_name || ex.storage_path}
                             {ex.kind !== kind ? (
-                              <span className="ml-1 text-zinc-400">
+                              <span className="ml-1 text-slate-500">
                                 (legado: {ex.kind})
                               </span>
                             ) : null}
@@ -80,7 +80,7 @@ export function FunnelAssetUploader({
                           {canWrite ? (
                             <button
                               type="button"
-                              className="text-xs text-zinc-500 underline"
+                              className="text-xs text-slate-400 underline"
                               disabled={pendingKind !== null}
                               onClick={() => {
                                 start(async () => {
@@ -104,24 +104,24 @@ export function FunnelAssetUploader({
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-xs text-zinc-400">Ainda sem imagens</p>
+                    <p className="text-xs text-slate-500">Ainda sem imagens</p>
                   )
                 ) : existingSingle ? (
                   <a
                     href={existingSingle.public_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="truncate text-xs text-sky-700 underline"
+                    className="truncate text-xs text-cyan-400 underline"
                   >
                     {existingSingle.file_name || existingSingle.storage_path}
                     {existingSingle.kind !== kind ? (
-                      <span className="ml-1 text-zinc-400">
+                      <span className="ml-1 text-slate-500">
                         (legado: {existingSingle.kind})
                       </span>
                     ) : null}
                   </a>
                 ) : (
-                  <p className="text-xs text-zinc-400">Ainda sem ficheiro</p>
+                  <p className="text-xs text-slate-500">Ainda sem ficheiro</p>
                 )}
               </div>
               {canWrite ? (
