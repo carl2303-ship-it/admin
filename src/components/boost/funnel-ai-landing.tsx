@@ -32,13 +32,13 @@ export function FunnelAiLanding({
 
   if (!canWrite) {
     return (
-      <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+      <div className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950 p-5">
         <h3 className="font-[family-name:var(--font-display)] text-lg font-bold">
           Gerar landing com AI
         </h3>
-        <p className="text-sm text-zinc-500">Sem permissão de escrita.</p>
+        <p className="text-sm text-slate-400">Sem permissão de escrita.</p>
         {body.benefits?.length ? (
-          <ul className="list-inside list-disc text-sm text-zinc-700">
+          <ul className="list-inside list-disc text-sm text-slate-300">
             {body.benefits.map((b) => (
               <li key={b}>{b}</li>
             ))}
@@ -50,7 +50,7 @@ export function FunnelAiLanding({
 
   return (
     <form
-      className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+      className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950 p-5"
       action={(fd) => {
         start(async () => {
           setError(null)
@@ -69,15 +69,15 @@ export function FunnelAiLanding({
       <h3 className="font-[family-name:var(--font-display)] text-lg font-bold">
         Gerar landing com AI
       </h3>
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-slate-400">
         Descreve o conteúdo do PDF/ebook e, opcionalmente, envia fotos. A AI
         gera headline, subheadline, CTA e benefícios — gravados neste funil e
         mostrados em{' '}
-        <code className="rounded bg-zinc-100 px-1">funnel.html?slug=…</code>.
+        <code className="rounded bg-slate-800 px-1">funnel.html?slug=…</code>.
       </p>
 
       <label className="block space-y-1">
-        <span className="text-xs font-bold uppercase text-zinc-500">
+        <span className="text-xs font-bold uppercase text-slate-400">
           Descrição do conteúdo do PDF
         </span>
         <textarea
@@ -92,7 +92,7 @@ export function FunnelAiLanding({
 
       <div className="grid gap-3 md:grid-cols-2">
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Tom
           </span>
           <select
@@ -108,7 +108,7 @@ export function FunnelAiLanding({
           </select>
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Idioma da landing
           </span>
           <select
@@ -126,7 +126,7 @@ export function FunnelAiLanding({
       </div>
 
       <label className="block space-y-1">
-        <span className="text-xs font-bold uppercase text-zinc-500">
+        <span className="text-xs font-bold uppercase text-slate-400">
           Fotos (opcional — bucket ebook-materials)
         </span>
         <input
@@ -134,27 +134,27 @@ export function FunnelAiLanding({
           type="file"
           accept="image/jpeg,image/png,image/webp"
           multiple
-          className="block w-full text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-sky-50 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-sky-800"
+          className="block w-full text-sm text-slate-400 file:mr-3 file:rounded-lg file:border-0 file:bg-cyan-500/10 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-cyan-300"
         />
         {body.images?.length ? (
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-slate-400">
             Já há {body.images.length} imagem(ns) na landing gerada.
           </p>
         ) : null}
       </label>
 
       {body.benefits?.length ? (
-        <div className="rounded-xl bg-zinc-50 p-3 text-sm">
-          <p className="mb-1 font-semibold text-zinc-800">
+        <div className="rounded-xl bg-slate-900 p-3 text-sm">
+          <p className="mb-1 font-semibold text-slate-200">
             Benefícios actuais
           </p>
-          <ul className="list-inside list-disc text-zinc-700">
+          <ul className="list-inside list-disc text-slate-300">
             {body.benefits.map((b) => (
               <li key={b}>{b}</li>
             ))}
           </ul>
           {body.generated_at ? (
-            <p className="mt-2 text-xs text-zinc-400">
+            <p className="mt-2 text-xs text-slate-500">
               Gerado: {new Date(body.generated_at).toLocaleString('pt-PT')}
             </p>
           ) : null}
@@ -162,7 +162,7 @@ export function FunnelAiLanding({
       ) : null}
 
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      {okMsg ? <p className="text-sm text-emerald-700">{okMsg}</p> : null}
+      {okMsg ? <p className="text-sm text-cyan-300">{okMsg}</p> : null}
 
       <button type="submit" disabled={pending} className={btnPrimary}>
         {pending ? 'A gerar…' : 'Gerar e guardar landing'}
