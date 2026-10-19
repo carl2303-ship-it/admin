@@ -176,7 +176,7 @@ export function ModulesPanel({
             <label className="text-xs font-semibold">
               sort_order
               <input
-                className={`${fieldClass} mt-1`}
+                className={`${fieldClass} mt.1`}
                 value={form.sortOrder}
                 onChange={(e) =>
                   setForm({ ...form, sortOrder: e.target.value })
@@ -254,13 +254,13 @@ export function ModulesPanel({
           <Panel key={m.code} className="space-y-2 p-4">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="font-semibold text-zinc-900">{m.name}</p>
-                <p className="text-xs text-zinc-500">{m.code}</p>
+                <p className="font-semibold text-white">{m.name}</p>
+                <p className="text-xs text-slate-400">{m.code}</p>
               </div>
               <StatusPill active={m.is_active} />
             </div>
-            <p className="text-sm text-zinc-600">{m.description}</p>
-            <p className="text-xs text-zinc-500">
+            <p className="text-sm text-slate-400">{m.description}</p>
+            <p className="text-xs text-slate-400">
               €{m.price_monthly ?? '—'} /mês · €{m.price_annual ?? '—'} /ano ·{' '}
               {(m.target_types || []).join(', ')}
             </p>
