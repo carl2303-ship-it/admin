@@ -59,20 +59,20 @@ export default async function BoostOrdersPage({
               <tr>
                 <td
                   colSpan={5}
-                  className="px-4 py-8 text-center text-zinc-500"
+                  className="px-4 py-8 text-center text-slate-400"
                 >
                   Nenhum pedido
                 </td>
               </tr>
             )}
             {result.data.map((o) => (
-              <tr key={o.id} className="hover:bg-zinc-50/80">
-                <Td className="whitespace-nowrap text-xs text-zinc-500">
+              <tr key={o.id} className="hover:bg-slate-900/80">
+                <Td className="whitespace-nowrap text-xs text-slate-400">
                   {new Date(o.created_at).toLocaleString('pt-PT')}
                 </Td>
                 <Td>
                   <p className="font-semibold">{o.customer_name || '—'}</p>
-                  <p className="text-xs text-zinc-400">{o.customer_email}</p>
+                  <p className="text-xs text-slate-500">{o.customer_email}</p>
                 </Td>
                 <Td className="font-bold">
                   €{Number(o.total ?? 0).toFixed(2)}
@@ -88,7 +88,7 @@ export default async function BoostOrdersPage({
                   <div className="flex flex-wrap gap-2">
                     <a
                       href={`/produtos/boost/pedidos?detail=${o.id}`}
-                      className="text-xs font-bold text-sky-700 hover:underline"
+                      className="text-xs font-bold text-cyan-400 hover:underline"
                     >
                       Detalhe
                     </a>
@@ -113,7 +113,7 @@ export default async function BoostOrdersPage({
           <h3 className="font-bold">
             Detalhe · {detailResult.data.order.customer_name}
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-slate-400">
             {detailResult.data.order.shipping_address || 'Sem morada'}
           </p>
           <ul className="mt-3 space-y-1 text-sm">
