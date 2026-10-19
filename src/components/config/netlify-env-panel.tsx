@@ -25,10 +25,10 @@ export function NetlifyEnvPanel({
 
   return (
     <Panel>
-      <div className="flex flex-col gap-2 border-b border-zinc-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-2 border-b border-slate-800 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="font-bold">{title}</p>
-          <p className="mt-0.5 text-xs text-zinc-500">
+          <p className="mt-0.5 text-xs text-slate-400">
             Só presença / nomes — nunca valores. Runtime = este deploy; Netlify
             API = opcional com token.
           </p>
@@ -58,7 +58,7 @@ export function NetlifyEnvPanel({
       </div>
 
       {!visibility.apiConfigured && (
-        <div className="border-b border-amber-100 bg-amber-50 px-4 py-2 text-xs text-amber-900">
+        <div className="border-b border-amber-500/20 bg-amber-500/10 px-4 py-2 text-xs text-amber-100">
           Para listar keys no account Netlify: define{' '}
           <code className="rounded bg-amber-100 px-1">NETLIFY_AUTH_TOKEN</code>{' '}
           + <code className="rounded bg-amber-100 px-1">NETLIFY_ACCOUNT_ID</code>{' '}
@@ -70,27 +70,27 @@ export function NetlifyEnvPanel({
       )}
 
       {visibility.apiError && (
-        <div className="border-b border-amber-100 bg-amber-50 px-4 py-2 text-xs text-amber-900">
+        <div className="border-b border-amber-500/20 bg-amber-500/10 px-4 py-2 text-xs text-amber-100">
           {visibility.apiError}
         </div>
       )}
 
       {compact && keys.length === 0 ? (
-        <p className="px-4 py-6 text-center text-sm text-zinc-500">
+        <p className="px-4 py-6 text-center text-sm text-slate-400">
           Todas as env do catálogo estão presentes neste runtime.
         </p>
       ) : (
-        <div className="divide-y divide-zinc-50">
+        <div className="divide-y divide-slate-800">
           {keys.map((k) => (
             <div
               key={k.key}
               className="flex flex-col gap-2 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="min-w-0">
-                <p className="truncate font-mono text-xs font-semibold text-zinc-900">
+                <p className="truncate font-mono text-xs font-semibold text-white">
                   {k.key}
                 </p>
-                <p className="text-[11px] text-zinc-500">
+                <p className="text-[11px] text-slate-400">
                   {k.label}
                   <span className="mx-1 text-zinc-300">·</span>
                   {PRODUCT_LABEL[k.product] || k.product}
@@ -108,8 +108,8 @@ export function NetlifyEnvPanel({
                     className={cn(
                       'inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold',
                       k.presentInNetlify
-                        ? 'bg-sky-100 text-sky-800'
-                        : 'bg-zinc-100 text-zinc-500'
+                        ? 'bg-sky-100 text-cyan-300'
+                        : 'bg-slate-800 text-slate-400'
                     )}
                   >
                     {k.presentInNetlify ? 'Netlify' : 'Netlify ✗'}
