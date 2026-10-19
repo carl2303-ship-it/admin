@@ -11,7 +11,6 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/produtos/padel1/packs', label: 'Packs' },
   { href: '/produtos/padel1/transacoes', label: 'Transações' },
   { href: '/produtos/padel1/metricas', label: 'Métricas' },
-  { href: '/produtos/padel1/rentabilidade', label: 'Rentabilidade Torneios' },
   { href: '/produtos/padel1/utilizadores', label: 'Utilizadores' },
   { href: '/produtos/padel1/configuracoes', label: 'Configurações' },
 ]
