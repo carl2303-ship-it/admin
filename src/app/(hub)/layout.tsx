@@ -16,8 +16,8 @@ export default async function HubLayout({
 
   if (auth.error && !auth.isBootstrap) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-6">
-        <div className="max-w-md rounded-2xl border border-amber-200 bg-amber-50 p-6 text-amber-900">
+      <div className="flex min-h-screen items-center justify-center bg-black p-6">
+        <div className="max-w-md rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6 text-amber-100">
           <h1 className="font-[family-name:var(--font-display)] text-lg font-bold">
             Acesso negado
           </h1>
@@ -32,8 +32,8 @@ export default async function HubLayout({
     : (auth.staff?.role ?? 'readonly')
 
   return (
-    <div className="flex min-h-screen">
-      <div className="sticky top-0 hidden h-screen md:block">
+    <div className="flex min-h-screen bg-black text-slate-100">
+      <div className="sticky top-0 hidden h-screen shrink-0 md:block">
         <Sidebar
           staffName={auth.staff?.full_name ?? null}
           staffEmail={auth.staff?.email ?? auth.user.email ?? ''}
@@ -41,25 +41,38 @@ export default async function HubLayout({
         />
       </div>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-b border-zinc-200 bg-white/80 px-4 py-3 backdrop-blur md:hidden">
+        <header className="border-b border-slate-800 bg-black px-4 py-3 md:hidden">
           <div className="flex items-center justify-between">
             <p className="font-[family-name:var(--font-display)] font-bold">
-              PADEL <span className="text-emerald-600">HUB</span>
+              PADEL <span className="text-cyan-400">HUB</span>
             </p>
-            <span className="text-[10px] uppercase tracking-wider text-zinc-500">
+            <span className="text-[10px] uppercase tracking-wider text-amber-400">
               {role}
             </span>
           </div>
-          <nav className="mt-3 flex gap-3 overflow-x-auto text-xs font-semibold text-zinc-600">
-            <a href="/dashboard">Dashboard</a>
-            <a href="/produtos/boost">Boost</a>
-            <a href="/produtos/padel1">Padel1</a>
-            <a href="/produtos/sportsevents">SE</a>
-            <a href="/conteudo">Conteúdo</a>
-            <a href="/configuracao">Config</a>
+          <nav className="mt-3 flex gap-3 overflow-x-auto text-xs font-semibold text-slate-400">
+            <a href="/dashboard" className="hover:text-cyan-400">
+              Dashboard
+            </a>
+            <a href="/produtos/boost" className="hover:text-cyan-400">
+              Boost
+            </a>
+            <a href="/produtos/padel1" className="hover:text-cyan-400">
+              Padel1
+            </a>
+            <a href="/produtos/sportsevents" className="hover:text-cyan-400">
+              SE
+            </a>
+            <a href="/conteudo" className="hover:text-amber-400">
+              Conteúdo & Social
+            </a>
+            <a href="/configuracao" className="hover:text-cyan-400">
+              Config
+            </a>
           </nav>
         </header>
-        <main className="flex-1 p-4 md:p-8">{children}</main>
+        {/* Full-bleed: só a barra HQ à esquerda; sem encuadrar o conteúdo */}
+        <main className="min-h-0 flex-1">{children}</main>
       </div>
     </div>
   )
