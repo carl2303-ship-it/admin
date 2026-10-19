@@ -45,7 +45,7 @@ export function ColorSizeFields({
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase text-zinc-500">Cores</span>
+          <span className="text-xs font-bold uppercase text-slate-400">Cores</span>
           <button
             type="button"
             className={btnGhost}
@@ -100,7 +100,7 @@ export function ColorSizeFields({
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Tamanhos
           </span>
           <button
