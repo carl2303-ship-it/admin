@@ -115,6 +115,8 @@ export function EnterpriseShell({
 
   async function loadEnterpriseData() {
     setLoading(true)
+    // Garante a lista completa de clubes parceiros do legado (idempotente).
+    await seJson('/api/se/partners/ensure-clubs', { method: 'POST' })
     const { ok, data } = await seJson<{
       leads?: any[]
       partners?: any[]
@@ -143,7 +145,7 @@ export function EnterpriseShell({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-950 text-slate-100 font-sans flex flex-col overflow-hidden">
+    <div className="min-h-full w-full bg-black text-slate-100 font-sans flex flex-col">
       <header className="bg-slate-900/90 border-b border-slate-800 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
         <div className="flex items-center gap-3">
           <div>
@@ -209,18 +211,18 @@ export function EnterpriseShell({
         >
           <Building2 className="w-4 h-4" /> Rede de Parceiros (ERP)
         </button>
-        <button
-          onClick={() => setActiveTab('blog')}
-          className={`py-3 flex items-center gap-2 border-b-2 transition-all ${activeTab === 'blog' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
+        <Link
+          href="/conteudo/blog-se"
+          className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all"
         >
           <Newspaper className="w-4 h-4" /> Blog SEO
-        </button>
-        <button
-          onClick={() => setActiveTab('social')}
-          className={`py-3 flex items-center gap-2 border-b-2 transition-all ${activeTab === 'social' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
+        </Link>
+        <Link
+          href="/conteudo/social"
+          className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all"
         >
           <Megaphone className="w-4 h-4" /> Redes sociais
-        </button>
+        </Link>
         <button
           onClick={() => setActiveTab('roi')}
           className={`py-3 flex items-center gap-2 border-b-2 transition-all ${activeTab === 'roi' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
