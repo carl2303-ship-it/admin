@@ -26,7 +26,7 @@ export default async function Padel1ClubesPage() {
       <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
         Clubes
       </h2>
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-slate-400">
         CRUD, plano, suspensão, owner (Edge), licenças, checkout Stripe e
         toggles de módulos — paridade com HQClubManagement.
       </p>

@@ -26,7 +26,7 @@ export default async function Padel1ConfiguracoesPage() {
       <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
         Configurações HQ
       </h2>
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-slate-400">
         Stripe plataforma e planos de clube (
         <code>platform_stripe_config</code> / <code>platform_plans</code>).
         Secrets nunca são reexibidos — só presença + rotação.

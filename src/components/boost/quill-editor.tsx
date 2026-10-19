@@ -66,7 +66,7 @@ export function QuillEditor({
   }, [])
 
   return (
-    <div className="boost-quill rounded-xl border border-zinc-300 bg-white [&_.ql-toolbar]:rounded-t-xl [&_.ql-container]:rounded-b-xl [&_.ql-editor]:min-h-[160px]">
+    <div className="boost-quill rounded-xl border border-slate-700 bg-slate-950 [&_.ql-toolbar]:rounded-t-xl [&_.ql-container]:rounded-b-xl [&_.ql-editor]:min-h-[160px]">
       <div ref={hostRef} />
       <input ref={hiddenRef} type="hidden" name={name} defaultValue={defaultValue} />
     </div>
