@@ -30,8 +30,8 @@ export default async function BoostContasPage() {
       <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
         Contas / utilizadores (Boost)
       </h2>
-      <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">O que o admin.html permite</p>
+      <Panel className="p-5 text-sm text-slate-400">
+        <p className="font-semibold text-white">O que o admin.html permite</p>
         <ul className="mt-2 list-inside list-disc space-y-1">
           <li>
             Login/logout na Auth Boost — <strong>sem</strong> CRUD de staff Boost
@@ -77,7 +77,7 @@ export default async function BoostContasPage() {
           <tbody>
             {result.data.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={5} className="px-4 py-8 text-center text-slate-400">
                   Sem organizações
                 </td>
               </tr>

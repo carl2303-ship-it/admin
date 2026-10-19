@@ -62,7 +62,7 @@ export default async function ConteudoBlogBoostPage({
           <tbody>
             {result.data.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-slate-400">
                   Nenhum post
                 </td>
               </tr>
@@ -79,7 +79,7 @@ export default async function ConteudoBlogBoostPage({
                     inactiveLabel="Rascunho"
                   />
                 </Td>
-                <Td className="text-xs text-zinc-500">
+                <Td className="text-xs text-slate-400">
                   {new Date(p.created_at).toLocaleDateString('pt-PT')}
                 </Td>
                 <Td>
