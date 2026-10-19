@@ -176,7 +176,7 @@ export function ModulesPanel({
             <label className="text-xs font-semibold">
               sort_order
               <input
-                className={`${fieldClass} mt.1`}
+                className={`${fieldClass} mt-1`}
                 value={form.sortOrder}
                 onChange={(e) =>
                   setForm({ ...form, sortOrder: e.target.value })
