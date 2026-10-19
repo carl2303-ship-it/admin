@@ -21,7 +21,7 @@ export function ImageUploadField({
 
   return (
     <div className="space-y-2">
-      <span className="text-xs font-bold uppercase text-zinc-500">{label}</span>
+      <span className="text-xs font-bold uppercase text-slate-400">{label}</span>
       <div className="flex flex-wrap items-center gap-2">
         <input
           name={name}
@@ -68,7 +68,7 @@ export function ImageUploadField({
         <img
           src={url}
           alt="Preview"
-          className="h-24 w-24 rounded-lg border border-zinc-200 object-cover"
+          className="h-24 w-24 rounded-lg border border-slate-800 object-cover"
         />
       ) : null}
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
@@ -97,7 +97,7 @@ export function AdditionalImagesField({
 
   return (
     <div className="space-y-2">
-      <span className="text-xs font-bold uppercase text-zinc-500">
+      <span className="text-xs font-bold uppercase text-slate-400">
         Imagens adicionais
       </span>
       <textarea
@@ -161,7 +161,7 @@ export function AdditionalImagesField({
               key={u}
               src={u}
               alt=""
-              className="h-16 w-16 rounded-lg border border-zinc-200 object-cover"
+              className="h-16 w-16 rounded-lg border border-slate-800 object-cover"
             />
           ))}
         </div>
