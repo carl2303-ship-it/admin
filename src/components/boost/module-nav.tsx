@@ -11,8 +11,6 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/produtos/boost/categorias', label: 'Categorias' },
   { href: '/produtos/boost/marcas', label: 'Marcas' },
   { href: '/produtos/boost/descontos', label: 'Descontos' },
-  { href: '/produtos/boost/blog', label: 'Blog' },
-  { href: '/produtos/boost/newsletter', label: 'Newsletter' },
   { href: '/produtos/boost/ebook-leads', label: 'Leads Ebook' },
   { href: '/produtos/boost/ebook-compras', label: 'Compras Ebook' },
   { href: '/produtos/boost/funis', label: 'Funis Ebook' },
@@ -26,7 +24,7 @@ export function BoostModuleNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="flex gap-1 overflow-x-auto border-b border-zinc-200 pb-px">
+    <nav className="flex gap-1 overflow-x-auto pb-px">
       {TABS.map((tab) => {
         const active = tab.exact
           ? pathname === tab.href
@@ -36,16 +34,22 @@ export function BoostModuleNav() {
             key={tab.href}
             href={tab.href}
             className={cn(
-              'shrink-0 rounded-t-lg px-3 py-2 text-sm font-semibold transition',
+              'shrink-0 px-3 py-3 text-sm font-semibold transition border-b-2',
               active
-                ? 'bg-white text-sky-700 shadow-[inset_0_-2px_0_0_rgb(14_165_233)]'
-                : 'text-zinc-500 hover:bg-white/70 hover:text-zinc-800'
+                ? 'border-cyan-400 text-cyan-400'
+                : 'border-transparent text-slate-500 hover:text-amber-400'
             )}
           >
             {tab.label}
           </Link>
         )
       })}
+      <Link
+        href="/conteudo"
+        className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-amber-400/50 hover:text-amber-400"
+      >
+        Conteúdo & Social →
+      </Link>
     </nav>
   )
 }

@@ -20,7 +20,7 @@ export function Padel1ModuleNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="flex gap-1 overflow-x-auto border-b border-zinc-200 pb-px">
+    <nav className="flex gap-1 overflow-x-auto pb-px">
       {TABS.map((tab) => {
         const active = tab.exact
           ? pathname === tab.href
@@ -30,10 +30,10 @@ export function Padel1ModuleNav() {
             key={tab.href}
             href={tab.href}
             className={cn(
-              'shrink-0 rounded-t-lg px-3 py-2 text-sm font-semibold transition',
+              'shrink-0 px-3 py-3 text-sm font-semibold transition border-b-2',
               active
-                ? 'bg-white text-violet-700 shadow-[inset_0_-2px_0_0_rgb(109_40_217)]'
-                : 'text-zinc-500 hover:bg-white/70 hover:text-zinc-800'
+                ? 'border-cyan-400 text-cyan-400'
+                : 'border-transparent text-slate-500 hover:text-amber-400'
             )}
           >
             {tab.label}

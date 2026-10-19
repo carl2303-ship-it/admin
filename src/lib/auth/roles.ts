@@ -15,9 +15,9 @@ export type HubProduct = 'boost' | 'padel1' | 'sportsevents' | 'content' | 'dash
 const ROLE_ACCESS: Record<HubRole, HubProduct[]> = {
   owner: ['dashboard', 'boost', 'padel1', 'sportsevents', 'content'],
   ops: ['dashboard', 'sportsevents', 'content'],
-  commerce: ['dashboard', 'boost', 'sportsevents'],
+  commerce: ['dashboard', 'boost', 'sportsevents', 'content'],
   platform: ['dashboard', 'padel1'],
-  content: ['dashboard', 'content', 'boost'],
+  content: ['dashboard', 'content', 'boost', 'sportsevents'],
   readonly: ['dashboard'],
 }
 
