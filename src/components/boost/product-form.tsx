@@ -49,7 +49,7 @@ export function ProductForm({
       {product?.id && <input type="hidden" name="id" value={product.id} />}
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">Nome</span>
+          <span className="text-xs font-bold uppercase text-slate-400">Nome</span>
           <input
             name="name"
             required
@@ -58,7 +58,7 @@ export function ProductForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">Slug</span>
+          <span className="text-xs font-bold uppercase text-slate-400">Slug</span>
           <input
             name="slug"
             defaultValue={product?.slug || ''}
@@ -67,7 +67,7 @@ export function ProductForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Categoria
           </span>
           <select
@@ -84,7 +84,7 @@ export function ProductForm({
           </select>
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">Marca</span>
+          <span className="text-xs font-bold uppercase text-slate-400">Marca</span>
           <select
             name="brand_id"
             defaultValue={product?.brand_id || ''}
@@ -99,7 +99,7 @@ export function ProductForm({
           </select>
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">Preço €</span>
+          <span className="text-xs font-bold uppercase text-slate-400">Preço €</span>
           <input
             name="price"
             type="number"
@@ -111,7 +111,7 @@ export function ProductForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Preço compare
           </span>
           <input
@@ -124,7 +124,7 @@ export function ProductForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">Stock</span>
+          <span className="text-xs font-bold uppercase text-slate-400">Stock</span>
           <input
             name="stock"
             type="number"
@@ -149,7 +149,7 @@ export function ProductForm({
         </div>
       </div>
       <label className="block space-y-1">
-        <span className="text-xs font-bold uppercase text-zinc-500">
+        <span className="text-xs font-bold uppercase text-slate-400">
           Descrição curta
         </span>
         <input
@@ -159,7 +159,7 @@ export function ProductForm({
         />
       </label>
       <div className="space-y-1">
-        <span className="text-xs font-bold uppercase text-zinc-500">
+        <span className="text-xs font-bold uppercase text-slate-400">
           Descrição (Quill)
         </span>
         <QuillEditor
@@ -174,7 +174,7 @@ export function ProductForm({
       />
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Download URL
           </span>
           <input
@@ -184,7 +184,7 @@ export function ProductForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Video URL
           </span>
           <input
@@ -194,7 +194,7 @@ export function ProductForm({
           />
         </label>
         <label className="block space-y-1 md:col-span-2">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Learn more URL
           </span>
           <input
