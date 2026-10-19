@@ -1,1 +1,1 @@
-/home/ubuntu/admin/src/components/sportsevents/BlogAdminPanel.tsx
+LOAD_FROM_TMP
