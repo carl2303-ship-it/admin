@@ -61,15 +61,15 @@ export default async function BoostEbookFunnelDetailPage({
         <div>
           <Link
             href="/produtos/boost/funis"
-            className="text-sm font-semibold text-sky-700 hover:underline"
+            className="text-sm font-semibold text-cyan-400 hover:underline"
           >
             ← Funis Ebook
           </Link>
           <h2 className="mt-1 font-[family-name:var(--font-display)] text-xl font-bold">
             {funnel.title}
           </h2>
-          <p className="mt-1 text-sm text-zinc-500">
-            Slug <code className="rounded bg-zinc-100 px-1">{funnel.slug}</code>
+          <p className="mt-1 text-sm text-slate-400">
+            Slug <code className="rounded bg-slate-800 px-1">{funnel.slug}</code>
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -85,23 +85,23 @@ export default async function BoostEbookFunnelDetailPage({
       </div>
 
       <Panel className="space-y-2 p-4 text-sm">
-        <p className="font-bold text-zinc-800">Chaves Stripe (productType)</p>
+        <p className="font-bold text-slate-200">Chaves Stripe (productType)</p>
         <p>
           Ebook:{' '}
-          <code className="rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-900">
+          <code className="rounded bg-cyan-500/10 px-1.5 py-0.5 text-cyan-200">
             {funnel.ebook_product_type}
           </code>{' '}
           — configurado ✓ (price_data dinâmico, sem Price ID no Dashboard)
         </p>
         <p>
           Upsell:{' '}
-          <code className="rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-900">
+          <code className="rounded bg-cyan-500/10 px-1.5 py-0.5 text-cyan-200">
             {funnel.upsell_product_type}
           </code>
         </p>
 
-        <p className="pt-2 font-bold text-zinc-800">URLs públicas (dinâmicas)</p>
-        <ul className="list-inside list-disc space-y-1 text-sky-800">
+        <p className="pt-2 font-bold text-slate-200">URLs públicas (dinâmicas)</p>
+        <ul className="list-inside list-disc space-y-1 text-cyan-300">
           <li>
             <a
               href={dynamic.landing}
@@ -136,10 +136,10 @@ export default async function BoostEbookFunnelDetailPage({
 
         {legacy ? (
           <>
-            <p className="pt-2 font-bold text-zinc-800">
+            <p className="pt-2 font-bold text-slate-200">
               URLs legado (landing rica HTML estático)
             </p>
-            <ul className="list-inside list-disc space-y-1 text-sky-800">
+            <ul className="list-inside list-disc space-y-1 text-cyan-300">
               <li>
                 <a
                   href={legacy.landing}
@@ -184,8 +184,8 @@ export default async function BoostEbookFunnelDetailPage({
           </>
         ) : null}
 
-        <p className="pt-2 font-bold text-zinc-800">Loja Boost</p>
-        <ul className="list-inside list-disc space-y-1 text-emerald-800">
+        <p className="pt-2 font-bold text-slate-200">Loja Boost</p>
+        <ul className="list-inside list-disc space-y-1 text-cyan-300">
           <li>
             Grelha digitais:{' '}
             <a
