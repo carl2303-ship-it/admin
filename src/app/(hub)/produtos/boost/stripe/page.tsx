@@ -32,7 +32,7 @@ export default async function BoostStripePage() {
       <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
         Stripe · Boost
       </h2>
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-slate-400">
         O admin Boost antigo não tinha tab Stripe — usava Edge Functions. Aqui
         fica o estado visível no hub (subscrições SaaS + sessions ebook),
         reutilizando as mesmas EFs.
@@ -40,7 +40,7 @@ export default async function BoostStripePage() {
 
       <div className="grid gap-3 sm:grid-cols-3">
         <Panel className="p-4">
-          <p className="text-xs font-bold uppercase text-zinc-500">
+          <p className="text-xs font-bold uppercase text-slate-400">
             Edge invoke
           </p>
           <div className="mt-2">
@@ -52,21 +52,21 @@ export default async function BoostStripePage() {
           </div>
         </Panel>
         <Panel className="p-4">
-          <p className="text-xs font-bold uppercase text-zinc-500">
+          <p className="text-xs font-bold uppercase text-slate-400">
             Orgs com Stripe sub
           </p>
           <p className="mt-1 text-2xl font-bold">{d.withStripeSub}</p>
         </Panel>
         <Panel className="p-4">
-          <p className="text-xs font-bold uppercase text-zinc-500">
+          <p className="text-xs font-bold uppercase text-slate-400">
             Orgs sem Stripe sub
           </p>
           <p className="mt-1 text-2xl font-bold">{d.withoutStripeSub}</p>
         </Panel>
       </div>
 
-      <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Edge Functions (reutilizar)</p>
+      <Panel className="p-5 text-sm text-slate-400">
+        <p className="font-semibold text-white">Edge Functions (reutilizar)</p>
         <ul className="mt-2 list-inside list-disc space-y-1">
           <li>
             <code>stripe-checkout</code> — loja, ebook, app-access, SaaS Tour
@@ -121,7 +121,7 @@ export default async function BoostStripePage() {
           <tbody>
             {d.subscriptions.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-slate-400">
                   Sem organizações
                 </td>
               </tr>
@@ -130,7 +130,7 @@ export default async function BoostStripePage() {
               <tr key={o.id}>
                 <Td>
                   <p className="font-semibold">{o.name}</p>
-                  <p className="text-xs text-zinc-400">{o.owner_email}</p>
+                  <p className="text-xs text-slate-500">{o.owner_email}</p>
                 </Td>
                 <Td>{o.plan_type}</Td>
                 <Td>{o.status}</Td>
@@ -170,7 +170,7 @@ export default async function BoostStripePage() {
               <tr key={p.id}>
                 <Td>
                   <p className="font-semibold">{p.customer_name || '—'}</p>
-                  <p className="text-xs text-zinc-400">{p.customer_email}</p>
+                  <p className="text-xs text-slate-500">{p.customer_email}</p>
                 </Td>
                 <Td>{p.product_type}</Td>
                 <Td>€{Number(p.amount || 0).toFixed(2)}</Td>
