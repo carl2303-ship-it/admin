@@ -27,7 +27,7 @@ export function DiscountForm({
 
   return (
     <form
-      className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+      className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950 p-5"
       action={(fd) => {
         start(async () => {
           setError(null)
@@ -53,7 +53,7 @@ export function DiscountForm({
       {discount?.id && <input type="hidden" name="id" value={discount.id} />}
       <div className="grid gap-3 md:grid-cols-2">
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Código
           </span>
           <input
@@ -64,7 +64,7 @@ export function DiscountForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">Tipo</span>
+          <span className="text-xs font-bold uppercase text-slate-400">Tipo</span>
           <select
             name="type"
             defaultValue={discount?.type || 'percentage'}
@@ -75,7 +75,7 @@ export function DiscountForm({
           </select>
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Valor (% ou €)
           </span>
           <input
@@ -89,7 +89,7 @@ export function DiscountForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Descrição
           </span>
           <input
@@ -99,7 +99,7 @@ export function DiscountForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Mín. compra
           </span>
           <input
@@ -112,7 +112,7 @@ export function DiscountForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Máx. usos
           </span>
           <input
@@ -124,7 +124,7 @@ export function DiscountForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Aplica-se a
           </span>
           <select
@@ -139,7 +139,7 @@ export function DiscountForm({
           </select>
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Válido de
           </span>
           <input
@@ -154,7 +154,7 @@ export function DiscountForm({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Válido até
           </span>
           <input
@@ -180,7 +180,7 @@ export function DiscountForm({
 
       {appliesTo === 'category' && (
         <label className="block space-y-1">
-          <span className="text-xs font-bold uppercase text-zinc-500">
+          <span className="text-xs font-bold uppercase text-slate-400">
             Categoria
           </span>
           <select
@@ -201,19 +201,19 @@ export function DiscountForm({
       )}
 
       {appliesTo === 'specific_products' && (
-        <div className="max-h-56 space-y-1 overflow-y-auto rounded-xl border border-zinc-200 p-3">
-          <p className="mb-2 text-xs font-bold uppercase text-zinc-500">
+        <div className="max-h-56 space-y-1 overflow-y-auto rounded-xl border border-slate-800 p-3">
+          <p className="mb-2 text-xs font-bold uppercase text-slate-400">
             Produtos ({selected.length} seleccionados)
           </p>
           {activeProducts.length === 0 ? (
-            <p className="text-sm text-zinc-500">Nenhum produto activo</p>
+            <p className="text-sm text-slate-400">Nenhum produto activo</p>
           ) : (
             activeProducts.map((p) => {
               const checked = selected.includes(p.id)
               return (
                 <label
                   key={p.id}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-zinc-50"
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-slate-900"
                 >
                   <input
                     type="checkbox"
