@@ -51,27 +51,27 @@ export function PacksPanel({
         <Panel key={p.code} className="space-y-2 p-4">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <p className="font-semibold text-zinc-900">
+              <p className="font-semibold text-white">
                 {p.name}{' '}
                 {p.is_popular && (
-                  <span className="text-xs font-bold text-violet-600">
+                  <span className="text-xs font-bold text-cyan-400">
                     Popular
                   </span>
                 )}
               </p>
-              <p className="text-xs text-zinc-500">{p.code}</p>
+              <p className="text-xs text-slate-400">{p.code}</p>
             </div>
             <StatusPill active={p.is_active} />
           </div>
-          <p className="text-sm text-zinc-600">{p.description}</p>
-          <p className="text-xs text-zinc-500">
+          <p className="text-sm text-slate-400">{p.description}</p>
+          <p className="text-xs text-slate-400">
             €{p.price_monthly ?? '—'} /mês · €{p.price_annual ?? '—'} /ano
           </p>
           <div className="flex flex-wrap gap-1">
             {(p.module_codes || []).map((c) => (
               <span
                 key={c}
-                className="rounded bg-zinc-100 px-2 py-0.5 text-[11px] font-semibold text-zinc-700"
+                className="rounded bg-slate-800 px-2 py-0.5 text-[11px] font-semibold text-slate-300"
               >
                 {c}
               </span>
@@ -79,7 +79,7 @@ export function PacksPanel({
           </div>
 
           {editCode === p.code && canWrite && (
-            <div className="space-y-2 border-t border-zinc-100 pt-3">
+            <div className="space-y-2 border-t border-slate-800 pt-3">
               <input
                 className={fieldClass}
                 value={form.name}
