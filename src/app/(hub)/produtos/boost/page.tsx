@@ -78,10 +78,10 @@ export default async function BoostOverviewPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-zinc-500">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-slate-400">
         <p>
           Acesso:{' '}
-          <span className="font-semibold text-zinc-800">{role}</span>
+          <span className="font-semibold text-slate-200">{role}</span>
           {canWriteBoost(role)
             ? ' · escrita loja/SaaS'
             : ' · leitura / conteúdo conforme role'}
@@ -129,12 +129,12 @@ export default async function BoostOverviewPage() {
               <Link key={item.href} href={item.href}>
                 <Panel className="p-4 transition hover:border-sky-300 hover:shadow-md">
                   <div className="flex items-center justify-between">
-                    <Icon className="h-5 w-5 text-sky-600" />
+                    <Icon className="h-5 w-5 text-cyan-400" />
                     <span className="font-[family-name:var(--font-display)] text-2xl font-bold">
                       {counts.data[item.key]}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm font-semibold text-zinc-700">
+                  <p className="mt-2 text-sm font-semibold text-slate-300">
                     {item.label}
                   </p>
                 </Panel>
@@ -144,8 +144,8 @@ export default async function BoostOverviewPage() {
         </div>
       )}
 
-      <Panel className="p-5 text-sm text-zinc-600">
-        <p className="font-semibold text-zinc-900">Paridade operacional Boost</p>
+      <Panel className="p-5 text-sm text-slate-400">
+        <p className="font-semibold text-white">Paridade operacional Boost</p>
         <p className="mt-1">
           Tabs loja/conteúdo/marketing/SaaS/Stripe no hub — Quill, upload
           Storage, cores/tamanhos, preview email digital, descontos e analytics.
