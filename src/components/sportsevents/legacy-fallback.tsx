@@ -6,11 +6,11 @@ import { getDeepLink } from '@/lib/products/deep-links'
 export function SportsEventsLegacyFallback() {
   const link = getDeepLink('sportsevents')
   return (
-    <p className="pt-4 text-center text-[11px] text-zinc-400">
+    <p className="pt-4 text-center text-[11px] text-slate-500">
       Emergência:{' '}
       <Link
         href="/api/bridge/sportsevents"
-        className="font-semibold text-amber-700 hover:underline"
+        className="font-semibold text-amber-400 hover:underline"
       >
         bridge Auth
       </Link>
@@ -19,7 +19,7 @@ export function SportsEventsLegacyFallback() {
         href={link.url}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-1 font-semibold text-zinc-500 hover:text-zinc-800"
+        className="inline-flex items-center gap-1 font-semibold text-slate-400 hover:text-slate-200"
       >
         {link.url.replace(/^https?:\/\//, '')}
         <ExternalLink className="h-3 w-3" />
