@@ -41,7 +41,7 @@ export default async function BoostEbookFunnelsPage() {
       <div className="space-y-4">
         <ErrorBanner message={result.error} />
         {missingTable ? (
-          <Panel className="p-4 text-sm text-zinc-700">
+          <Panel className="p-4 text-sm text-slate-300">
             <p className="font-bold">Migration necessária no Supabase Boost</p>
             <p className="mt-1">
               Corre o SQL{' '}
@@ -66,9 +66,9 @@ export default async function BoostEbookFunnelsPage() {
           <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
             Funis Ebook
           </h2>
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-sm text-slate-400">
             Cria landings + upsells sem clonar HTML. URLs públicas:
-            <code className="ml-1 rounded bg-zinc-100 px-1 text-xs">
+            <code className="ml-1 rounded bg-slate-800 px-1 text-xs">
               {STORE_BASE}/funnel.html?slug=…
             </code>
           </p>
@@ -76,7 +76,7 @@ export default async function BoostEbookFunnelsPage() {
         {write && !hasLegacy ? (
           <div className="space-y-1 text-right">
             <ImportLegacyPadelIqButton />
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-slate-400">
               Importa PADEL IQ PRO (PT) + liga à loja
             </p>
           </div>
@@ -101,7 +101,7 @@ export default async function BoostEbookFunnelsPage() {
           <tbody>
             {funnels.length === 0 ? (
               <tr>
-                <Td colSpan={7} className="text-zinc-500">
+                <Td colSpan={7} className="text-slate-400">
                   Ainda sem funis. Cria o primeiro acima
                   {write ? ' ou importa o legado PADEL IQ PRO' : ''}.
                 </Td>
@@ -114,14 +114,14 @@ export default async function BoostEbookFunnelsPage() {
                   ? legacyPadelIqUrls().landing
                   : urls.landing
                 return (
-                  <tr key={f.id} className="border-t border-zinc-100">
+                  <tr key={f.id} className="border-t border-slate-800">
                     <Td>
                       <p className="font-semibold">{f.title}</p>
-                      <p className="text-xs text-zinc-500">{f.headline}</p>
+                      <p className="text-xs text-slate-400">{f.headline}</p>
                     </Td>
                     <Td>
                       <p className="font-mono text-xs">{f.slug}</p>
-                      <p className="font-mono text-[11px] text-zinc-500">
+                      <p className="font-mono text-[11px] text-slate-400">
                         {f.ebook_product_type} · {f.upsell_product_type}
                       </p>
                     </Td>
@@ -138,7 +138,7 @@ export default async function BoostEbookFunnelsPage() {
                           }
                           target="_blank"
                           rel="noreferrer"
-                          className="text-sky-700 hover:underline"
+                          className="text-cyan-400 hover:underline"
                         >
                           Landing
                         </a>
@@ -148,7 +148,7 @@ export default async function BoostEbookFunnelsPage() {
                           }
                           target="_blank"
                           rel="noreferrer"
-                          className="text-sky-700 hover:underline"
+                          className="text-cyan-400 hover:underline"
                         >
                           Upsell
                         </a>
@@ -160,7 +160,7 @@ export default async function BoostEbookFunnelsPage() {
                           }
                           target="_blank"
                           rel="noreferrer"
-                          className="text-sky-700 hover:underline"
+                          className="text-cyan-400 hover:underline"
                         >
                           Thank-you
                         </a>
@@ -168,7 +168,7 @@ export default async function BoostEbookFunnelsPage() {
                           href={storeCta}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-emerald-700 hover:underline"
+                          className="text-cyan-300 hover:underline"
                         >
                           Loja «Saber mais»
                         </a>
@@ -186,7 +186,7 @@ export default async function BoostEbookFunnelsPage() {
                     <Td>
                       <Link
                         href={`/produtos/boost/funis/${f.id}`}
-                        className="text-sm font-semibold text-sky-700 hover:underline"
+                        className="text-sm font-semibold text-cyan-400 hover:underline"
                       >
                         Gerir
                       </Link>
