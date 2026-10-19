@@ -1,10 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f6f5;
-  --foreground: #18181b;
-  --hub-emerald: #059669;
-  --hub-ink: #09090b;
+  /* Shell unificada SE: fundo preto + azul claro + amarelo */
+  --background: #000000;
+  --foreground: #e2e8f0;
+  --hub-cyan: #22d3ee;
+  --hub-amber: #fbbf24;
+  --hub-ink: #000000;
+  --hub-panel: #0a0a0a;
+  --hub-border: #1e293b;
 }
 
 @theme inline {
@@ -15,10 +19,7 @@
 }
 
 body {
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgb(16 185 129 / 0.12), transparent 55%),
-    radial-gradient(900px 500px at 100% 0%, rgb(14 165 233 / 0.08), transparent 50%),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
 }
 
