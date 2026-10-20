@@ -1,1 +1,1 @@
-@file:///tmp/PartnersNetwork.tsx
+PROBE_ARGUMENTS_FILE
