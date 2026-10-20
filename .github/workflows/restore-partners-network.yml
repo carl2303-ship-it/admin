@@ -1,0 +1,33 @@
+name: restore-partners-network
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/restore-pn/pn.tsx.gz.b64'
+      - '.github/workflows/restore-partners-network.yml'
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode gzip PartnersNetwork and commit
+        run: |
+          set -euo pipefail
+          DEST=src/components/sportsevents/PartnersNetwork.tsx
+          base64 -d .github/restore-pn/pn.tsx.gz.b64 | gzip -dc > "$DEST"
+          EXPECTED=28fdab87b76c754a874befb2225eecb6f86d8ef6dbe85029a5b257cd09815e50
+          GOT=$(sha256sum "$DEST" | awk '{print $1}')
+          echo "got=$GOT"
+          test "$GOT" = "$EXPECTED"
+          grep -q "initialListMode = 'ALL'" "$DEST"
+          git config user.name "carl2303-ship-it"
+          git config user.email "carl2303@gmail.com"
+          git add "$DEST"
+          if git diff --cached --quiet; then
+            echo "No change needed"
+            exit 0
+          fi
+          git commit -m "fix(se): listar clubes reais da DB SE — shell/network sem seed"
+          git push origin HEAD:main
