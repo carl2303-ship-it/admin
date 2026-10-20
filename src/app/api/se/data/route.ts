@@ -30,7 +30,8 @@ export async function GET() {
       .from('partners')
       .select('*, destinations(name)')
       .order('country_code', { ascending: true })
-      .order('name', { ascending: true }),
+      .order('name', { ascending: true })
+      .limit(5000),
     db
       .from('events')
       .select('*, destinations(name, code), sports(name), hub_packages(package_key, name)')

@@ -1,60 +1,51 @@
 import { NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/admin'
 import { requireSeStaff } from '@/lib/sportsevents/auth'
-import { EUROPEAN_PADEL_CLUBS } from '@/lib/sportsevents/european-padel-clubs'
-import { ensureEuropeanPadelClubs } from '@/lib/sportsevents/ensure-european-clubs'
+import { getPartnersDbCounts } from '@/lib/sportsevents/partners-counts'
 
-/** Diagnóstico: contagens sem inserir. */
+/**
+ * Diagnóstico: contagens reais na DB SE.
+ * O seed inventado de ~37 clubes foi desactivado — os clubes já existem em partners.
+ */
 export async function GET() {
   const auth = await requireSeStaff()
   if (auth.error) {
     return NextResponse.json({ error: auth.error }, { status: auth.status })
   }
 
-  const db = createServiceClient()
-  if (!db) {
-    return NextResponse.json(
-      {
-        error: 'SUPABASE_SERVICE_ROLE_KEY em falta',
-        serviceRole: false,
-        totalSeed: EUROPEAN_PADEL_CLUBS.length,
-        clubesPadel: null,
-      },
-      { status: 503 }
-    )
-  }
-
-  const { count, error } = await db
-    .from('partners')
-    .select('id', { count: 'exact', head: true })
-    .eq('type', 'CLUBE_PADEL')
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  const counts = await getPartnersDbCounts()
+  if (!counts.ok) {
+    return NextResponse.json(counts, {
+      status: counts.serviceRole ? 500 : 503,
+    })
   }
 
   return NextResponse.json({
-    serviceRole: true,
-    totalSeed: EUROPEAN_PADEL_CLUBS.length,
-    clubesPadel: count ?? 0,
-    missing: Math.max(0, EUROPEAN_PADEL_CLUBS.length - (count ?? 0)),
-    ok: (count ?? 0) >= EUROPEAN_PADEL_CLUBS.length,
+    ok: true,
+    serviceRole: counts.serviceRole,
+    total: counts.total,
+    clubesPadel: counts.clubesPadel,
+    byType: counts.byType,
+    seedDisabled: true,
   })
 }
 
-/** Idempotente: garante os 37 clubes europeus do legado em `partners`. */
+/** Seed desactivado — devolve só contagens (não insere). */
 export async function POST() {
   const auth = await requireSeStaff()
   if (auth.error) {
     return NextResponse.json({ error: auth.error }, { status: auth.status })
   }
 
-  const result = await ensureEuropeanPadelClubs()
-  const status = !result.serviceRole
-    ? 503
-    : result.errors.length && result.inserted === 0
-      ? 400
-      : 200
-
-  return NextResponse.json(result, { status })
+  const counts = await getPartnersDbCounts()
+  return NextResponse.json(
+    {
+      ...counts,
+      inserted: 0,
+      skipped: 0,
+      seedDisabled: true,
+      message:
+        'Seed inventado desactivado. Os clubes já estão em public.partners — usa GET /api/se/data.',
+    },
+    { status: 200 }
+  )
 }
