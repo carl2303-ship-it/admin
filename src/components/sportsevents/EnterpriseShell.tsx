@@ -124,8 +124,11 @@ export function EnterpriseShell({
     }
   }, [])
 
+  const [dataError, setDataError] = useState<string | null>(null)
+
   async function loadEnterpriseData() {
     setLoading(true)
+    setDataError(null)
     // Lê partners reais da DB SE via /api/se/data — sem seed inventado.
     const { ok, data } = await seJson<{
       leads?: any[]
@@ -137,9 +140,11 @@ export function EnterpriseShell({
       destinations?: LookupOption[]
       sports?: LookupOption[]
       error?: string
+      warnings?: string[]
     }>('/api/se/data')
     if (!ok) {
       console.error(data.error)
+      setDataError(data.error || 'Falha a carregar dados SE')
       setLoading(false)
       return
     }
@@ -151,6 +156,9 @@ export function EnterpriseShell({
     setTransferLogs(data.transferLogs || [])
     setDestinations(data.destinations || [])
     setSports(data.sports || [])
+    if (data.warnings?.length) {
+      console.warn('[se/data]', data.warnings)
+    }
     setLoading(false)
   }
 
@@ -261,6 +269,17 @@ export function EnterpriseShell({
       )}
 
       <main className="p-6 flex-1 overflow-y-auto">
+        {dataError && (
+          <div className="mb-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
+            Erro a carregar dados SE: {dataError}
+          </div>
+        )}
+        {activeTab === 'partners' && !loading && partners.length === 0 && !dataError && (
+          <div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+            Nenhum parceiro devolvido pela API. Confirma service role SE no Netlify e
+            filtro «Todos».
+          </div>
+        )}
         {activeTab === 'kpis' && (
           <div className="space-y-4">
             {loading ? (
