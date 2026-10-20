@@ -1,6 +1,6 @@
 /**
- * Seed reference — European padel clubs for SportsEvents.app CRM.
- * Already imported into Supabase `partners` (type CLUBE_PADEL).
+ * @deprecated Referência histórica (~37 nomes). NÃO usar para seed.
+ * A DB SE já tem ~132 CLUBE_PADEL em public.partners — lista via /api/se/data.
  */
 export const EUROPEAN_PADEL_CLUBS = [
   {
