@@ -1,1 +1,1 @@
-LOADING_FROM_DISK_PLACEHOLDER
+@file:///tmp/PartnersNetwork.tsx
