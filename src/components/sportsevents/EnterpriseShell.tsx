@@ -51,11 +51,22 @@ export function EnterpriseShell({
   initialTab = 'kpis',
   initialEventsSubTab = 'packages',
   hideChromeNav = false,
+  partnersListMode = 'ALL',
 }: {
   initialTab?: SeShellTab
   initialEventsSubTab?: 'packages' | 'dated'
   /** Quando true, esconde a nav interna (usa module-nav do hub). */
   hideChromeNav?: boolean
+  /** Filtro inicial da lista de parceiros (default: Todos). */
+  partnersListMode?:
+    | 'ALL'
+    | 'A_CONTACTAR'
+    | 'EMAIL'
+    | 'TELEFONE'
+    | 'RESPONDIDO'
+    | 'INTERESSE'
+    | 'SEM_INTERESSE'
+    | 'PARCEIRO'
 }) {
   const [activeTab, setActiveTab] = useState<SeShellTab>(initialTab)
   const [eventsSubTab, setEventsSubTab] = useState<'packages' | 'dated'>(
@@ -115,8 +126,7 @@ export function EnterpriseShell({
 
   async function loadEnterpriseData() {
     setLoading(true)
-    // Garante a lista completa de clubes parceiros do legado (idempotente).
-    await seJson('/api/se/partners/ensure-clubs', { method: 'POST' })
+    // Lê partners reais da DB SE via /api/se/data — sem seed inventado.
     const { ok, data } = await seJson<{
       leads?: any[]
       partners?: any[]
@@ -276,6 +286,7 @@ export function EnterpriseShell({
         {activeTab === 'partners' && (
           <PartnersNetwork
             partners={partners}
+            initialListMode={partnersListMode}
             onRefresh={loadEnterpriseData}
             onRequestAddPartner={(type) => {
               setPartnerModalType(type || 'CLUBE_PADEL')
