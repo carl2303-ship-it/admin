@@ -1,15 +1,18 @@
 -- =============================================================================
--- SEED: 37 clubes europeus (legado sportsevents.app/admin) → public.partners
--- Projecto Supabase: SportsEvents (ref tprbpeacicadsbmvxcqk)
+-- OBSOLETO / NÃO CORRER
+-- Seed inventado de 37 clubes — ERRADO.
+-- Os clubes reais (~132 CLUBE_PADEL) JÁ existem em public.partners no projecto
+-- SportsEvents (ref tprbpeacicadsbmvxcqk). O Hub lista-os via /api/se/data.
 --
--- COMO CORRER (Carlos):
--- 1. Abrir https://supabase.com/dashboard/project/tprbpeacicadsbmvxcqk/sql/new
--- 2. Colar TODO este ficheiro e Run
--- 3. Confirmar no fim: clubes_padel >= 37
--- 4. Abrir https://admin.sportsevents.app/produtos/sportsevents/parceiros → filtro «Todos»
---
--- Idempotente: não duplica (mesmo name + country_code + type CLUBE_PADEL).
--- Se der erro no type/status (enum), diz ao agente a mensagem exacta.
+-- Verificação (SQL Editor):
+--   SELECT count(*) FILTER (WHERE type::text = 'CLUBE_PADEL') AS clubes_padel,
+--          count(*) AS total
+--   FROM public.partners;
+-- =============================================================================
+-- Conteúdo abaixo mantido só como histórico — NÃO executar.
+/*
+-- =============================================================================
+-- (histórico) SEED: 37 clubes europeus inventados — NÃO USAR
 -- =============================================================================
 
 BEGIN;
@@ -304,3 +307,11 @@ WHERE NOT EXISTS (
     AND upper(coalesce(p.country_code, '')) = upper('CH')
 );
 
+*/
+-- Fim do bloco histórico — NÃO executar o seed acima.
+
+-- Verificação segura (só SELECT):
+SELECT
+  count(*) FILTER (WHERE type::text = 'CLUBE_PADEL') AS clubes_padel,
+  count(*) AS total
+FROM public.partners;
