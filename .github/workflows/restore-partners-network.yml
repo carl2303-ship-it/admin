@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - '.github/restore-pn/pn.tsx.gz.b64'
+      - '.github/restore-pn/**'
       - '.github/workflows/restore-partners-network.yml'
 permissions:
   contents: write
@@ -16,7 +16,7 @@ jobs:
         run: |
           set -euo pipefail
           DEST=src/components/sportsevents/PartnersNetwork.tsx
-          base64 -d .github/restore-pn/pn.tsx.gz.b64 | gzip -dc > "$DEST"
+          cat .github/restore-pn/gzpart*.b64 | tr -d '\n' | base64 -d | gzip -dc > "$DEST"
           EXPECTED=28fdab87b76c754a874befb2225eecb6f86d8ef6dbe85029a5b257cd09815e50
           GOT=$(sha256sum "$DEST" | awk '{print $1}')
           echo "got=$GOT"
