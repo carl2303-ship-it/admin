@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation'
 import { requireSportsEventsModule } from '@/lib/sportsevents/auth'
+import { ensureEuropeanPadelClubs } from '@/lib/sportsevents/ensure-european-clubs'
 import { EnterpriseShell } from '@/components/sportsevents/EnterpriseShell'
+import { PartnersSeedBanner } from '@/components/sportsevents/PartnersSeedBanner'
 
 export default async function SeParceirosPage() {
   const auth = await requireSportsEventsModule()
@@ -12,5 +14,19 @@ export default async function SeParceirosPage() {
       </div>
     )
   }
-  return <EnterpriseShell initialTab="partners" hideChromeNav />
+
+  // Seed no servidor (service role) — não depende do browser / não engole erros.
+  const seed = await ensureEuropeanPadelClubs()
+
+  return (
+    <div className="space-y-4">
+      <PartnersSeedBanner seed={seed} />
+      <EnterpriseShell
+        initialTab="partners"
+        hideChromeNav
+        partnersListMode="ALL"
+        skipClientEnsure
+      />
+    </div>
+  )
 }
