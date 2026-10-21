@@ -4,8 +4,10 @@ import { requireBoostClient, invokeBoostEdgeFunction } from './client'
 import { PLAN_MAX_TOURNAMENTS } from './types'
 import {
   guardWrite,
+  guardSaasWrite,
   guardContentWrite,
   revalidateBoost,
+  revalidateSaas,
   slugify,
   type ActionResult,
 } from './actions-shared'
@@ -15,7 +17,7 @@ import {
 export async function saveSaasLicense(
   formData: FormData
 ): Promise<ActionResult> {
-  const g = await guardWrite()
+  const g = await guardSaasWrite()
   if (!g.ok) return g
 
   const id = String(formData.get('id') || '')
@@ -62,7 +64,7 @@ export async function saveSaasLicense(
         .eq('id', id)
         .eq('source', 'boost')
       if (error) return { ok: false, error: error.message }
-      revalidateBoost(['/produtos/boost/saas'])
+      revalidateSaas()
       return { ok: true, message: 'Licença actualizada' }
     }
 
@@ -84,17 +86,17 @@ export async function saveSaasLicense(
 
     if (error) return { ok: false, error }
     if (data?.tour_provision?.credentials_sent) {
-      revalidateBoost(['/produtos/boost/saas'])
+      revalidateSaas()
       return { ok: true, message: 'Licença criada; credenciais Tour enviadas.' }
     }
     if (data?.tour_provision?.user_id) {
-      revalidateBoost(['/produtos/boost/saas'])
+      revalidateSaas()
       return {
         ok: true,
         message: 'Licença criada e login Tour associado (email de credenciais pode ter falhado).',
       }
     }
-    revalidateBoost(['/produtos/boost/saas'])
+    revalidateSaas()
     return {
       ok: true,
       message:
@@ -106,7 +108,7 @@ export async function saveSaasLicense(
 }
 
 export async function toggleSaasStatus(id: string): Promise<ActionResult> {
-  const g = await guardWrite()
+  const g = await guardSaasWrite()
   if (!g.ok) return g
   try {
     const client = requireBoostClient()
@@ -123,7 +125,7 @@ export async function toggleSaasStatus(id: string): Promise<ActionResult> {
       .update({ status: next })
       .eq('id', id)
     if (up) return { ok: false, error: up.message }
-    revalidateBoost(['/produtos/boost/saas'])
+    revalidateSaas()
     return { ok: true }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
@@ -134,7 +136,7 @@ export async function updateSaasPlan(
   id: string,
   planType: string
 ): Promise<ActionResult> {
-  const g = await guardWrite()
+  const g = await guardSaasWrite()
   if (!g.ok) return g
   try {
     const client = requireBoostClient()
@@ -147,7 +149,7 @@ export async function updateSaasPlan(
       .eq('id', id)
       .eq('source', 'boost')
     if (error) return { ok: false, error: error.message }
-    revalidateBoost(['/produtos/boost/saas'])
+    revalidateSaas()
     return { ok: true }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
@@ -155,7 +157,7 @@ export async function updateSaasPlan(
 }
 
 export async function deleteSaasLicense(id: string): Promise<ActionResult> {
-  const g = await guardWrite()
+  const g = await guardSaasWrite()
   if (!g.ok) return g
   try {
     const client = requireBoostClient()
@@ -165,7 +167,7 @@ export async function deleteSaasLicense(id: string): Promise<ActionResult> {
       .eq('id', id)
       .eq('source', 'boost')
     if (error) return { ok: false, error: error.message }
-    revalidateBoost(['/produtos/boost/saas'])
+    revalidateSaas()
     return { ok: true }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
@@ -175,7 +177,7 @@ export async function deleteSaasLicense(id: string): Promise<ActionResult> {
 export async function resendSaasCredentials(
   organizationId: string
 ): Promise<ActionResult> {
-  const g = await guardWrite()
+  const g = await guardSaasWrite()
   if (!g.ok) return g
 
   const { data, error } = await invokeBoostEdgeFunction<{
@@ -197,7 +199,7 @@ export async function generateSaasPaymentLink(input: {
   billingPeriod: 'mensal' | 'anual'
   sendEmail: boolean
 }): Promise<ActionResult & { url?: string }> {
-  const g = await guardWrite()
+  const g = await guardSaasWrite()
   if (!g.ok) return g
 
   const { createSaasPaymentLink } = await import('./saas-payment-link')
@@ -207,7 +209,7 @@ export async function generateSaasPaymentLink(input: {
   })
   if (!result.ok) return { ok: false, error: result.error }
 
-  revalidateBoost(['/produtos/boost/saas'])
+  revalidateSaas()
   return {
     ok: true,
     url: result.url,
