@@ -119,17 +119,12 @@ export default async function MetricasHubPage() {
           <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-amber-400">
             SportsEvents
           </h2>
-          <div className="flex gap-3 text-sm font-semibold">
-            <Link href="/metricas/se" className="text-cyan-400 hover:underline">
-              KPIs SE →
-            </Link>
-            <Link
-              href="/simulacoes/roi"
-              className="text-amber-400 hover:underline"
-            >
-              ROI Torneios →
-            </Link>
-          </div>
+          <Link
+            href="/metricas/se"
+            className="text-sm font-semibold text-cyan-400 hover:underline"
+          >
+            KPIs SE →
+          </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {kpis

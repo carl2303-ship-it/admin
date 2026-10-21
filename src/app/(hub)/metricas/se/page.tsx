@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { requireHubAccess } from '@/lib/auth/hub-auth'
 import {
@@ -62,12 +61,7 @@ export default async function MetricasSePage() {
   return (
     <div className="space-y-8">
       <p className="text-sm text-slate-400">
-        Contagens reais do ERP SportsEvents. A calculadora ROI / rentabilidade
-        vive em{' '}
-        <Link href="/simulacoes/roi" className="font-semibold text-amber-400">
-          Simulações → ROI Torneios
-        </Link>
-        .
+        Contagens reais do ERP SportsEvents.
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -119,24 +113,6 @@ export default async function MetricasSePage() {
             error: bookings.error || undefined,
           }}
         />
-      </div>
-
-      <div className="flex flex-wrap gap-4 text-sm font-semibold">
-        <Link
-          href="/produtos/sportsevents"
-          className="text-cyan-400 hover:underline"
-        >
-          Calendário / insights →
-        </Link>
-        <Link
-          href="/produtos/sportsevents/pipeline"
-          className="text-cyan-400 hover:underline"
-        >
-          Pipeline CRM →
-        </Link>
-        <Link href="/simulacoes" className="text-amber-400 hover:underline">
-          Simulador financeiro →
-        </Link>
       </div>
     </div>
   )
