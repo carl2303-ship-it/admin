@@ -12,7 +12,6 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/produtos/padel1/transacoes', label: 'Transações' },
   { href: '/produtos/padel1/saas', label: 'SaaS Tour' },
   { href: '/produtos/padel1/utilizadores', label: 'Utilizadores' },
-  { href: '/produtos/padel1/configuracoes', label: 'Configurações' },
 ]
 
 export function Padel1ModuleNav() {
@@ -29,7 +28,7 @@ export function Padel1ModuleNav() {
             key={tab.href}
             href={tab.href}
             className={cn(
-              'shrink-0 px-3 py-3 text-sm font-semibold transition border-b-2',
+              'shrink-0 border-b-2 px-3 py-3 text-sm font-semibold transition',
               active
                 ? 'border-cyan-400 text-cyan-400'
                 : 'border-transparent text-slate-500 hover:text-amber-400'
@@ -39,12 +38,6 @@ export function Padel1ModuleNav() {
           </Link>
         )
       })}
-      <Link
-        href="/metricas/padel1"
-        className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-cyan-400/50 hover:text-cyan-400"
-      >
-        Métricas →
-      </Link>
     </nav>
   )
 }

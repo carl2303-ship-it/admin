@@ -11,13 +11,7 @@ import {
   ErrorBanner,
   Panel,
 } from '@/components/padel1/ui'
-import {
-  Building2,
-  Layers,
-  Package,
-  Users,
-  ArrowLeftRight,
-} from 'lucide-react'
+import { Building2, Layers, Package, Users } from 'lucide-react'
 
 const LINKS = [
   {
@@ -59,44 +53,13 @@ export default async function Padel1OverviewPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-slate-400">
-        <p>
-          Acesso:{' '}
-          <span className="font-semibold text-slate-200">{role}</span>
-          {canWritePadel1(role)
-            ? ' · escrita HQ (owner/platform)'
-            : ' · só leitura'}
-        </p>
-        <div className="flex flex-wrap gap-3 text-xs font-semibold">
-          <Link
-            href="/produtos/padel1/transacoes"
-            className="inline-flex items-center gap-1 text-violet-700 hover:underline"
-          >
-            <ArrowLeftRight className="h-3.5 w-3.5" /> Transações
-          </Link>
-          <Link
-            href="/metricas/padel1"
-            className="text-cyan-400 hover:underline"
-          >
-            Métricas
-          </Link>
-          <Link
-            href="/produtos/padel1/saas"
-            className="text-amber-400 hover:underline"
-          >
-            SaaS Tour
-          </Link>
-          <Link
-            href="/produtos/padel1/configuracoes"
-            className="text-violet-700 hover:underline"
-          >
-            Configurações
-          </Link>
-          <Link href="/configuracao/padel1" className="text-violet-700 hover:underline">
-            Env hub
-          </Link>
-        </div>
-      </div>
+      <p className="text-sm text-slate-400">
+        Acesso:{' '}
+        <span className="font-semibold text-slate-200">{role}</span>
+        {canWritePadel1(role)
+          ? ' · escrita HQ (owner/platform)'
+          : ' · só leitura'}
+      </p>
 
       {!counts.ok && counts.missingConfig && (
         <ConfigBanner message={counts.error} />
@@ -134,7 +97,7 @@ export default async function Padel1OverviewPage() {
             const Icon = item.icon
             return (
               <Link key={item.href} href={item.href}>
-                <Panel className="p-4 transition hover:border-violet-300 hover:shadow-md">
+                <Panel className="p-4 transition hover:border-cyan-500/40">
                   <div className="flex items-center justify-between">
                     <Icon className="h-5 w-5 text-cyan-400" />
                     <span className="font-[family-name:var(--font-display)] text-2xl font-bold">
@@ -154,9 +117,7 @@ export default async function Padel1OverviewPage() {
       {kpis.ok && (
         <div className="grid gap-3 lg:grid-cols-2">
           <Panel className="p-4">
-            <p className="text-sm font-semibold text-white">
-              Clubes por plano
-            </p>
+            <p className="text-sm font-semibold text-white">Clubes por plano</p>
             <ul className="mt-2 space-y-1 text-sm text-slate-400">
               <li>Bronze: {kpis.data.planCounts.bronze}</li>
               <li>Silver: {kpis.data.planCounts.silver}</li>
@@ -178,23 +139,6 @@ export default async function Padel1OverviewPage() {
           </Panel>
         </div>
       )}
-
-      <Panel className="p-5 text-sm text-slate-400">
-        <p className="font-semibold text-white">Paridade HQ Manager</p>
-        <p className="mt-1">
-          Dashboard, Clubes, Módulos, Packs, Transações, SaaS Tour,
-          Utilizadores/super_admins e Configurações — gate{' '}
-          <code>hub_staff</code> (owner/platform). Métricas consolidadas em{' '}
-          <Link href="/metricas/padel1" className="text-cyan-400">
-            /metricas/padel1
-          </Link>
-          ; ROI em{' '}
-          <Link href="/simulacoes/roi" className="text-amber-400">
-            Simulações
-          </Link>
-          .
-        </p>
-      </Panel>
     </div>
   )
 }

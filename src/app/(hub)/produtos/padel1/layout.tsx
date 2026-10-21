@@ -1,5 +1,4 @@
 import { Padel1ModuleNav } from '@/components/padel1/module-nav'
-import { Padel1LegacyFallback } from '@/components/padel1/legacy-fallback'
 import { ProductChrome } from '@/components/shell/product-chrome'
 
 export default function Padel1ModuleLayout({
@@ -14,9 +13,6 @@ export default function Padel1ModuleLayout({
       nav={<Padel1ModuleNav />}
     >
       {children}
-      <div className="mt-6">
-        <Padel1LegacyFallback />
-      </div>
     </ProductChrome>
   )
 }

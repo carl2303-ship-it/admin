@@ -1,5 +1,4 @@
 import { SportsEventsModuleNav } from '@/components/sportsevents/module-nav'
-import { SportsEventsLegacyFallback } from '@/components/sportsevents/legacy-fallback'
 import { ProductChrome } from '@/components/shell/product-chrome'
 
 export default function SportsEventsModuleLayout({
@@ -14,9 +13,6 @@ export default function SportsEventsModuleLayout({
       nav={<SportsEventsModuleNav />}
     >
       {children}
-      <div className="mt-6">
-        <SportsEventsLegacyFallback />
-      </div>
     </ProductChrome>
   )
 }

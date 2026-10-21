@@ -14,8 +14,6 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/produtos/boost/ebook-leads', label: 'Leads Ebook' },
   { href: '/produtos/boost/ebook-compras', label: 'Compras Ebook' },
   { href: '/produtos/boost/funis', label: 'Funis Ebook' },
-  { href: '/produtos/boost/stripe', label: 'Stripe' },
-  { href: '/produtos/boost/contas', label: 'Contas' },
 ]
 
 export function BoostModuleNav() {
@@ -32,7 +30,7 @@ export function BoostModuleNav() {
             key={tab.href}
             href={tab.href}
             className={cn(
-              'shrink-0 px-3 py-3 text-sm font-semibold transition border-b-2',
+              'shrink-0 border-b-2 px-3 py-3 text-sm font-semibold transition',
               active
                 ? 'border-cyan-400 text-cyan-400'
                 : 'border-transparent text-slate-500 hover:text-amber-400'
@@ -42,18 +40,6 @@ export function BoostModuleNav() {
           </Link>
         )
       })}
-      <Link
-        href="/metricas/boost"
-        className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-cyan-400/50 hover:text-cyan-400"
-      >
-        Analytics →
-      </Link>
-      <Link
-        href="/conteudo"
-        className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-amber-400/50 hover:text-amber-400"
-      >
-        Conteúdo & Social →
-      </Link>
     </nav>
   )
 }

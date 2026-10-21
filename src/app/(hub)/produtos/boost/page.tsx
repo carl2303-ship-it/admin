@@ -11,7 +11,6 @@ import {
   Mail,
   Download,
   CreditCard,
-  BarChart3,
 } from 'lucide-react'
 
 const LINKS = [
@@ -71,47 +70,11 @@ export default async function BoostOverviewPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-slate-400">
-        <p>
-          Acesso:{' '}
-          <span className="font-semibold text-slate-200">{role}</span>
-          {canWriteBoost(role)
-            ? ' · escrita loja/SaaS'
-            : ' · leitura / conteúdo conforme role'}
-        </p>
-        <div className="flex flex-wrap gap-3 text-xs font-semibold">
-          <Link
-            href="/metricas/boost"
-            className="inline-flex items-center gap-1 text-cyan-400 hover:underline"
-          >
-            <BarChart3 className="h-3.5 w-3.5" /> Analytics
-          </Link>
-          <Link
-            href="/produtos/padel1/saas"
-            className="text-amber-400 hover:underline"
-          >
-            SaaS Tour (Padel1) →
-          </Link>
-          <Link href="/produtos/boost/stripe" className="text-sky-700 hover:underline">
-            Stripe
-          </Link>
-          <Link href="/produtos/boost/contas" className="text-sky-700 hover:underline">
-            Contas
-          </Link>
-          <Link href="/equipa" className="text-sky-700 hover:underline">
-            Equipa hub
-          </Link>
-          <Link
-            href="/produtos/boost/categorias"
-            className="text-sky-700 hover:underline"
-          >
-            Categorias
-          </Link>
-          <Link href="/produtos/boost/marcas" className="text-sky-700 hover:underline">
-            Marcas
-          </Link>
-        </div>
-      </div>
+      <p className="text-sm text-slate-400">
+        Acesso:{' '}
+        <span className="font-semibold text-slate-200">{role}</span>
+        {canWriteBoost(role) ? ' · escrita loja' : ' · leitura / conteúdo'}
+      </p>
 
       {!counts.ok && counts.missingConfig && (
         <ConfigBanner message={counts.error} />
@@ -126,7 +89,7 @@ export default async function BoostOverviewPage() {
             const Icon = item.icon
             return (
               <Link key={item.href} href={item.href}>
-                <Panel className="p-4 transition hover:border-sky-300 hover:shadow-md">
+                <Panel className="p-4 transition hover:border-cyan-500/40">
                   <div className="flex items-center justify-between">
                     <Icon className="h-5 w-5 text-cyan-400" />
                     <span className="font-[family-name:var(--font-display)] text-2xl font-bold">
@@ -142,21 +105,6 @@ export default async function BoostOverviewPage() {
           })}
         </div>
       )}
-
-      <Panel className="p-5 text-sm text-slate-400">
-        <p className="font-semibold text-white">Paridade operacional Boost</p>
-        <p className="mt-1">
-          Tabs loja/conteúdo/marketing/Stripe no hub. SaaS Tour vive em{' '}
-          <Link href="/produtos/padel1/saas" className="text-cyan-400">
-            Padel One HQ
-          </Link>
-          ; Analytics em{' '}
-          <Link href="/metricas/boost" className="text-cyan-400">
-            Métricas
-          </Link>
-          . Estágios ficam em SportsEvents. Legacy só emergência.
-        </p>
-      </Panel>
     </div>
   )
 }
