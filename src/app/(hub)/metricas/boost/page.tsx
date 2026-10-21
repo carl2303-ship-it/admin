@@ -17,7 +17,7 @@ function Change({ value }: { value: number | null }) {
   if (value === null) return <span className="text-xs text-slate-500">—</span>
   const up = value >= 0
   return (
-    <span className={`text-xs font-semibold ${up ? 'text-cyan-400' : 'text-red-600'`}>
+    <span className={`text-xs font-semibold ${up ? 'text-cyan-400' : 'text-red-600'}`}>
       {up ? '↑' : '↓'} {Math.abs(value).toFixed(1)}% vs período anterior
     </span>
   )
