@@ -79,22 +79,22 @@ export const PRODUCT_STRIPE_CONTEXTS: ProductStripeContext[] = [
     blurb:
       'Conta usada pelas Edge Functions Boost (checkout SaaS / ebooks). Secrets no Edge Boost, não no Netlify admin.',
     secretsLiveIn: 'Supabase Boost → Edge Functions → Secrets',
-    hubOpsHref: '/produtos/boost/stripe',
+    hubOpsHref: '/configuracao/boost',
   },
   {
     product: 'padel1',
     title: 'Stripe · Padel1 (plataforma)',
     blurb:
-      'Stripe da plataforma / HQ. Escrita live no hub chega na Fase 3; por agora deep-link + intent.',
-    secretsLiveIn: 'Projecto padel1 / Manager (fora do env admin)',
-    hubOpsHref: '/produtos/padel1',
+      'Stripe da plataforma / HQ — planos e secrets em Configuração · Padel1.',
+    secretsLiveIn: 'Projecto padel1 (platform_stripe_config)',
+    hubOpsHref: '/configuracao/padel1',
   },
   {
     product: 'sportsevents',
     title: 'Stripe · SportsEvents (Connect)',
     blurb:
-      'Connect / pagamentos do site público. Env no Netlify sportsevents.app até Fase 4.',
-    secretsLiveIn: 'Netlify sportsevents.app (+ ERP /admin)',
-    hubOpsHref: '/produtos/sportsevents',
+      'Connect / pagamentos — definições e intents em Configuração · SportsEvents.',
+    secretsLiveIn: 'Netlify sportsevents.app + app_settings',
+    hubOpsHref: '/configuracao/sportsevents',
   },
 ]
