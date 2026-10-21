@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { ConfigSectionNav, IntegrationTable } from '@/components/config/config-ui'
 import { BoostStripeSecretsForm } from '@/components/config/boost-stripe-form'
+import { BoostStripeOpsSection } from '@/components/config/boost-stripe-ops'
 import { ConfigIntentsTable } from '@/components/config/intents-table'
 import { StripeDashboardLinks } from '@/components/config/stripe-dashboard-links'
 import { NetlifyEnvPanel } from '@/components/config/netlify-env-panel'
@@ -36,15 +36,8 @@ export default async function ConfigBoostPage() {
           Boost Store
         </h1>
         <p className="mt-1 max-w-2xl text-sm text-slate-400">
-          Estado das env do hub para Boost + rotação Stripe nas Edge Functions +
-          atalhos Dashboard. Ops do dia-a-dia em{' '}
-          <Link
-            href="/produtos/boost/stripe"
-            className="font-semibold text-cyan-400 hover:underline"
-          >
-            /produtos/boost/stripe
-          </Link>
-          .
+          Env, secrets Stripe Edge, dashboard e ops (subs / ebook / acessos
+          Tour) — tudo aqui.
         </p>
       </div>
 
@@ -72,6 +65,8 @@ export default async function ConfigBoostPage() {
       <IntegrationTable items={status.integrations} />
 
       <StripeDashboardLinks product="boost" />
+
+      <BoostStripeOpsSection />
 
       <BoostStripeSecretsForm
         managementConfigured={edge.managementConfigured}

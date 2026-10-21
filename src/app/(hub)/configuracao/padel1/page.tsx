@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { ConfigSectionNav, IntegrationTable } from '@/components/config/config-ui'
 import { ConfigIntentForm } from '@/components/config/config-intent-form'
 import { ConfigIntentsTable } from '@/components/config/intents-table'
@@ -11,6 +10,12 @@ import {
 } from '@/lib/config/queries'
 import { getPadel1ConfigStatus } from '@/lib/config/status'
 import { getNetlifyEnvVisibility } from '@/lib/config/netlify-env'
+import { getSettings } from '@/lib/padel1/queries'
+import { SettingsPanel } from '@/components/padel1/settings-panel'
+import {
+  canWritePadel1,
+  staffRole,
+} from '@/lib/padel1/auth'
 import { ErrorBanner, Panel } from '@/components/boost/ui'
 
 export default async function ConfigPadel1Page() {
@@ -19,9 +24,11 @@ export default async function ConfigPadel1Page() {
   if (!gate.allowed) return <ErrorBanner message={gate.error || 'Sem permissão'} />
 
   const status = getPadel1ConfigStatus()
-  const [intents, netlify] = await Promise.all([
+  const write = canWritePadel1(staffRole(gate.staff, gate.isBootstrap))
+  const [intents, netlify, settings] = await Promise.all([
     listConfigIntents('padel1'),
     getNetlifyEnvVisibility({ product: 'padel1' }),
+    getSettings(),
   ])
 
   return (
@@ -34,13 +41,28 @@ export default async function ConfigPadel1Page() {
           Padel One
         </h1>
         <p className="mt-1 max-w-2xl text-sm text-slate-400">
-          Mais do que status: env Netlify do admin, atalhos Stripe HQ e intents
-          para rotação sem perder o contexto no hub. Escrita live Stripe
-          plataforma = Fase 3.
+          Stripe plataforma, planos, env Netlify e intents — tudo nesta tab.
         </p>
       </div>
 
       <ConfigSectionNav active="padel1" />
+
+      {settings.ok ? (
+        <div className="space-y-3">
+          <h2 className="font-[family-name:var(--font-display)] text-lg font-bold">
+            Stripe HQ · planos
+          </h2>
+          <SettingsPanel
+            stripe={settings.data.stripe}
+            plans={settings.data.plans}
+            canWrite={write}
+          />
+        </div>
+      ) : (
+        <Panel className="p-4 text-sm text-slate-400">
+          {settings.error || 'Sem settings Padel1'}
+        </Panel>
+      )}
 
       <IntegrationTable items={status.integrations} />
 
@@ -58,29 +80,6 @@ export default async function ConfigPadel1Page() {
       />
 
       <ConfigIntentsTable intents={intents} />
-
-      <Panel className="p-5 text-sm text-slate-400">
-        <p className="font-semibold text-white">Atalhos no hub</p>
-        <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
-          <li>
-            Produto / KPIs:{' '}
-            <Link
-              href="/produtos/padel1"
-              className="font-semibold text-cyan-400 hover:underline"
-            >
-              /produtos/padel1
-            </Link>
-          </li>
-          <li>
-            HQ de emergência: deep-link{' '}
-            <code>NEXT_PUBLIC_PADEL1_HQ_URL</code> (acima)
-          </li>
-          <li>
-            Estágios: <strong>não</strong> fazem parte do Boost — ERP SE em
-            sportsevents.app
-          </li>
-        </ul>
-      </Panel>
     </div>
   )
 }

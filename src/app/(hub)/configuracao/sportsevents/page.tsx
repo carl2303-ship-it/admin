@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { ConfigSectionNav, IntegrationTable } from '@/components/config/config-ui'
 import { ConfigIntentForm } from '@/components/config/config-intent-form'
 import { ConfigIntentsTable } from '@/components/config/intents-table'
@@ -11,7 +10,8 @@ import {
 } from '@/lib/config/queries'
 import { getSportsEventsConfigStatus } from '@/lib/config/status'
 import { getNetlifyEnvVisibility } from '@/lib/config/netlify-env'
-import { ErrorBanner, Panel } from '@/components/boost/ui'
+import { DefinicoesPanel } from '@/components/sportsevents/DefinicoesPanel'
+import { ErrorBanner } from '@/components/boost/ui'
 
 export default async function ConfigSportsEventsPage() {
   const gate = await requireConfigOwner()
@@ -34,13 +34,16 @@ export default async function ConfigSportsEventsPage() {
           SportsEvents
         </h1>
         <p className="mt-1 max-w-2xl text-sm text-slate-400">
-          Auth e dados SE partilham o Supabase com o hub. Aqui vês o pacote Auth,
-          intents para Stripe Connect / Meta / AI do site público, e env do
-          admin. Estágios = ERP SE, não módulo Boost.
+          Definições SE (staff + app_settings), Stripe Connect, env e intents —
+          tudo nesta tab.
         </p>
       </div>
 
       <ConfigSectionNav active="sportsevents" />
+
+      <div className="overflow-hidden rounded-2xl border border-slate-800">
+        <DefinicoesPanel />
+      </div>
 
       <IntegrationTable items={status.integrations} />
 
@@ -58,41 +61,6 @@ export default async function ConfigSportsEventsPage() {
       />
 
       <ConfigIntentsTable intents={intents} />
-
-      <Panel className="p-5 text-sm text-slate-400">
-        <p className="font-semibold text-white">Onde configurar o resto</p>
-        <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
-          <li>
-            ERP / definições legacy:{' '}
-            <a
-              href="https://sportsevents.app/admin"
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold text-cyan-400 hover:underline"
-            >
-              sportsevents.app/admin
-            </a>
-          </li>
-          <li>
-            Deep-link no hub:{' '}
-            <Link
-              href="/produtos/sportsevents"
-              className="font-semibold text-cyan-400 hover:underline"
-            >
-              /produtos/sportsevents
-            </Link>
-          </li>
-          <li>
-            Estágios e calendário: sportsevents.app (fora do Boost / hub
-            estágios).
-          </li>
-          <li>
-            Migration intents:{' '}
-            <code>20260930170000_create_hub_config_intents.sql</code> no project
-            SE.
-          </li>
-        </ul>
-      </Panel>
     </div>
   )
 }
