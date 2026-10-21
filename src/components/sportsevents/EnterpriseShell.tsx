@@ -9,17 +9,10 @@ import {
   Briefcase,
   Calendar,
   Plus,
-  Calculator,
   IdCard,
-  Settings,
-  Newspaper,
-  Megaphone,
 } from 'lucide-react'
-import RentabilidadeTorneios from '@/components/sportsevents/RentabilidadeTorneios'
 import PartnersNetwork from '@/components/sportsevents/PartnersNetwork'
 import { HubPackagesPanel } from '@/components/sportsevents/HubPackagesPanel'
-import { BlogAdminPanel } from '@/components/sportsevents/BlogAdminPanel'
-import { SocialAdminPanel } from '@/components/sportsevents/SocialAdminPanel'
 import { StagesCalendar } from '@/components/sportsevents/StagesCalendar'
 import {
   CreatePartnerModal,
@@ -43,9 +36,6 @@ export type SeShellTab =
   | 'pipeline'
   | 'partners'
   | 'events'
-  | 'blog'
-  | 'social'
-  | 'roi'
 
 export function EnterpriseShell({
   initialTab = 'kpis',
@@ -102,7 +92,16 @@ export function EnterpriseShell({
       setActiveTab('partners')
     }
     if (params.get('tab') === 'blog') {
-      setActiveTab('blog')
+      window.location.replace('/conteudo/blog-se')
+      return
+    }
+    if (params.get('tab') === 'social') {
+      window.location.replace('/conteudo/social')
+      return
+    }
+    if (params.get('tab') === 'roi') {
+      window.location.replace('/simulacoes/roi')
+      return
     }
     const stripe = params.get('stripe')
     const account = params.get('account')
@@ -230,40 +229,10 @@ export function EnterpriseShell({
           <Building2 className="w-4 h-4" /> Rede de Parceiros (ERP)
         </button>
         <Link
-          href="/conteudo/blog-se"
-          className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all"
-        >
-          <Newspaper className="w-4 h-4" /> Blog SEO
-        </Link>
-        <Link
-          href="/conteudo/social"
-          className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all"
-        >
-          <Megaphone className="w-4 h-4" /> Redes sociais
-        </Link>
-        <Link
-          href="/simulacoes/roi"
-          className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all"
-        >
-          <Calculator className="w-4 h-4" /> Rentabilidade Torneios
-        </Link>
-        <Link
-          href="/simulacoes"
-          className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all"
-        >
-          <Calculator className="w-4 h-4" /> Simulador Financeiro
-        </Link>
-        <Link
           href="/produtos/sportsevents/cartoes"
           className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all"
         >
           <IdCard className="w-4 h-4" /> Cartões digitais
-        </Link>
-        <Link
-          href="/produtos/sportsevents/definicoes"
-          className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-cyan-400 hover:border-cyan-400/50 transition-all"
-        >
-          <Settings className="w-4 h-4" /> Definições
         </Link>
       </nav>
       )}
@@ -313,10 +282,6 @@ export function EnterpriseShell({
             }}
           />
         )}
-
-        {activeTab === 'blog' && <BlogAdminPanel />}
-
-        {activeTab === 'social' && <SocialAdminPanel />}
 
         {activeTab === 'pipeline' && (
           <div className="space-y-4">
@@ -411,8 +376,6 @@ export function EnterpriseShell({
             </div>
           </div>
         )}
-
-        {activeTab === 'roi' && <RentabilidadeTorneios />}
 
         {activeTab === 'events' && (
           <div className="space-y-4">
