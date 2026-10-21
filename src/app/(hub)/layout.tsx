@@ -63,6 +63,12 @@ export default async function HubLayout({
             <a href="/produtos/sportsevents" className="hover:text-cyan-400">
               SE
             </a>
+            <a href="/simulacoes" className="hover:text-amber-400">
+              Simulações
+            </a>
+            <a href="/metricas" className="hover:text-cyan-400">
+              Métricas
+            </a>
             <a href="/conteudo" className="hover:text-amber-400">
               Conteúdo & Social
             </a>
