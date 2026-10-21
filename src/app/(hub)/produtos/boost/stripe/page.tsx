@@ -71,7 +71,7 @@ export default async function BoostStripePage() {
           <li>
             <code>stripe-checkout</code> — loja, ebook, app-access, SaaS Tour
             (hub gera link em{' '}
-            <Link href="/produtos/boost/saas" className="font-bold text-sky-700">
+            <Link href="/produtos/padel1/saas" className="font-bold text-cyan-400">
               SaaS Tour
             </Link>
             )

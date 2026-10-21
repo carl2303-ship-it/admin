@@ -7,7 +7,6 @@ import {
   Package,
   ShoppingBag,
   Percent,
-  KeyRound,
   BookOpen,
   Mail,
   Download,
@@ -33,12 +32,6 @@ const LINKS = [
     label: 'Descontos',
     key: 'discounts' as const,
     icon: Percent,
-  },
-  {
-    href: '/produtos/boost/saas',
-    label: 'SaaS Tour',
-    key: 'saas' as const,
-    icon: KeyRound,
   },
   {
     href: '/produtos/boost/blog',
@@ -88,10 +81,16 @@ export default async function BoostOverviewPage() {
         </p>
         <div className="flex flex-wrap gap-3 text-xs font-semibold">
           <Link
-            href="/produtos/boost/analytics"
-            className="inline-flex items-center gap-1 text-sky-700 hover:underline"
+            href="/metricas/boost"
+            className="inline-flex items-center gap-1 text-cyan-400 hover:underline"
           >
             <BarChart3 className="h-3.5 w-3.5" /> Analytics
+          </Link>
+          <Link
+            href="/produtos/padel1/saas"
+            className="text-amber-400 hover:underline"
+          >
+            SaaS Tour (Padel1) →
           </Link>
           <Link href="/produtos/boost/stripe" className="text-sky-700 hover:underline">
             Stripe
@@ -147,10 +146,15 @@ export default async function BoostOverviewPage() {
       <Panel className="p-5 text-sm text-slate-400">
         <p className="font-semibold text-white">Paridade operacional Boost</p>
         <p className="mt-1">
-          Tabs loja/conteúdo/marketing/SaaS/Stripe no hub — Quill, upload
-          Storage, cores/tamanhos, preview email digital, descontos e analytics.
-          Estágios ficam em SportsEvents (fora do módulo Boost). Legacy só
-          emergência.
+          Tabs loja/conteúdo/marketing/Stripe no hub. SaaS Tour vive em{' '}
+          <Link href="/produtos/padel1/saas" className="text-cyan-400">
+            Padel One HQ
+          </Link>
+          ; Analytics em{' '}
+          <Link href="/metricas/boost" className="text-cyan-400">
+            Métricas
+          </Link>
+          . Estágios ficam em SportsEvents. Legacy só emergência.
         </p>
       </Panel>
     </div>
