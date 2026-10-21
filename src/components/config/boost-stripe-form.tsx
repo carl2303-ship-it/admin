@@ -176,10 +176,10 @@ export function BoostStripeSecretsForm({
             <li>
               Testa um link SaaS em{' '}
               <a
-                href="/produtos/boost/saas"
+                href="/produtos/padel1/saas"
                 className="font-semibold text-cyan-400 hover:underline"
               >
-                /produtos/boost/saas
+                /produtos/padel1/saas
               </a>
             </li>
             <li>
