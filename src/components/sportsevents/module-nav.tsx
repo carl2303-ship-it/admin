@@ -10,8 +10,6 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/produtos/sportsevents/pacotes', label: 'Pacotes' },
   { href: '/produtos/sportsevents/eventos', label: 'Eventos' },
   { href: '/produtos/sportsevents/parceiros', label: 'Parceiros' },
-  { href: '/produtos/sportsevents/rentabilidade', label: 'ROI Torneios' },
-  { href: '/produtos/sportsevents/simulador', label: 'Simulador' },
   { href: '/produtos/sportsevents/cartoes', label: 'Cartões' },
   { href: '/produtos/sportsevents/definicoes', label: 'Definições' },
 ]
@@ -40,6 +38,18 @@ export function SportsEventsModuleNav() {
           </Link>
         )
       })}
+      <Link
+        href="/simulacoes"
+        className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-amber-400/50 hover:text-amber-400"
+      >
+        Simulações →
+      </Link>
+      <Link
+        href="/metricas/se"
+        className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-cyan-400/50 hover:text-cyan-400"
+      >
+        Métricas →
+      </Link>
       <Link
         href="/conteudo"
         className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-amber-400/50 hover:text-amber-400"
