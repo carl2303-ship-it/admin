@@ -12,12 +12,15 @@ import {
   Settings,
   ExternalLink,
   LogOut,
+  Calculator,
+  BarChart3,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import type { HubRole } from '@/lib/auth/roles'
-import { roleCanAccess, roleLabel } from '@/lib/auth/roles'
+import { roleCanAccess } from '@/lib/auth/roles'
+import { roleLabel } from '@/lib/auth/roles'
 
 type NavItem = {
   href: string
@@ -36,6 +39,18 @@ const NAV: NavItem[] = [
     label: 'SportsEvents',
     icon: CalendarDays,
     product: 'sportsevents',
+  },
+  {
+    href: '/simulacoes',
+    label: 'Simulações',
+    icon: Calculator,
+    product: 'dashboard',
+  },
+  {
+    href: '/metricas',
+    label: 'Métricas',
+    icon: BarChart3,
+    product: 'dashboard',
   },
   { href: '/conteudo', label: 'Conteúdo & Social', icon: Megaphone, product: 'content' },
   {
