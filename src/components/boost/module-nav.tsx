@@ -14,8 +14,6 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/produtos/boost/ebook-leads', label: 'Leads Ebook' },
   { href: '/produtos/boost/ebook-compras', label: 'Compras Ebook' },
   { href: '/produtos/boost/funis', label: 'Funis Ebook' },
-  { href: '/produtos/boost/analytics', label: 'Analytics' },
-  { href: '/produtos/boost/saas', label: 'SaaS Tour' },
   { href: '/produtos/boost/stripe', label: 'Stripe' },
   { href: '/produtos/boost/contas', label: 'Contas' },
 ]
@@ -44,6 +42,12 @@ export function BoostModuleNav() {
           </Link>
         )
       })}
+      <Link
+        href="/metricas/boost"
+        className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-cyan-400/50 hover:text-cyan-400"
+      >
+        Analytics →
+      </Link>
       <Link
         href="/conteudo"
         className="shrink-0 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-slate-500 transition hover:border-amber-400/50 hover:text-amber-400"

@@ -75,10 +75,16 @@ export default async function Padel1OverviewPage() {
             <ArrowLeftRight className="h-3.5 w-3.5" /> Transações
           </Link>
           <Link
-            href="/produtos/padel1/metricas"
-            className="text-violet-700 hover:underline"
+            href="/metricas/padel1"
+            className="text-cyan-400 hover:underline"
           >
             Métricas
+          </Link>
+          <Link
+            href="/produtos/padel1/saas"
+            className="text-amber-400 hover:underline"
+          >
+            SaaS Tour
           </Link>
           <Link
             href="/produtos/padel1/configuracoes"
@@ -176,11 +182,17 @@ export default async function Padel1OverviewPage() {
       <Panel className="p-5 text-sm text-slate-400">
         <p className="font-semibold text-white">Paridade HQ Manager</p>
         <p className="mt-1">
-          Dashboard, Clubes (CRUD, owner, licenças, checkout, módulos), Módulos,
-          Packs, Transações, Métricas, Utilizadores/super_admins e
-          Configurações Stripe/planos — no hub com gate{' '}
-          <code>hub_staff</code> (roles owner/platform). ROI / rentabilidade de
-          torneios só em SportsEvents.
+          Dashboard, Clubes, Módulos, Packs, Transações, SaaS Tour,
+          Utilizadores/super_admins e Configurações — gate{' '}
+          <code>hub_staff</code> (owner/platform). Métricas consolidadas em{' '}
+          <Link href="/metricas/padel1" className="text-cyan-400">
+            /metricas/padel1
+          </Link>
+          ; ROI em{' '}
+          <Link href="/simulacoes/roi" className="text-amber-400">
+            Simulações
+          </Link>
+          .
         </p>
       </Panel>
     </div>
