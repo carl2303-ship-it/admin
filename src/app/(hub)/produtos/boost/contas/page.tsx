@@ -58,8 +58,8 @@ export default async function BoostContasPage() {
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 px-4 py-3">
           <p className="font-bold">Owners Tour (organizações Boost)</p>
           <Link
-            href="/produtos/boost/saas"
-            className="text-xs font-bold text-sky-700 hover:underline"
+            href="/produtos/padel1/saas"
+            className="text-xs font-bold text-cyan-400 hover:underline"
           >
             Gerir licenças / provisionar →
           </Link>
