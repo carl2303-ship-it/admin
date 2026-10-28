@@ -73,15 +73,24 @@ type Props = {
   staffName: string | null
   staffEmail: string
   role: HubRole | 'bootstrap'
+  onNavigate?: () => void
+  className?: string
 }
 
-export function Sidebar({ staffName, staffEmail, role }: Props) {
+export function Sidebar({
+  staffName,
+  staffEmail,
+  role,
+  onNavigate,
+  className,
+}: Props) {
   const pathname = usePathname()
   const router = useRouter()
 
   async function logout() {
     const supabase = createClient()
     await supabase.auth.signOut()
+    onNavigate?.()
     router.replace('/login')
     router.refresh()
   }
@@ -93,7 +102,12 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
   })
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-slate-800 bg-black text-slate-100">
+    <aside
+      className={cn(
+        'flex h-full w-64 shrink-0 flex-col border-r border-slate-800 bg-black text-slate-100',
+        className
+      )}
+    >
       <div className="border-b border-slate-800 px-5 py-6">
         <p className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight">
           PADEL <span className="text-cyan-400">HUB</span>
@@ -103,7 +117,7 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
         </p>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto overscroll-contain px-3 py-4">
         {visible.map((item) => {
           const active =
             pathname === item.href || pathname.startsWith(`${item.href}/`)
@@ -112,8 +126,9 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => onNavigate?.()}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                'flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                 active
                   ? 'bg-cyan-500/15 text-cyan-300'
                   : 'text-slate-400 hover:bg-slate-900 hover:text-slate-100'
@@ -136,7 +151,7 @@ export function Sidebar({ staffName, staffEmail, role }: Props) {
         <button
           type="button"
           onClick={logout}
-          className="mt-3 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-xs text-slate-400 transition hover:bg-slate-900 hover:text-slate-100"
+          className="mt-3 flex min-h-11 w-full items-center gap-2 rounded-lg px-2 py-2 text-xs text-slate-400 transition hover:bg-slate-900 hover:text-slate-100"
         >
           <LogOut className="h-3.5 w-3.5" />
           Terminar sessão

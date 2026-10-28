@@ -9,6 +9,8 @@
   --hub-ink: #000000;
   --hub-panel: #0a0a0a;
   --hub-border: #1e293b;
+  --hub-safe-top: env(safe-area-inset-top, 0px);
+  --hub-safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 @theme inline {
@@ -21,6 +23,8 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  padding-top: var(--hub-safe-top);
+  padding-bottom: var(--hub-safe-bottom);
 }
 
 @keyframes fade-up {
@@ -36,4 +40,46 @@ body {
 
 .animate-fade-up {
   animation: fade-up 0.55s ease-out both;
+}
+
+/* Module tabs / horizontal strip — scroll touch-friendly */
+.hub-scroll-x {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+.hub-scroll-x::-webkit-scrollbar {
+  height: 4px;
+}
+
+.hub-scroll-x::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 999px;
+}
+
+/* Tabelas largas — scroll horizontal no telemóvel */
+.hub-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  max-width: 100%;
+}
+
+/* Alvos de toque mínimos em controlos do hub */
+@media (max-width: 767px) {
+  .hub-touch {
+    min-height: 2.75rem;
+  }
+
+  input.hub-touch,
+  select.hub-touch,
+  textarea.hub-touch {
+    font-size: 16px; /* evita zoom iOS */
+  }
 }
