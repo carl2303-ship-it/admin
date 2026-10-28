@@ -1,0 +1,10 @@
+import { icon192 } from '@/lib/pwa/icon-pngs'
+
+export function GET() {
+  return new Response(new Uint8Array(icon192), {
+    headers: {
+      'Content-Type': 'image/png',
+      'Cache-Control': 'public, max-age=86400, immutable',
+    },
+  })
+}
