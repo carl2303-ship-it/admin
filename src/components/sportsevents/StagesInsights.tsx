@@ -173,7 +173,7 @@ export function StagesInsights({
             Sem estágios neste período.
           </p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="hub-table-wrap">
             <table className="w-full text-left text-xs min-w-[720px]">
               <thead className="bg-slate-950 text-slate-500 uppercase text-[10px] tracking-wider">
                 <tr>
@@ -329,7 +329,7 @@ export function StagesInsights({
             de pacotes com split, aparecem aqui por parceiro.
           </p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="hub-table-wrap">
             <table className="w-full text-left text-xs min-w-[640px]">
               <thead className="bg-slate-950 text-slate-500 uppercase text-[10px]">
                 <tr>
