@@ -9,6 +9,11 @@ import {
 } from '@/lib/boost/actions'
 import { ActionButton } from '@/components/boost/action-buttons'
 import {
+  ProductActiveToggle,
+  ProductPriceInput,
+  ProductStockInput,
+} from '@/components/boost/product-inline-fields'
+import {
   ConfigBanner,
   ErrorBanner,
   Panel,
@@ -89,13 +94,35 @@ export default async function BoostProductsPage() {
                   </div>
                 </Td>
                 <Td>{p.category?.name || '—'}</Td>
-                <Td className="font-bold text-cyan-400">
-                  €{Number(p.price).toFixed(2)}
+                <Td>
+                  {write ? (
+                    <ProductPriceInput productId={p.id} price={Number(p.price)} />
+                  ) : (
+                    <span className="font-bold text-cyan-400">
+                      €{Number(p.price).toFixed(2)}
+                    </span>
+                  )}
                 </Td>
-                <Td>{p.stock ?? 0}</Td>
+                <Td>
+                  {write ? (
+                    <ProductStockInput
+                      productId={p.id}
+                      stock={p.stock ?? 0}
+                    />
+                  ) : (
+                    (p.stock ?? 0)
+                  )}
+                </Td>
                 <Td>
                   <div className="flex flex-col gap-1">
-                    <StatusPill active={p.active} />
+                    {write ? (
+                      <ProductActiveToggle
+                        productId={p.id}
+                        active={p.active}
+                      />
+                    ) : (
+                      <StatusPill active={p.active} />
+                    )}
                     {p.is_featured && (
                       <span className="text-[10px] font-bold text-amber-400">
                         ★ destaque
