@@ -192,7 +192,8 @@ export function StagesCalendar({
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+        <div className="hub-table-wrap rounded-2xl border border-slate-800 bg-slate-900">
+          <div className="min-w-[36rem]">
           <div className="grid grid-cols-7 border-b border-slate-800 bg-slate-950/80">
             {WEEKDAYS.map((d) => (
               <div
@@ -269,6 +270,7 @@ export function StagesCalendar({
                 </div>
               )
             })}
+          </div>
           </div>
         </div>
 
