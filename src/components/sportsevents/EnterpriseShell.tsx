@@ -163,81 +163,77 @@ export function EnterpriseShell({
 
   return (
     <div className="min-h-full w-full bg-black text-slate-100 font-sans flex flex-col">
-      <header className="bg-slate-900/90 border-b border-slate-800 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
-        <div className="flex items-center gap-3">
-          <div>
-            <h2 className="text-lg font-black tracking-tight text-white flex items-center gap-2 font-[family-name:var(--font-display)]">
-              SportsEvents{' '}
-              <span className="text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2 py-0.5 rounded-full font-mono">
-                ENTERPRISE ERP
-              </span>
-            </h2>
-            <p className="text-xs text-slate-400">
-              Gestão Multinacional Ibérica (Algarve · Barcelona · Marbella)
-            </p>
-          </div>
+      <header className="flex flex-col gap-3 border-b border-slate-800 bg-slate-900/90 px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-4">
+        <div className="min-w-0">
+          <h2 className="flex flex-wrap items-center gap-2 font-[family-name:var(--font-display)] text-base font-black tracking-tight text-white sm:text-lg">
+            SportsEvents{' '}
+            <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-0.5 font-mono text-xs text-cyan-400">
+              ENTERPRISE ERP
+            </span>
+          </h2>
+          <p className="text-xs text-slate-400">
+            Gestão Multinacional Ibérica (Algarve · Barcelona · Marbella)
+          </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
-            <button
-              onClick={() => setManagerFilter('ALL')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${managerFilter === 'ALL' ? 'bg-slate-800 text-white shadow' : 'text-slate-400 hover:text-white'}`}
-            >
-              Visão Global
-            </button>
-            <button
-              onClick={() => setManagerFilter('PAI')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${managerFilter === 'PAI' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-white'}`}
-            >
-              🇵🇹 Operações Algarve (Pai)
-            </button>
-            <button
-              onClick={() => setManagerFilter('FILHO')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${managerFilter === 'FILHO' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-white'}`}
-            >
-              🇪🇸 Comercial / Espanha (Filho)
-            </button>
-          </div>
+        <div className="hub-scroll-x max-w-full rounded-xl border border-slate-800 bg-slate-950 p-1">
+          <button
+            onClick={() => setManagerFilter('ALL')}
+            className={`inline-flex min-h-10 shrink-0 items-center rounded-lg px-3 text-xs font-semibold transition-all ${managerFilter === 'ALL' ? 'bg-slate-800 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+          >
+            Visão Global
+          </button>
+          <button
+            onClick={() => setManagerFilter('PAI')}
+            className={`inline-flex min-h-10 shrink-0 items-center rounded-lg px-3 text-xs font-semibold transition-all ${managerFilter === 'PAI' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-white'}`}
+          >
+            🇵🇹 Operações Algarve (Pai)
+          </button>
+          <button
+            onClick={() => setManagerFilter('FILHO')}
+            className={`inline-flex min-h-10 shrink-0 items-center rounded-lg px-3 text-xs font-semibold transition-all ${managerFilter === 'FILHO' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-white'}`}
+          >
+            🇪🇸 Comercial / Espanha (Filho)
+          </button>
         </div>
       </header>
 
       {!hideChromeNav && (
-      <nav className="bg-slate-900/50 border-b border-slate-800 px-6 flex gap-6 text-xs font-semibold overflow-x-auto">
+      <nav className="hub-scroll-x border-b border-slate-800 bg-slate-900/50 px-3 text-xs font-semibold sm:px-6">
         <button
           onClick={() => setActiveTab('kpis')}
-          className={`py-3 flex items-center gap-2 border-b-2 transition-all ${activeTab === 'kpis' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
+          className={`inline-flex min-h-11 shrink-0 items-center gap-2 border-b-2 py-3 transition-all ${activeTab === 'kpis' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
         >
           <Calendar className="w-4 h-4" /> Calendário de Estágios
         </button>
         <button
           onClick={() => setActiveTab('pipeline')}
-          className={`py-3 flex items-center gap-2 border-b-2 transition-all ${activeTab === 'pipeline' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
+          className={`inline-flex min-h-11 shrink-0 items-center gap-2 border-b-2 py-3 transition-all ${activeTab === 'pipeline' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
         >
           <Briefcase className="w-4 h-4" /> Pipeline de Vendas & CRM
         </button>
         <button
           onClick={() => setActiveTab('events')}
-          className={`py-3 flex items-center gap-2 border-b-2 transition-all ${activeTab === 'events' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
+          className={`inline-flex min-h-11 shrink-0 items-center gap-2 border-b-2 py-3 transition-all ${activeTab === 'events' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
         >
           <Calendar className="w-4 h-4" /> Estágios & Eventos Operacionais
         </button>
         <button
           onClick={() => setActiveTab('partners')}
-          className={`py-3 flex items-center gap-2 border-b-2 transition-all ${activeTab === 'partners' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
+          className={`inline-flex min-h-11 shrink-0 items-center gap-2 border-b-2 py-3 transition-all ${activeTab === 'partners' ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
         >
           <Building2 className="w-4 h-4" /> Rede de Parceiros (ERP)
         </button>
         <Link
           href="/produtos/sportsevents/cartoes"
-          className="py-3 flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all"
+          className="inline-flex min-h-11 shrink-0 items-center gap-2 border-b-2 border-transparent py-3 text-slate-400 transition-all hover:border-amber-400/50 hover:text-amber-400"
         >
           <IdCard className="w-4 h-4" /> Cartões digitais
         </Link>
       </nav>
       )}
 
-      <main className="p-6 flex-1 overflow-y-auto">
+      <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-6">
         {dataError && (
           <div className="mb-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
             Erro a carregar dados SE: {dataError}
