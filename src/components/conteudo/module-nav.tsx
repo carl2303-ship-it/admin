@@ -16,7 +16,7 @@ export function ConteudoModuleNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="flex gap-1 overflow-x-auto pb-px">
+    <nav className="hub-scroll-x pb-px">
       {TABS.map((tab) => {
         const active = tab.exact
           ? pathname === tab.href
@@ -26,7 +26,7 @@ export function ConteudoModuleNav() {
             key={tab.href}
             href={tab.href}
             className={cn(
-              'shrink-0 border-b-2 px-3 py-3 text-sm font-semibold transition',
+              'inline-flex min-h-11 shrink-0 items-center border-b-2 px-3 text-sm font-semibold transition',
               active
                 ? 'border-amber-400 text-amber-400'
                 : 'border-transparent text-slate-500 hover:text-cyan-400'
