@@ -1,5 +1,9 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import { createBoostServiceClient } from '@/lib/supabase/admin'
+import {
+  createBoostServiceClient,
+  resolveBoostAnonKey,
+  resolveBoostApiUrl,
+} from '@/lib/supabase/admin'
 
 export class BoostConfigError extends Error {
   constructor(message: string) {
@@ -8,33 +12,34 @@ export class BoostConfigError extends Error {
   }
 }
 
-/** Service role Boost — só no servidor. Falha se env em falta. */
+/** Service role Boost (SE schema `boost`) — só no servidor. */
 export function requireBoostClient(): SupabaseClient {
   const client = createBoostServiceClient()
   if (!client) {
     throw new BoostConfigError(
-      'BOOST_SUPABASE_URL / BOOST_SUPABASE_SERVICE_ROLE_KEY não configurados.'
+      'Service role SE em falta (SUPABASE_SERVICE_ROLE_KEY / BOOST_SUPABASE_*). Dados Boost estão no schema boost do projecto SportsEvents.'
     )
   }
   return client
 }
 
 /**
- * Obtém JWT de um user Auth Boost para invocar Edge Functions
+ * JWT para invocar Edge Functions no projecto SE
  * (`provision-saas-license` exige getUser()).
  *
  * Ordem: BOOST_EDGE_AUTH_EMAIL+PASSWORD → userId (staff.boost_user_id / BOOST_EDGE_USER_ID)
- * via generateLink + verifyOtp.
+ * via generateLink + verifyOtp. Auth = SE (mesmo projecto).
  */
 export async function getBoostEdgeAccessToken(
   preferredUserId?: string | null
 ): Promise<{ token: string | null; error?: string }> {
-  const url = process.env.BOOST_SUPABASE_URL
-  const anonKey = process.env.BOOST_SUPABASE_ANON_KEY
+  const url = resolveBoostApiUrl()
+  const anonKey = resolveBoostAnonKey()
   if (!url || !anonKey) {
     return {
       token: null,
-      error: 'BOOST_SUPABASE_ANON_KEY em falta (necessário para Edge Functions).',
+      error:
+        'ANON key SE em falta (NEXT_PUBLIC_SUPABASE_ANON_KEY / BOOST_SUPABASE_ANON_KEY) para Edge.',
     }
   }
 
@@ -60,7 +65,7 @@ export async function getBoostEdgeAccessToken(
 
   const service = createBoostServiceClient()
   if (!service) {
-    return { token: null, error: 'Service role Boost em falta.' }
+    return { token: null, error: 'Service role SE/Boost em falta.' }
   }
 
   const userId = preferredUserId || process.env.BOOST_EDGE_USER_ID || null
@@ -68,7 +73,7 @@ export async function getBoostEdgeAccessToken(
     return {
       token: null,
       error:
-        'Sem JWT Boost: define BOOST_EDGE_AUTH_EMAIL/PASSWORD, BOOST_EDGE_USER_ID, ou mapeia boost_user_id no hub_staff.',
+        'Sem JWT: define BOOST_EDGE_AUTH_EMAIL/PASSWORD (user Auth SE), BOOST_EDGE_USER_ID, ou mapeia boost_user_id no hub_staff.',
     }
   }
 
@@ -77,7 +82,7 @@ export async function getBoostEdgeAccessToken(
   if (userError || !userData.user?.email) {
     return {
       token: null,
-      error: `User Boost ${userId}: ${userError?.message || 'sem email'}`,
+      error: `User ${userId}: ${userError?.message || 'sem email'}`,
     }
   }
 
@@ -113,18 +118,20 @@ export async function getBoostEdgeAccessToken(
   return { token: otpData.session.access_token }
 }
 
-/** Invoca Edge Function no projeto Boost (reutiliza lógica Stripe/SaaS). */
-export async function invokeBoostEdgeFunction<T = unknown>(
+/** Invoca Edge Function no projecto SE (Stripe/SaaS). Requer deploy + secrets no SE. */
+export async function invokeBoostEdgeFunction<
+  T = unknown
+>(
   functionName: string,
   body: Record<string, unknown>,
   options?: { accessToken?: string | null; preferUserId?: string | null }
 ): Promise<{ data: T | null; error: string | null }> {
-  const url = process.env.BOOST_SUPABASE_URL
-  const anonKey = process.env.BOOST_SUPABASE_ANON_KEY
+  const url = resolveBoostApiUrl()
+  const anonKey = resolveBoostAnonKey()
   if (!url || !anonKey) {
     return {
       data: null,
-      error: 'BOOST_SUPABASE_URL / BOOST_SUPABASE_ANON_KEY em falta.',
+      error: 'URL/ANON SE em falta para Edge Functions.',
     }
   }
 
@@ -132,11 +139,10 @@ export async function invokeBoostEdgeFunction<T = unknown>(
   if (!token) {
     const got = await getBoostEdgeAccessToken(options?.preferUserId)
     if (!got.token) {
-      // stripe-checkout saas é público — tenta com anon
       if (functionName === 'stripe-checkout') {
         token = anonKey
       } else {
-        return { data: null, error: got.error || 'Sem token Boost' }
+        return { data: null, error: got.error || 'Sem token Edge' }
       }
     } else {
       token = got.token
