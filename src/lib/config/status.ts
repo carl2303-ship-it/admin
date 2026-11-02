@@ -74,7 +74,7 @@ function item(
 export function getBoostConfigStatus(): ProductConfigStatus {
   const storeUrl = publicOrMissing(
     process.env.NEXT_PUBLIC_BOOST_STORE_URL,
-    'https://boostpadel.store'
+    'https://sportsevents.app/store'
   )
   const tourAppUrl = publicOrMissing(
     process.env.NEXT_PUBLIC_TOUR_APP_URL,
@@ -82,7 +82,7 @@ export function getBoostConfigStatus(): ProductConfigStatus {
   )
   const adminUrl = publicOrMissing(
     process.env.NEXT_PUBLIC_BOOST_ADMIN_URL,
-    'https://boostpadel.store/admin.html'
+    'https://admin.sportsevents.app'
   )
   const edgeAuth =
     present(process.env.BOOST_EDGE_AUTH_EMAIL) &&
