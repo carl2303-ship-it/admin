@@ -157,7 +157,7 @@ export async function publishEbookFunnelToStore(
       (funnel.slug === LEGACY_PADEL_IQ.slug
         ? LEGACY_PADEL_IQ.cover_public_url
         : null) ||
-      'https://gmpyjnufuvsoewbtirsg.supabase.co/storage/v1/object/public/ebook-materials/the%20padel%20iq%20logo.png'
+      'https://tprbpeacicadsbmvxcqk.supabase.co/storage/v1/object/public/ebook-materials/the%20padel%20iq%20logo.png'
 
     const shortDesc =
       String(funnel.subheadline || '').trim() ||
