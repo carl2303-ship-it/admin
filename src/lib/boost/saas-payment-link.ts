@@ -36,7 +36,7 @@ export async function createSaasPaymentLink(
     return {
       ok: false,
       error:
-        'Edge loja não configurado: falta URL/anon SE (NEXT_PUBLIC_SUPABASE_* ou BOOST_*). Deploy stripe-checkout no projecto SE ainda é obrigatório.',
+        'Edge loja não configurado: falta URL/anon Edge (BOOST_EDGE_* ou legado Boost). Hold: Edge ainda no projecto Boost até SE + webhook prontos.',
     }
   }
 
