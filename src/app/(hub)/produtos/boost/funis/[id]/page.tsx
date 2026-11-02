@@ -53,7 +53,7 @@ export default async function BoostEbookFunnelDetailPage({
   const isLegacy = funnel.slug === LEGACY_PADEL_IQ.slug
   const legacy = isLegacy ? legacyPadelIqUrls() : null
   const storeCta = isLegacy ? legacy!.landing : dynamic.landing
-  const storeDigital = `${storeBaseUrl()}/digital.html`
+  const storeDigital = storeBaseUrl()
 
   return (
     <div className="space-y-6">
