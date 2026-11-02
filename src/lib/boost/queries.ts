@@ -1,4 +1,8 @@
 import { requireBoostClient, BoostConfigError } from './client'
+import {
+  resolveBoostAnonKey,
+  resolveBoostApiUrl,
+} from '@/lib/supabase/admin'
 import type {
   BoostBlogPost,
   BoostBrand,
@@ -788,10 +792,9 @@ export async function getStripeVisibility(): Promise<
       subscription_expires_at: string | null
     }[]
 
+    // Hold: Edge Boost com anon legado basta para stripe-checkout (fallback anon).
     const edgeConfigured = Boolean(
-      process.env.BOOST_SUPABASE_URL &&
-        (process.env.BOOST_EDGE_AUTH_EMAIL || process.env.BOOST_EDGE_USER_ID) &&
-        process.env.BOOST_SUPABASE_ANON_KEY
+      resolveBoostApiUrl() && resolveBoostAnonKey()
     )
 
     return {
