@@ -240,7 +240,7 @@ export async function publishEbookFunnelToStore(
       }
     }
 
-    const storeUrl = `${storeBaseUrl()}/digital.html`
+    const storeUrl = storeBaseUrl()
     revalidateBoost([
       '/produtos/boost/funis',
       `/produtos/boost/funis/${funnelId}`,

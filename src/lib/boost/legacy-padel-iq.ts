@@ -1,6 +1,7 @@
 /** Constantes do funil legado PADEL IQ PRO (smartpadelstrategy). PT only. */
 
-export const STORE_BASE_DEFAULT = 'https://boostpadel.store'
+/** Base canónica da loja (sportsevents.app/store). */
+export const STORE_BASE_DEFAULT = 'https://sportsevents.app/store'
 
 export const LEGACY_PADEL_IQ = {
   title: 'PADEL IQ PRO: O SISTEMA TÁTICO DEFINITIVO',
@@ -22,10 +23,11 @@ export const LEGACY_PADEL_IQ = {
   status: 'active' as const,
   store_product_id: '3e1bc969-36f4-4322-a4f7-6c50309312f7',
   store_category_id: '538a9bcb-248a-4bf8-898a-4cc15309a9d7',
-  legacy_landing_path: '/smartpadelstrategy.html',
-  legacy_upsell_path: '/ebook-upsell.html',
-  legacy_thank_you_path: '/ebook-thank-you.html',
-  legacy_upsell_thank_you_path: '/ebook-upsell-thank-you.html',
+  legacy_landing_path: '/funnel?slug=smartpadelstrategy',
+  legacy_upsell_path: '/funnel/upsell?slug=smartpadelstrategy',
+  legacy_thank_you_path: '/funnel/thank-you?slug=smartpadelstrategy',
+  legacy_upsell_thank_you_path:
+    '/funnel/thank-you?slug=smartpadelstrategy&bundle=1',
   cover_public_url:
     'https://gmpyjnufuvsoewbtirsg.supabase.co/storage/v1/object/public/ebook-materials/position%20ebook%20POR/ebook-cover-por.jpg',
   assets_pt: [
@@ -79,9 +81,9 @@ export function funnelPublicUrls(slug: string) {
   const base = storeBaseUrl()
   const q = encodeURIComponent(slug)
   return {
-    landing: `${base}/funnel.html?slug=${q}`,
-    upsell: `${base}/funnel-upsell.html?slug=${q}`,
-    thankYou: `${base}/funnel-thank-you.html?slug=${q}`,
+    landing: `${base}/funnel?slug=${q}`,
+    upsell: `${base}/funnel/upsell?slug=${q}`,
+    thankYou: `${base}/funnel/thank-you?slug=${q}`,
   }
 }
 

@@ -16,7 +16,7 @@ UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia
 - `BOOST_SUPABASE_URL` / `BOOST_SUPABASE_SERVICE_ROLE_KEY` / `BOOST_SUPABASE_ANON_KEY`
 - `NEXT_PUBLIC_BOOST_ADMIN_URL` — deep-link emergência
 - `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` ou `BOOST_EDGE_USER_ID`
-- `NEXT_PUBLIC_BOOST_STORE_URL`
+- `NEXT_PUBLIC_BOOST_STORE_URL` — default `https://sportsevents.app/store` (boostpadel.store descontinuado)
 - `NEXT_PUBLIC_TOUR_APP_URL` — base da App Tour nos cards SaaS (default `https://tour.padel1.app`; **não** `tour.boostpadel.store`)
 
 ## Edge Functions (reutilizadas)

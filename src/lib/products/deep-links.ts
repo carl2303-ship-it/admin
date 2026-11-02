@@ -14,7 +14,7 @@ export function getLegacyDeepLinks(): LegacyDeepLink[] {
       label: 'Boost Store Admin',
       url:
         process.env.NEXT_PUBLIC_BOOST_ADMIN_URL ||
-        'https://boostpadel.store/admin.html',
+        'https://admin.sportsevents.app',
       description: 'HTML monolítico — login Auth Boost próprio',
     },
     {

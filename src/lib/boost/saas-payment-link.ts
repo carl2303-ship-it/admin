@@ -48,8 +48,8 @@ export async function createSaasPaymentLink(
       return { ok: false, error: orgError?.message || 'Org não encontrada' }
     }
 
-    const storeBase =
-      process.env.NEXT_PUBLIC_BOOST_STORE_URL || 'https://boostpadel.store'
+    const tourAppUrl =
+      process.env.NEXT_PUBLIC_TOUR_APP_URL || 'https://tour.padel1.app'
 
     const { data, error } = await invokeBoostEdgeFunction<{
       url?: string
@@ -67,8 +67,8 @@ export async function createSaasPaymentLink(
         language: org.language || 'pt',
         currency: input.currency,
         sendPaymentLinkEmail: input.sendEmail,
-        successUrl: `${storeBase}/tour.html?subscription=success&slug=${encodeURIComponent(org.slug)}`,
-        cancelUrl: `${storeBase}/tour.html#precos`,
+        successUrl: `${tourAppUrl}/?subscription=success&slug=${encodeURIComponent(org.slug)}`,
+        cancelUrl: `${tourAppUrl}/`,
       },
       { preferUserId: input.preferUserId }
     )

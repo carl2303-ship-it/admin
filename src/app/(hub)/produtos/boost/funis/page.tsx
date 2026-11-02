@@ -69,7 +69,7 @@ export default async function BoostEbookFunnelsPage() {
           <p className="mt-1 text-sm text-slate-400">
             Cria landings + upsells sem clonar HTML. URLs públicas:
             <code className="ml-1 rounded bg-slate-800 px-1 text-xs">
-              {STORE_BASE}/funnel.html?slug=…
+              {STORE_BASE}/funnel?slug=…
             </code>
           </p>
         </div>

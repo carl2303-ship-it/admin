@@ -73,7 +73,7 @@ export function FunnelAiLanding({
         Descreve o conteúdo do PDF/ebook e, opcionalmente, envia fotos. A AI
         gera headline, subheadline, CTA e benefícios — gravados neste funil e
         mostrados em{' '}
-        <code className="rounded bg-slate-800 px-1">funnel.html?slug=…</code>.
+        <code className="rounded bg-slate-800 px-1">/store/funnel?slug=…</code>.
       </p>
 
       <label className="block space-y-1">
