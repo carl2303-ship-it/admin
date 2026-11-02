@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import {
+  createBoostEdgeAuthAdminClient,
   createBoostServiceClient,
   resolveBoostAnonKey,
   resolveBoostApiUrl,
@@ -24,11 +25,12 @@ export function requireBoostClient(): SupabaseClient {
 }
 
 /**
- * JWT para invocar Edge Functions no projecto SE
+ * JWT para invocar Edge Functions no projecto Edge actual
  * (`provision-saas-license` exige getUser()).
  *
- * Ordem: BOOST_EDGE_AUTH_EMAIL+PASSWORD → userId (staff.boost_user_id / BOOST_EDGE_USER_ID)
- * via generateLink + verifyOtp. Auth = SE (mesmo projecto).
+ * Hold: Edge = projecto Boost. Ordem:
+ * BOOST_EDGE_AUTH_EMAIL+PASSWORD → userId (BOOST_EDGE_USER_ID / staff)
+ * via generateLink + verifyOtp no Auth do projecto Edge.
  */
 export async function getBoostEdgeAccessToken(
   preferredUserId?: string | null
@@ -39,7 +41,7 @@ export async function getBoostEdgeAccessToken(
     return {
       token: null,
       error:
-        'ANON key SE em falta (NEXT_PUBLIC_SUPABASE_ANON_KEY / BOOST_SUPABASE_ANON_KEY) para Edge.',
+        'ANON key Edge em falta (BOOST_EDGE_ANON_KEY / legado Boost) para invocar functions.',
     }
   }
 
@@ -63,9 +65,13 @@ export async function getBoostEdgeAccessToken(
     return { token: data.session.access_token }
   }
 
-  const service = createBoostServiceClient()
+  const service = createBoostEdgeAuthAdminClient()
   if (!service) {
-    return { token: null, error: 'Service role SE/Boost em falta.' }
+    return {
+      token: null,
+      error:
+        'Service role do projecto Edge em falta (BOOST_EDGE_SERVICE_ROLE_KEY / BOOST_SUPABASE_SERVICE_ROLE_KEY no hold Boost).',
+    }
   }
 
   const userId = preferredUserId || process.env.BOOST_EDGE_USER_ID || null
@@ -73,7 +79,7 @@ export async function getBoostEdgeAccessToken(
     return {
       token: null,
       error:
-        'Sem JWT: define BOOST_EDGE_AUTH_EMAIL/PASSWORD (user Auth SE), BOOST_EDGE_USER_ID, ou mapeia boost_user_id no hub_staff.',
+        'Sem JWT: define BOOST_EDGE_AUTH_EMAIL/PASSWORD (user Auth do projecto Edge), BOOST_EDGE_USER_ID, ou mapeia boost_user_id no hub_staff.',
     }
   }
 
@@ -118,7 +124,11 @@ export async function getBoostEdgeAccessToken(
   return { token: otpData.session.access_token }
 }
 
-/** Invoca Edge Function no projecto SE (Stripe/SaaS). Requer deploy + secrets no SE. */
+/**
+ * Invoca Edge Function (Stripe/SaaS).
+ * Hold: projecto Boost até SE Edge + webhook prontos.
+ * `stripe-checkout` faz fallback a anon se não houver JWT.
+ */
 export async function invokeBoostEdgeFunction<
   T = unknown
 >(
@@ -131,7 +141,7 @@ export async function invokeBoostEdgeFunction<
   if (!url || !anonKey) {
     return {
       data: null,
-      error: 'URL/ANON SE em falta para Edge Functions.',
+      error: 'URL/ANON Edge em falta para Edge Functions.',
     }
   }
 
