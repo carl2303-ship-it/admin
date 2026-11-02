@@ -1,3 +1,7 @@
+import {
+  resolveBoostAnonKey,
+  resolveBoostApiUrl,
+} from '@/lib/supabase/admin'
 import { invokeBoostEdgeFunction, requireBoostClient } from './client'
 import { PLAN_MAX_TOURNAMENTS } from './types'
 
@@ -28,11 +32,11 @@ export async function createSaasPaymentLink(
     return { ok: false, error: 'Email do cliente obrigatório.' }
   }
 
-  if (!process.env.BOOST_SUPABASE_URL || !process.env.BOOST_SUPABASE_ANON_KEY) {
+  if (!resolveBoostApiUrl() || !resolveBoostAnonKey()) {
     return {
       ok: false,
       error:
-        'Edge Boost não configurado: falta BOOST_SUPABASE_URL e/ou BOOST_SUPABASE_ANON_KEY no Netlify do admin.',
+        'Edge loja não configurado: falta URL/anon SE (NEXT_PUBLIC_SUPABASE_* ou BOOST_*). Deploy stripe-checkout no projecto SE ainda é obrigatório.',
     }
   }
 
