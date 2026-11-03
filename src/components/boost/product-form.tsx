@@ -143,6 +143,22 @@ export function ProductForm({
             className={fieldClass}
           />
         </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-bold uppercase text-slate-400">
+            Ordem na loja
+          </span>
+          <input
+            name="display_order"
+            type="number"
+            min="0"
+            step="1"
+            defaultValue={product?.display_order ?? 0}
+            className={fieldClass}
+          />
+          <span className="text-[11px] text-slate-500">
+            Menor = mais cedo. Na loja: destaque → ordem → esgotados no fim.
+          </span>
+        </label>
         <div className="md:col-span-2">
           <ImageUploadField
             name="image_url"
