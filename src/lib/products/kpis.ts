@@ -91,6 +91,21 @@ export async function fetchPadel1ActiveClubs(): Promise<KpiResult> {
   return { key, label, product: 'padel1', value: count ?? 0, status: 'ok' }
 }
 
+/** Contas de jogador Padel1 (`player_accounts`). */
+export async function fetchPadel1Players(): Promise<KpiResult> {
+  const key = 'padel1_players'
+  const label = 'Jogadores da Padel1'
+  const client = createPadel1ServiceClient()
+  if (!client) return missing('padel1', key, label)
+
+  const { count, error } = await client
+    .from('player_accounts')
+    .select('id', { count: 'exact', head: true })
+
+  if (error) return degraded('padel1', key, label, error.message)
+  return { key, label, product: 'padel1', value: count ?? 0, status: 'ok' }
+}
+
 /** Próximos estágios SportsEvents (events com start_date >= hoje). */
 export async function fetchSportsEventsUpcoming(): Promise<KpiResult> {
   const key = 'se_upcoming_events'
@@ -188,6 +203,7 @@ export async function fetchDashboardKpis(): Promise<KpiResult[]> {
     fetchBoostOrderCount(),
     fetchBoostSaasLicenses(),
     fetchPadel1ActiveClubs(),
+    fetchPadel1Players(),
     fetchSportsEventsUpcoming(),
     fetchSportsEventsLeads(),
   ])
