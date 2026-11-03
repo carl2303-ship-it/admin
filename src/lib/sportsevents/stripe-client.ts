@@ -7,8 +7,9 @@ export async function getStripe() {
     (await getAppSetting('stripe_secret_key'))
   if (!key) return null
   return new Stripe(key, {
-    // Keep in sync with installed `stripe` package ApiVersion (no lockfile → latest ^23).
-    apiVersion: '2026-10-28.endive',
+    // Pinned stripe@23.1.0 (package-lock) uses 2026-10-28.endive.
+    // Cast keeps typecheck green if a cache still resolves an older stripe.
+    apiVersion: '2026-10-28.endive' as Stripe.LatestApiVersion,
   })
 }
 
