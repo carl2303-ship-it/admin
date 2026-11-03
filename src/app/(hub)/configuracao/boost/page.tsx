@@ -1,72 +1,36 @@
 import { redirect } from 'next/navigation'
-import { ConfigSectionNav, IntegrationTable } from '@/components/config/config-ui'
+import { ConfigSectionNav } from '@/components/config/config-ui'
 import { BoostStripeSecretsForm } from '@/components/config/boost-stripe-form'
-import { BoostStripeOpsSection } from '@/components/config/boost-stripe-ops'
-import { ConfigIntentsTable } from '@/components/config/intents-table'
 import { StripeDashboardLinks } from '@/components/config/stripe-dashboard-links'
-import { NetlifyEnvPanel } from '@/components/config/netlify-env-panel'
-import {
-  listConfigIntents,
-  requireConfigOwner,
-} from '@/lib/config/queries'
-import { getBoostConfigStatus } from '@/lib/config/status'
+import { requireConfigOwner } from '@/lib/config/queries'
 import { listBoostEdgeSecretNames } from '@/lib/config/management-api'
-import { getNetlifyEnvVisibility } from '@/lib/config/netlify-env'
-import { ErrorBanner, Panel } from '@/components/boost/ui'
+import { ErrorBanner } from '@/components/boost/ui'
 
 export default async function ConfigBoostPage() {
   const gate = await requireConfigOwner()
   if (!gate.user) redirect('/login')
   if (!gate.allowed) return <ErrorBanner message={gate.error || 'Sem permissão'} />
 
-  const status = getBoostConfigStatus()
-  const [edge, intents, netlify] = await Promise.all([
-    listBoostEdgeSecretNames(),
-    listConfigIntents('boost'),
-    getNetlifyEnvVisibility({ product: 'boost' }),
-  ])
+  const edge = await listBoostEdgeSecretNames()
 
   return (
     <div className="w-full space-y-5 animate-fade-up">
       <div>
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-400">
-          Configuração · Boost
+          Configuração · Loja
         </p>
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight">
-          Boost Store
+          Loja
         </h1>
         <p className="mt-1 max-w-2xl text-sm text-slate-400">
-          Env, secrets Stripe Edge, dashboard e ops (subs / ebook / acessos
-          Tour) — tudo aqui.
+          Conta Stripe da loja (checkout e ebooks). Actualiza só se mudares de
+          conta ou rodares chaves.
         </p>
       </div>
 
       <ConfigSectionNav active="boost" />
 
-      <Panel className="p-5 text-sm text-slate-400">
-        <p className="font-semibold text-white">Modelo actual</p>
-        <ul className="mt-2 list-inside list-disc space-y-1 text-xs">
-          <li>
-            <code>STRIPE_SECRET_KEY</code> / webhook vivem nos{' '}
-            <strong>Edge secrets</strong> do Supabase Boost — não no Netlify do
-            admin.
-          </li>
-          <li>
-            O hub usa <code>BOOST_*</code> + JWT Edge para{' '}
-            <em>invocar</em> <code>stripe-checkout</code> etc.
-          </li>
-          <li>
-            Service role Boost ≠ Management API: sem PAT não há write live de
-            secrets.
-          </li>
-        </ul>
-      </Panel>
-
-      <IntegrationTable items={status.integrations} />
-
       <StripeDashboardLinks product="boost" />
-
-      <BoostStripeOpsSection />
 
       <BoostStripeSecretsForm
         managementConfigured={edge.managementConfigured}
@@ -84,13 +48,6 @@ export default async function ConfigBoostPage() {
           edge.managementConfigured ? edge.error : undefined
         }
       />
-
-      <NetlifyEnvPanel
-        visibility={netlify}
-        title="Env Netlify · Boost (site admin)"
-      />
-
-      <ConfigIntentsTable intents={intents} />
     </div>
   )
 }
