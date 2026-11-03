@@ -1,0 +1,36 @@
+name: restore-package-lock
+on:
+  push:
+    paths:
+      - '.github/restore-package-lock/**'
+      - '.github/workflows/restore-package-lock.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode and commit real package-lock.json
+        run: |
+          set -euo pipefail
+          cat .github/restore-package-lock/package-lock.part*.b64 | tr -d '\n' | base64 -d | gzip -dc > package-lock.json
+          python3 - <<'PY'
+          import pathlib
+          p = pathlib.Path('package-lock.json')
+          t = p.read_text()
+          assert t.lstrip().startswith('{')
+          assert '"name"' in t[:80]
+          assert 'node_modules/stripe' in t
+          assert '"version": "23.1.0"' in t
+          assert 'LOCKFILE_PLACEHOLDER' not in t
+          print('ok', p.stat().st_size)
+          PY
+          git config user.name "carl2303-ship-it"
+          git config user.email "carl2303@gmail.com"
+          git add package-lock.json
+          # remove sidecars after restore
+          git rm -r --ignore-unmatch .github/restore-package-lock .github/workflows/restore-package-lock.yml || true
+          git commit -m "fix(deps): replace placeholder package-lock with stripe@23.1.0 lock"
+          git push
