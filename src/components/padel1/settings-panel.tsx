@@ -72,9 +72,8 @@ export function SettingsPanel({
       {tab === 'stripe' && (
         <Panel className="space-y-3 p-4">
           <p className="text-sm text-slate-400">
-            Credenciais em <code>platform_stripe_config</code> (projecto
-            padel1). O hub nunca mostra o valor actual dos secrets — só
-            presença. Preenche para criar/rodar.
+            Chaves Stripe da plataforma Padel1. Só presença (OK / em falta) —
+            cola valores novos se precisares de mudar de conta ou rodar chaves.
           </p>
           <div className="flex flex-wrap gap-3 text-xs">
             <StatusPill
@@ -108,21 +107,21 @@ export function SettingsPanel({
             <div className="space-y-2">
               <input
                 className={fieldClass}
-                placeholder="stripe_publishable_key"
+                placeholder="Chave pública (pk_…)"
                 value={pk}
                 onChange={(e) => setPk(e.target.value)}
               />
               <input
                 className={fieldClass}
                 type="password"
-                placeholder="stripe_secret_key"
+                placeholder="Chave secreta (sk_…)"
                 value={sk}
                 onChange={(e) => setSk(e.target.value)}
               />
               <input
                 className={fieldClass}
                 type="password"
-                placeholder="webhook_secret (opcional)"
+                placeholder="Webhook (whsec_…) — opcional"
                 value={wh}
                 onChange={(e) => setWh(e.target.value)}
               />
