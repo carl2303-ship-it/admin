@@ -10,9 +10,19 @@ import { QuillEditor } from './quill-editor'
 import { btnGhost, btnPrimary, fieldClass } from './ui'
 
 function additionalUrls(product?: BoostProduct | null): string[] {
-  if (!product?.additional_images) return []
-  if (Array.isArray(product.additional_images)) {
-    return product.additional_images.map(String).filter(Boolean)
+  const raw = product?.additional_images as unknown
+  if (!raw) return []
+  if (Array.isArray(raw)) return raw.map(String).filter(Boolean)
+  if (typeof raw === 'string') {
+    try {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed)) return parsed.map(String).filter(Boolean)
+    } catch {
+      return raw
+        .split('\n')
+        .map((u) => u.trim())
+        .filter(Boolean)
+    }
   }
   return []
 }
