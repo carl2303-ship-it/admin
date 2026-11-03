@@ -1,0 +1,1 @@
+{{FILE:/tmp/admin-redeploy/restore/s0.txt}}
