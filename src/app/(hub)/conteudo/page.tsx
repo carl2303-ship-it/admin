@@ -18,7 +18,7 @@ const LINKS = [
   },
   {
     href: '/conteudo/newsletter',
-    title: 'Newsletter Boost',
+    title: 'Newsletter SE',
     desc: 'Subscribers e export',
     icon: Mail,
   },

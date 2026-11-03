@@ -39,8 +39,8 @@ const LINKS = [
     icon: BookOpen,
   },
   {
-    href: '/produtos/boost/newsletter',
-    label: 'Newsletter',
+    href: '/conteudo/newsletter',
+    label: 'Newsletter SE',
     key: 'newsletter' as const,
     icon: Mail,
   },
