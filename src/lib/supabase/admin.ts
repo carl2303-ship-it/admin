@@ -47,24 +47,16 @@ export function createServiceClient() {
 }
 
 /**
- * Dados Boost (loja/SaaS) — no projecto SE, schema `boost`.
- * Se Netlify ainda tiver BOOST_* a apontar ao projecto legado, remapeia para SE
- * e usa SUPABASE_SERVICE_ROLE_KEY.
+ * Dados Boost (loja/SaaS) + Storage (`product-images`, `ebook-materials`, …)
+ * — SEMPRE no projecto SportsEvents, schema `boost`.
+ *
+ * Nunca usa BOOST_SUPABASE_URL / BOOST_SUPABASE_SERVICE_ROLE_KEY:
+ * esses envs podem ainda apontar ao projecto Boost legado (Edge hold) e
+ * faziam uploads de fotos irem para o Storage Boost.
  */
 export function createBoostServiceClient() {
-  const rawUrl =
-    process.env.BOOST_SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    SE_SUPABASE_URL
-  const legacy = rawUrl.includes(LEGACY_BOOST_HOST)
-  const url = legacy
-    ? process.env.NEXT_PUBLIC_SUPABASE_URL || SE_SUPABASE_URL
-    : rawUrl
-  const key = legacy
-    ? process.env.SUPABASE_SERVICE_ROLE_KEY
-    : process.env.BOOST_SUPABASE_SERVICE_ROLE_KEY ||
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-  return serverOnlyClient(url, key, { schema: 'boost' })
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  return serverOnlyClient(SE_SUPABASE_URL, key, { schema: 'boost' })
 }
 
 /**
