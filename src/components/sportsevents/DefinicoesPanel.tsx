@@ -36,7 +36,13 @@ type SettingRow = {
 const inputCls =
   'w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500/50'
 
-export function DefinicoesPanel() {
+export function DefinicoesPanel({
+  mode = 'full',
+}: {
+  /** `stripe` = só chaves Stripe (Configuração simplificada). */
+  mode?: 'full' | 'stripe'
+}) {
+  const stripeOnly = mode === 'stripe'
   const [staff, setStaff] = useState<StaffMember[]>([])
   const [settings, setSettings] = useState<SettingRow[]>([])
   const [env, setEnv] = useState<Record<string, boolean>>({})
@@ -184,8 +190,25 @@ export function DefinicoesPanel() {
     setSavingSettings(false)
   }
 
+  const visibleSettings = stripeOnly
+    ? settings.filter(
+        (s) =>
+          /stripe/i.test(s.key) ||
+          /stripe/i.test(s.label || '') ||
+          s.key.toLowerCase().includes('sk_') ||
+          s.key.toLowerCase().includes('pk_')
+      )
+    : settings
+
   return (
-    <div className="min-h-screen bg-navy text-app-white font-sans flex flex-col">
+    <div
+      className={
+        stripeOnly
+          ? 'bg-slate-950 text-white font-sans'
+          : 'min-h-screen bg-navy text-app-white font-sans flex flex-col'
+      }
+    >
+      {!stripeOnly && (
       <header className="bg-navy/90 border-b border-white/10 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
         <div className="flex items-center gap-3">
                     <div>
@@ -208,8 +231,15 @@ export function DefinicoesPanel() {
           
         </div>
       </header>
+      )}
 
-      <main className="flex-1 p-6 max-w-5xl mx-auto w-full space-y-8">
+      <main
+        className={
+          stripeOnly
+            ? 'p-5 w-full space-y-6'
+            : 'flex-1 p-6 max-w-5xl mx-auto w-full space-y-8'
+        }
+      >
         {loading ? (
           <p className="text-sm text-slate-500">A carregar...</p>
         ) : (
@@ -226,7 +256,7 @@ export function DefinicoesPanel() {
               </p>
             )}
 
-            {isBootstrap && (
+            {!stripeOnly && isBootstrap && (
               <section className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 space-y-3">
                 <div className="flex items-start gap-2">
                   <Shield className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
@@ -251,6 +281,7 @@ export function DefinicoesPanel() {
               </section>
             )}
 
+            {!stripeOnly && (
             <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5 space-y-5">
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-cyan-400" />
@@ -393,13 +424,17 @@ export function DefinicoesPanel() {
                 </button>
               </form>
             </section>
+            )}
 
             <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5 space-y-5">
               <div className="flex items-center gap-2">
                 <KeyRound className="w-4 h-4 text-amber-400" />
-                <h2 className="text-sm font-black">Chaves & integrações</h2>
+                <h2 className="text-sm font-black">
+                  {stripeOnly ? 'Chaves Stripe' : 'Chaves & integrações'}
+                </h2>
               </div>
 
+              {!stripeOnly && (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-[10px]">
                 {[
                   ['Stripe secret (env)', env.stripe_secret_key],
@@ -423,7 +458,14 @@ export function DefinicoesPanel() {
                   </div>
                 ))}
               </div>
+              )}
 
+              {stripeOnly ? (
+                <p className="text-sm text-slate-400">
+                  Estado de cada chave (OK / em falta). Cola um valor novo só se
+                  precisares de mudar — deixa vazio para manter.
+                </p>
+              ) : (
               <p className="text-[11px] text-slate-500 leading-relaxed">
                 Os badges acima só olham para <strong className="text-slate-400">variáveis de ambiente</strong> (Netlify / .env).
                 Em falta no local é normal se as chaves estão só no formulário abaixo (tabela <code className="text-slate-400">app_settings</code>).
@@ -431,13 +473,14 @@ export function DefinicoesPanel() {
                 <code className="text-slate-400">SUPABASE_SERVICE_ROLE_KEY</code> para o{' '}
                 <code className="text-slate-400">.env.local</code>.
               </p>
+              )}
 
               <div className="rounded-xl border border-slate-800 bg-slate-950/80 px-3 py-2 text-[11px] text-slate-400 space-y-1">
                 <div className="text-[10px] uppercase text-slate-500 font-bold">
-                  Estado na base de dados (formulário)
+                  {stripeOnly ? 'Estado' : 'Estado na base de dados (formulário)'}
                 </div>
                 <ul className="grid sm:grid-cols-2 gap-1">
-                  {settings.map((s) => (
+                  {(stripeOnly ? visibleSettings : settings).map((s) => (
                     <li key={s.key} className="flex items-center gap-2">
                       <span
                         className={
@@ -453,22 +496,24 @@ export function DefinicoesPanel() {
                         {s.has_value
                           ? s.masked
                             ? `(${s.masked})`
-                            : '(definido)'
+                            : '(OK)'
                           : env[s.key]
-                            ? '(só env)'
-                            : '(vazio)'}
+                            ? '(OK)'
+                            : '(em falta)'}
                       </span>
                     </li>
                   ))}
                 </ul>
               </div>
 
+              {!stripeOnly && (
               <p className="text-[11px] text-slate-500">
                 Prioridade: variável de ambiente → valor guardado abaixo.
               </p>
+              )}
 
               <form onSubmit={saveSettings} className="space-y-3">
-                {settings.map((s) => (
+                {(stripeOnly ? visibleSettings : settings).map((s) => (
                   <label key={s.key} className="block space-y-1 text-xs">
                     <span className="text-[10px] uppercase text-slate-500 font-bold">
                       {s.label || s.key}
