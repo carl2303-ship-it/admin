@@ -121,6 +121,8 @@ export async function saveProduct(
         ? parseFloat(String(formData.get('compare_at_price')))
         : null,
       stock: parseInt(String(formData.get('stock') || '0'), 10) || 0,
+      display_order:
+        parseInt(String(formData.get('display_order') || '0'), 10) || 0,
       image_url: imageUrl,
       additional_images,
       colors,
@@ -157,7 +159,7 @@ export async function saveProduct(
 
 export async function quickUpdateProduct(
   id: string,
-  field: 'price' | 'stock' | 'is_featured' | 'active',
+  field: 'price' | 'stock' | 'is_featured' | 'active' | 'display_order',
   value: number | boolean
 ): Promise<ActionResult> {
   const g = await guardWrite()
@@ -171,6 +173,43 @@ export async function quickUpdateProduct(
     if (error) return { ok: false, error: error.message }
     revalidateBoost(['/produtos/boost/produtos'])
     return { ok: true }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  }
+}
+
+/** Persiste ordem da grelha (drag) → boost.products.display_order = índice. */
+export async function reorderProducts(
+  orderedIds: string[]
+): Promise<ActionResult> {
+  const g = await guardWrite()
+  if (!g.ok) return g
+  if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
+    return { ok: false, error: 'Lista de produtos vazia' }
+  }
+  try {
+    const client = requireBoostClient()
+    const now = new Date().toISOString()
+    const results = await Promise.all(
+      orderedIds.map((id, index) =>
+        client
+          .from('products')
+          .update({ display_order: index, updated_at: now })
+          .eq('id', id)
+      )
+    )
+    const firstError = results.find((r) => r.error)?.error
+    if (firstError) {
+      return {
+        ok: false,
+        error:
+          firstError.message.includes('display_order')
+            ? 'Falta a coluna boost.products.display_order — corre a migration 20261103170000_boost_products_display_order.sql no projeto SE.'
+            : firstError.message,
+      }
+    }
+    revalidateBoost(['/produtos/boost/produtos'])
+    return { ok: true, message: 'Ordem guardada' }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
   }
