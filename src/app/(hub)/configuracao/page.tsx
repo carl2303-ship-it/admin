@@ -1,77 +1,51 @@
 import { redirect } from 'next/navigation'
 import {
   ConfigSectionNav,
-  ProductStatusCard,
+  OwnerHealthCard,
 } from '@/components/config/config-ui'
 import { AllStripeDashboardShortcuts } from '@/components/config/stripe-dashboard-links'
-import { NetlifyEnvPanel } from '@/components/config/netlify-env-panel'
-import { OpsChecklistBanner } from '@/components/config/ops-checklist'
-import { getConfigOverview } from '@/lib/config/queries'
-import { ErrorBanner, Panel, StatusPill } from '@/components/boost/ui'
+import { getOwnerHealthItems } from '@/lib/config/owner-health'
+import { requireConfigOwner } from '@/lib/config/queries'
+import { ErrorBanner } from '@/components/boost/ui'
 
 export default async function ConfiguracaoPage() {
-  const overview = await getConfigOverview()
-  if (!overview.ok) {
-    if (overview.error === 'Não autenticado') redirect('/login')
-    return <ErrorBanner message={overview.error} />
+  const gate = await requireConfigOwner()
+  if (!gate.user) redirect('/login')
+  if (!gate.allowed) {
+    return <ErrorBanner message={gate.error || 'Sem permissão'} />
   }
 
-  const hrefs: Record<string, string> = {
-    boost: '/configuracao/boost',
-    padel1: '/configuracao/padel1',
-    sportsevents: '/configuracao/sportsevents',
-    hub: '/configuracao/hub',
-  }
+  const health = getOwnerHealthItems()
+  const allOk = health.every((h) => h.ok)
 
   return (
     <div className="w-full space-y-5 animate-fade-up">
       <p className="max-w-2xl text-sm text-slate-400">
-        Estado das integrações, env Netlify do admin, atalhos Stripe e intents
-        ops — sem saltar para dashboards no dia-a-dia. Segredos nunca são
-        mostrados.
+        Só o essencial: está tudo OK, ou há um problema? As únicas coisas que
+        podes precisar de mudar aqui são as <strong className="text-slate-200">chaves Stripe</strong>.
       </p>
 
       <ConfigSectionNav active="overview" />
 
-      <OpsChecklistBanner />
+      <div
+        className={
+          allOk
+            ? 'rounded-2xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100'
+            : 'rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100'
+        }
+      >
+        {allOk
+          ? 'Tudo OK nas três áreas.'
+          : 'Há pelo menos um problema — abre a secção marcada e actualiza Stripe se for o caso.'}
+      </div>
 
-      <Panel className="p-4">
-        <div className="flex flex-wrap items-center gap-3 text-sm">
-          <span className="font-semibold text-slate-200">
-            Escrita Edge Boost (Stripe)
-          </span>
-          <StatusPill
-            active={overview.managementConfigured}
-            activeLabel="Management API pronta"
-            inactiveLabel="Só checklist / intent"
-          />
-          <span className="font-semibold text-slate-200">Netlify env</span>
-          <StatusPill
-            active={overview.netlify.apiConfigured && !overview.netlify.apiError}
-            activeLabel="API + runtime"
-            inactiveLabel="Só runtime"
-          />
-        </div>
-        <p className="mt-2 text-xs text-slate-400">
-          Secrets Stripe Boost continuam no Edge. Env do admin continua no
-          Netlify (visibilidade aqui; escrita live no slice seguinte). Estágios
-          ficam em sportsevents.app.
-        </p>
-      </Panel>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        {overview.products.map((p) => (
-          <ProductStatusCard
-            key={p.product}
-            status={p}
-            href={hrefs[p.product]}
-          />
+      <div className="grid gap-4 sm:grid-cols-3">
+        {health.map((item) => (
+          <OwnerHealthCard key={item.id} item={item} />
         ))}
       </div>
 
       <AllStripeDashboardShortcuts />
-
-      <NetlifyEnvPanel visibility={overview.netlify} compact />
     </div>
   )
 }

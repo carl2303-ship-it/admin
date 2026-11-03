@@ -1,6 +1,5 @@
 /**
  * Links públicos para o Stripe Dashboard (sem secrets).
- * Contas Stripe são por produto — o hub só aponta, não embute keys.
  */
 
 export type StripeDashboardLink = {
@@ -13,7 +12,6 @@ export type StripeDashboardLink = {
 const BASE = 'https://dashboard.stripe.com'
 
 export function getStripeDashboardLinks(scope: {
-  /** Prefer test mode links when true. */
   testMode?: boolean
 }): StripeDashboardLink[] {
   const prefix = scope.testMode ? `${BASE}/test` : BASE
@@ -22,43 +20,37 @@ export function getStripeDashboardLinks(scope: {
       id: 'home',
       label: 'Dashboard',
       href: prefix,
-      description: 'Visão geral da conta Stripe',
+      description: 'Visão geral da conta',
     },
     {
       id: 'payments',
       label: 'Pagamentos',
       href: `${prefix}/payments`,
-      description: 'Cobranças e intentos recentes',
+      description: 'Cobranças recentes',
     },
     {
       id: 'customers',
       label: 'Clientes',
       href: `${prefix}/customers`,
-      description: 'Customers / assinantes',
+      description: 'Clientes e assinantes',
     },
     {
       id: 'subscriptions',
       label: 'Subscrições',
       href: `${prefix}/subscriptions`,
-      description: 'SaaS / planos activos',
+      description: 'Planos activos',
     },
     {
       id: 'webhooks',
       label: 'Webhooks',
       href: `${prefix}/webhooks`,
-      description: 'Endpoints e logs de eventos',
+      description: 'Endpoints e eventos',
     },
     {
       id: 'apikeys',
-      label: 'API keys',
+      label: 'Chaves API',
       href: `${prefix}/apikeys`,
-      description: 'Rodar sk_ / pk_ (copiar para hub / Edge)',
-    },
-    {
-      id: 'developers',
-      label: 'Developers',
-      href: `${prefix}/developers`,
-      description: 'Logs, eventos, ferramentas',
+      description: 'Copiar chaves para actualizar aqui',
     },
   ]
 }
@@ -67,34 +59,26 @@ export type ProductStripeContext = {
   product: 'boost' | 'padel1' | 'sportsevents'
   title: string
   blurb: string
-  /** Onde vivem os secrets desta conta. */
-  secretsLiveIn: string
   hubOpsHref?: string
 }
 
 export const PRODUCT_STRIPE_CONTEXTS: ProductStripeContext[] = [
   {
     product: 'boost',
-    title: 'Stripe · Boost Store',
-    blurb:
-      'Conta usada pelas Edge Functions Boost (checkout SaaS / ebooks). Secrets no Edge Boost, não no Netlify admin.',
-    secretsLiveIn: 'Supabase Boost → Edge Functions → Secrets',
+    title: 'Stripe · Loja',
+    blurb: 'Checkout da loja e ebooks. Podes actualizar as chaves nesta página.',
     hubOpsHref: '/configuracao/boost',
   },
   {
     product: 'padel1',
-    title: 'Stripe · Padel1 (plataforma)',
-    blurb:
-      'Stripe da plataforma / HQ — planos e secrets em Configuração · Padel1.',
-    secretsLiveIn: 'Projecto padel1 (platform_stripe_config)',
+    title: 'Stripe · Padel1',
+    blurb: 'Planos e pagamentos da plataforma Padel1.',
     hubOpsHref: '/configuracao/padel1',
   },
   {
     product: 'sportsevents',
-    title: 'Stripe · SportsEvents (Connect)',
-    blurb:
-      'Connect / pagamentos — definições e intents em Configuração · SportsEvents.',
-    secretsLiveIn: 'Netlify sportsevents.app + app_settings',
+    title: 'Stripe · SportsEvents',
+    blurb: 'Pagamentos e Connect do site SportsEvents.',
     hubOpsHref: '/configuracao/sportsevents',
   },
 ]

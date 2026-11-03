@@ -25,14 +25,16 @@ export function StripeDashboardLinks({
             {ctx.title}
           </h3>
           <p className="mt-1 text-sm text-slate-400">{ctx.blurb}</p>
-          <p className="mt-2 text-xs text-slate-400">
-            Secrets vivem em: <strong>{ctx.secretsLiveIn}</strong>
-          </p>
         </div>
         {ctx.hubOpsHref && (
-          <Link href={ctx.hubOpsHref} className={btnGhost}>
-            Ops no hub
-          </Link>
+          <a
+            href="https://dashboard.stripe.com"
+            target="_blank"
+            rel="noreferrer"
+            className={btnGhost}
+          >
+            Abrir Stripe
+          </a>
         )}
       </div>
 
@@ -43,19 +45,13 @@ export function StripeDashboardLinks({
             href={link.href}
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 transition hover:border-cyan-500/40 hover:bg-slate-900"
+            className="rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 transition hover:border-cyan-500/40"
           >
             <p className="text-sm font-semibold text-white">{link.label}</p>
             <p className="mt-0.5 text-[11px] text-slate-400">{link.description}</p>
           </a>
         ))}
       </div>
-
-      <p className="mt-3 text-[11px] text-slate-500">
-        Links abrem dashboard.stripe.com
-        {testMode ? ' (modo test)' : ' (modo live)'}. Garante que estás na conta
-        Stripe correcta do produto.
-      </p>
     </Panel>
   )
 }
@@ -64,11 +60,11 @@ export function AllStripeDashboardShortcuts() {
   return (
     <Panel className="p-5">
       <h3 className="font-[family-name:var(--font-display)] text-lg font-bold">
-        Stripe Dashboard (por produto)
+        Stripe — contas
       </h3>
       <p className="mt-1 text-sm text-slate-400">
-        Atalhos para configurar sem sair do fluxo do hub. Cada produto pode ter
-        conta Stripe própria.
+        Cada produto tem a sua conta. Abre o dashboard ou actualiza as chaves na
+        secção certa.
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         {PRODUCT_STRIPE_CONTEXTS.map((ctx) => (
@@ -78,7 +74,7 @@ export function AllStripeDashboardShortcuts() {
           >
             <p className="text-sm font-bold text-white">{ctx.title}</p>
             <p className="mt-1 text-[11px] text-slate-400">{ctx.blurb}</p>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-3">
               <a
                 href="https://dashboard.stripe.com"
                 target="_blank"
@@ -89,10 +85,10 @@ export function AllStripeDashboardShortcuts() {
               </a>
               {ctx.hubOpsHref && (
                 <Link
-                  href={`/configuracao/${ctx.product}`}
+                  href={ctx.hubOpsHref}
                   className="text-xs font-semibold text-cyan-400 hover:underline"
                 >
-                  Config {ctx.product}
+                  Actualizar chaves
                 </Link>
               )}
             </div>
