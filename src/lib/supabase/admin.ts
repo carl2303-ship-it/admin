@@ -21,7 +21,10 @@ function serverOnlyClient(
       autoRefreshToken: false,
       persistSession: false,
     },
-    ...(options?.schema ? { db: { schema: options.schema } } : {}),
+    // Cast: DefaultSchema só admite "public"; runtime pode usar "boost".
+    ...(options?.schema
+      ? { db: { schema: options.schema as 'public' } }
+      : {}),
   })
 }
 
