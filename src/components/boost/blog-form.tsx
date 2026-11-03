@@ -24,7 +24,7 @@ export function BlogForm({ post }: { post?: BoostBlogPost | null }) {
             setError(result.error)
             return
           }
-          router.push('/produtos/boost/blog')
+          router.push('/conteudo/blog-se')
           router.refresh()
         })
       }}
@@ -122,7 +122,7 @@ export function BlogForm({ post }: { post?: BoostBlogPost | null }) {
         <button
           type="button"
           className={btnGhost}
-          onClick={() => router.push('/produtos/boost/blog')}
+          onClick={() => router.push('/conteudo/blog-se')}
         >
           Limpar / cancelar
         </button>

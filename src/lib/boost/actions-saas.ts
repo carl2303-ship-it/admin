@@ -281,7 +281,7 @@ export async function saveBlogPost(formData: FormData): Promise<ActionResult> {
       if (error) return { ok: false, error: error.message }
     }
 
-    revalidateBoost(['/produtos/boost/blog'])
+    revalidateBoost(['/conteudo/blog-se', '/produtos/boost/blog'])
     return { ok: true }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
@@ -295,7 +295,7 @@ export async function deleteBlogPost(id: string): Promise<ActionResult> {
     const client = requireBoostClient()
     const { error } = await client.from('blog_posts').delete().eq('id', id)
     if (error) return { ok: false, error: error.message }
-    revalidateBoost(['/produtos/boost/blog'])
+    revalidateBoost(['/conteudo/blog-se', '/produtos/boost/blog'])
     return { ok: true }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
