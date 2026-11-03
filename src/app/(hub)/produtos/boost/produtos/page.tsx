@@ -2,25 +2,11 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { requireBoostModule, canWriteBoost, staffRole } from '@/lib/boost/auth'
 import { listProducts } from '@/lib/boost/queries'
-import {
-  deleteProduct,
-  duplicateProduct,
-  quickUpdateProduct,
-} from '@/lib/boost/actions'
-import { ActionButton } from '@/components/boost/action-buttons'
-import {
-  ProductActiveToggle,
-  ProductPriceInput,
-  ProductStockInput,
-} from '@/components/boost/product-inline-fields'
+import { ProductsReorderTable } from '@/components/boost/products-reorder-table'
 import {
   ConfigBanner,
   ErrorBanner,
   Panel,
-  StatusPill,
-  TableShell,
-  Th,
-  Td,
   btnPrimary,
 } from '@/components/boost/ui'
 
@@ -51,122 +37,7 @@ export default async function BoostProductsPage() {
         )}
       </div>
       <Panel>
-        <TableShell>
-          <thead>
-            <tr>
-              <Th>Produto</Th>
-              <Th>Categoria</Th>
-              <Th>Preço</Th>
-              <Th>Stock</Th>
-              <Th>Estado</Th>
-              <Th>Acções</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {result.data.length === 0 && (
-              <tr>
-                <td
-                  colSpan={6}
-                  className="border-b border-zinc-50 px-4 py-8 text-center text-slate-400"
-                >
-                  Nenhum produto
-                </td>
-              </tr>
-            )}
-            {result.data.map((p) => (
-              <tr key={p.id} className="hover:bg-slate-900/80">
-                <Td>
-                  <div className="flex items-center gap-3">
-                    {p.image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={p.image_url}
-                        alt=""
-                        className="h-10 w-10 rounded-lg object-cover"
-                      />
-                    ) : (
-                      <div className="h-10 w-10 rounded-lg bg-slate-800" />
-                    )}
-                    <div>
-                      <p className="font-semibold">{p.name}</p>
-                      <p className="text-xs text-slate-500">{p.slug}</p>
-                    </div>
-                  </div>
-                </Td>
-                <Td>{p.category?.name || '—'}</Td>
-                <Td>
-                  {write ? (
-                    <ProductPriceInput productId={p.id} price={Number(p.price)} />
-                  ) : (
-                    <span className="font-bold text-cyan-400">
-                      €{Number(p.price).toFixed(2)}
-                    </span>
-                  )}
-                </Td>
-                <Td>
-                  {write ? (
-                    <ProductStockInput
-                      productId={p.id}
-                      stock={p.stock ?? 0}
-                    />
-                  ) : (
-                    (p.stock ?? 0)
-                  )}
-                </Td>
-                <Td>
-                  <div className="flex flex-col gap-1">
-                    {write ? (
-                      <ProductActiveToggle
-                        productId={p.id}
-                        active={p.active}
-                      />
-                    ) : (
-                      <StatusPill active={p.active} />
-                    )}
-                    {p.is_featured && (
-                      <span className="text-[10px] font-bold text-amber-400">
-                        ★ destaque
-                      </span>
-                    )}
-                  </div>
-                </Td>
-                <Td>
-                  <div className="flex flex-wrap gap-1.5">
-                    {write && (
-                      <>
-                        <Link
-                          href={`/produtos/boost/produtos/${p.id}`}
-                          className="text-xs font-bold text-cyan-400 hover:underline"
-                        >
-                          Editar
-                        </Link>
-                        <ActionButton
-                          label={p.is_featured ? '★' : '☆'}
-                          action={quickUpdateProduct.bind(
-                            null,
-                            p.id,
-                            'is_featured',
-                            !p.is_featured
-                          )}
-                        />
-                        <ActionButton
-                          label="Duplicar"
-                          action={duplicateProduct.bind(null, p.id)}
-                        />
-                        <ActionButton
-                          label="Eliminar"
-                          variant="danger"
-                          confirm={`Eliminar "${p.name}"?`}
-                          action={deleteProduct.bind(null, p.id)}
-                        />
-                      </>
-                    )}
-                  </div>
-                </Td>
-              </tr>
-            ))}
-          </tbody>
-        </TableShell>
+        <ProductsReorderTable products={result.data} canWrite={write} />
       </Panel>
     </div>
   )

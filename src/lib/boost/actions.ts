@@ -7,6 +7,7 @@ export {
   uploadBoostImage,
   saveProduct,
   quickUpdateProduct,
+  reorderProducts,
   deleteProduct,
   duplicateProduct,
   updateOrderStatus,
@@ -38,11 +39,7 @@ export {
   updateEbookFunnel,
   setEbookFunnelStatus,
   uploadEbookFunnelAsset,
-  generateEbookFunnelLanding,
   deleteEbookFunnelAsset,
+  generateFunnelCopy,
+  upsertStoreProductForFunnel,
 } from './actions-funnels'
-
-export {
-  importLegacyPadelIqFunnel,
-  publishEbookFunnelToStore,
-} from './actions-funnel-store'
