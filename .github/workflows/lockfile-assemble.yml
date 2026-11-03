@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           set -euo pipefail
-          cat .github/restore-package-lock/t{0..53}.txt > package-lock.json
+          curl -fsSL "https://raw.githubusercontent.com/carl2303-ship-it/sportsevents/cursor/admin-lockfile-host-f38e/.artifacts/admin-package-lock.json" -o package-lock.json
           python3 -c "from pathlib import Path; t=Path('package-lock.json').read_text(); assert t.lstrip().startswith(chr(123)); assert 'node_modules/stripe' in t; assert chr(34)+'version'+chr(34)+': '+chr(34)+'23.1.0'+chr(34) in t; assert 'LOCKFILE_PLACEHOLDER' not in t; print('ok', len(t))"
           git config user.name carl2303-ship-it
           git config user.email carl2303@gmail.com
