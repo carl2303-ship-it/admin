@@ -34,21 +34,46 @@ function wrapError(err: unknown): QueryResult<never> {
   }
 }
 
+function compareHubProducts(a: BoostProduct, b: BoostProduct): number {
+  const soldOut = (p: BoostProduct) => !p.is_digital && Number(p.stock) === 0
+  const soA = soldOut(a) ? 1 : 0
+  const soB = soldOut(b) ? 1 : 0
+  if (soA !== soB) return soA - soB
+  const featA = a.is_featured ? 1 : 0
+  const featB = b.is_featured ? 1 : 0
+  if (featA !== featB) return featB - featA
+  const orderA = Number(a.display_order ?? 0)
+  const orderB = Number(b.display_order ?? 0)
+  if (orderA !== orderB) return orderA - orderB
+  return String(b.created_at || '').localeCompare(String(a.created_at || ''))
+}
+
 export async function listProducts(): Promise<QueryResult<BoostProduct[]>> {
   try {
     const client = requireBoostClient()
-    const { data, error } = await client
-      .from('products')
-      .select(
-        `
+    const select = `
         *,
         category:categories(name),
         brand:brands(name)
       `
-      )
+    let { data, error } = await client
+      .from('products')
+      .select(select)
+      .order('is_featured', { ascending: false })
+      .order('display_order', { ascending: true })
       .order('created_at', { ascending: false })
+    if (error) {
+      const retry = await client
+        .from('products')
+        .select(select)
+        .order('created_at', { ascending: false })
+      data = retry.data
+      error = retry.error
+    }
     if (error) return { ok: false, error: error.message }
-    return { ok: true, data: (data || []) as BoostProduct[] }
+    const list = ((data || []) as BoostProduct[]).slice()
+    list.sort(compareHubProducts)
+    return { ok: true, data: list }
   } catch (e) {
     return wrapError(e)
   }
