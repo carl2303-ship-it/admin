@@ -33,8 +33,8 @@ const LINKS = [
     icon: Percent,
   },
   {
-    href: '/produtos/boost/blog',
-    label: 'Blog',
+    href: '/conteudo/blog-se',
+    label: 'Blog (SportsEvents)',
     key: 'blog' as const,
     icon: BookOpen,
   },

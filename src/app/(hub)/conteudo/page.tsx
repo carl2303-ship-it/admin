@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { requireHubAccess } from '@/lib/auth/hub-auth'
 import { redirect } from 'next/navigation'
-import { Newspaper, Megaphone, Mail, BookOpen } from 'lucide-react'
+import { Newspaper, Megaphone, Mail } from 'lucide-react'
 
 const LINKS = [
   {
@@ -15,12 +15,6 @@ const LINKS = [
     title: 'Redes & Meta',
     desc: 'Biblioteca de assets, publicar IG/FB, histórico Meta',
     icon: Megaphone,
-  },
-  {
-    href: '/conteudo/blog-boost',
-    title: 'Blog Boost',
-    desc: 'Posts da loja Boost Padel',
-    icon: BookOpen,
   },
   {
     href: '/conteudo/newsletter',
