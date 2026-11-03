@@ -8,7 +8,6 @@ const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/conteudo', label: 'Visão geral', exact: true },
   { href: '/conteudo/blog-se', label: 'Blog SportsEvents' },
   { href: '/conteudo/social', label: 'Redes & Meta' },
-  { href: '/conteudo/blog-boost', label: 'Blog Boost' },
   { href: '/conteudo/newsletter', label: 'Newsletter Boost' },
 ]
 
