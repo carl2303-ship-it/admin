@@ -26,6 +26,11 @@ export default async function Padel1ModulosPage() {
       <h2 className="font-[family-name:var(--font-display)] text-xl font-bold">
         Módulos plataforma
       </h2>
+      <p className="text-sm text-slate-400">
+        Catálogo de módulos Padel One (preços, targets, dependências, features
+        landing). Activar/desactivar controla disponibilidade no Manager e nos
+        packs.
+      </p>
       <ModulesPanel modules={result.data} canWrite={write} />
     </div>
   )

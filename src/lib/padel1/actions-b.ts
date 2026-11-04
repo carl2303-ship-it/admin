@@ -90,10 +90,15 @@ export async function savePlatformModule(input: {
 }): Promise<ActionResult> {
   const g = await guardWrite()
   if (!g.ok) return g
+  if (!input.code.trim()) return { ok: false, error: 'Código obrigatório.' }
+  if (!input.name.trim()) return { ok: false, error: 'Nome obrigatório.' }
+  if (!input.targetTypes.length) {
+    return { ok: false, error: 'Escolhe pelo menos um target_type (club/organizer).' }
+  }
   try {
     const client = requirePadel1Client()
-    const payload = {
-      code: input.code,
+    const base = {
+      code: input.code.trim(),
       name: input.name.trim(),
       description: input.description.trim() || null,
       price_monthly: input.priceMonthly,
@@ -101,18 +106,19 @@ export async function savePlatformModule(input: {
       target_types: input.targetTypes,
       requires_modules: input.requiresModules,
       landing_features: input.landingFeatures,
-      player_app_mode: input.playerAppMode,
+      player_app_mode: input.playerAppMode || null,
       sort_order: input.sortOrder,
-      is_active: true,
     }
     const { error } = input.isNew
-      ? await client.from('platform_modules').insert(payload)
+      ? await client
+          .from('platform_modules')
+          .insert({ ...base, is_active: true })
       : await client
           .from('platform_modules')
-          .update(payload)
+          .update(base)
           .eq('code', input.code)
     if (error) return { ok: false, error: error.message }
-    revalidatePadel1(['/produtos/padel1/modulos'])
+    revalidatePadel1(['/produtos/padel1/modulos', '/produtos/padel1/packs'])
     return { ok: true, message: 'Módulo guardado.' }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
@@ -139,35 +145,54 @@ export async function togglePlatformModule(
   }
 }
 
-export async function updatePlatformPack(input: {
+export async function savePlatformPack(input: {
   code: string
   name: string
-  priceMonthly: number | null
-  priceAnnual: number | null
+  tagline: string
+  description: string
+  priceMonthly: number
+  priceAnnual: number
   comparePriceMonthly: number | null
+  comparePriceAnnual: number | null
   moduleCodes: string[]
-  isPopular: boolean
   landingFeatures: string[]
+  isPopular: boolean
+  sortOrder: number
+  isNew?: boolean
 }): Promise<ActionResult> {
   const g = await guardWrite()
   if (!g.ok) return g
+  const code = input.code.trim().toLowerCase().replace(/\s+/g, '_')
+  if (!code) return { ok: false, error: 'Código do pack obrigatório.' }
+  if (!input.name.trim()) return { ok: false, error: 'Nome obrigatório.' }
+  if (!Number.isFinite(input.priceMonthly) || !Number.isFinite(input.priceAnnual)) {
+    return { ok: false, error: 'Preços mensal e anual são obrigatórios.' }
+  }
   try {
     const client = requirePadel1Client()
-    const { error } = await client
-      .from('platform_packs')
-      .update({
-        name: input.name.trim(),
-        price_monthly: input.priceMonthly,
-        price_annual: input.priceAnnual,
-        compare_price_monthly: input.comparePriceMonthly,
-        module_codes: input.moduleCodes,
-        is_popular: input.isPopular,
-        landing_features: input.landingFeatures,
-      })
-      .eq('code', input.code)
+    const base = {
+      code,
+      name: input.name.trim(),
+      tagline: input.tagline.trim() || null,
+      description: input.description.trim() || null,
+      price_monthly: input.priceMonthly,
+      price_annual: input.priceAnnual,
+      compare_price_monthly: input.comparePriceMonthly,
+      compare_price_annual: input.comparePriceAnnual,
+      module_codes: input.moduleCodes,
+      landing_features: input.landingFeatures,
+      is_popular: input.isPopular,
+      sort_order: input.sortOrder,
+    }
+    const { error } = input.isNew
+      ? await client.from('platform_packs').insert({ ...base, is_active: true })
+      : await client.from('platform_packs').update(base).eq('code', code)
     if (error) return { ok: false, error: error.message }
     revalidatePadel1(['/produtos/padel1/packs'])
-    return { ok: true, message: 'Pack actualizado.' }
+    return {
+      ok: true,
+      message: input.isNew ? 'Pack criado.' : 'Pack actualizado.',
+    }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
   }
@@ -188,6 +213,32 @@ export async function togglePlatformPack(
     if (error) return { ok: false, error: error.message }
     revalidatePadel1(['/produtos/padel1/packs'])
     return { ok: true }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
+  }
+}
+
+const PROTECTED_PACK_CODES = new Set(['light', 'total'])
+
+export async function deletePlatformPack(code: string): Promise<ActionResult> {
+  const g = await guardWrite()
+  if (!g.ok) return g
+  if (PROTECTED_PACK_CODES.has(code)) {
+    return {
+      ok: false,
+      error:
+        'Packs light/total são usados pelo Manager (apply_client_pack). Desactiva em vez de apagar.',
+    }
+  }
+  try {
+    const client = requirePadel1Client()
+    const { error } = await client
+      .from('platform_packs')
+      .delete()
+      .eq('code', code)
+    if (error) return { ok: false, error: error.message }
+    revalidatePadel1(['/produtos/padel1/packs'])
+    return { ok: true, message: 'Pack eliminado.' }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Erro' }
   }
