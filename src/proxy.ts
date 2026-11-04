@@ -1,6 +1,27 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+/** Copia cookies refreshes do cliente Supabase para um redirect (evita sessão dessincronizada). */
+function redirectWithCookies(
+  redirectUrl: URL,
+  supabaseResponse: NextResponse
+) {
+  const response = NextResponse.redirect(redirectUrl)
+  supabaseResponse.cookies.getAll().forEach((cookie) => {
+    response.cookies.set(cookie.name, cookie.value)
+  })
+  return response
+}
+
+/** Destino pós-login seguro — nunca /login nem / (evita bounce). */
+function safeNextPath(pathname: string): string {
+  if (!pathname || pathname === '/' || pathname.startsWith('/login')) {
+    return '/dashboard'
+  }
+  if (!pathname.startsWith('/')) return '/dashboard'
+  return pathname
+}
+
 export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
@@ -29,8 +50,12 @@ export async function proxy(request: NextRequest) {
     },
   })
 
-  const { data } = await supabase.auth.getClaims()
-  const isAuthenticated = Boolean(data?.claims)
+  // getUser() alinha com hub-auth / Server Components. getClaims()-só
+  // podia marcar sessão “ok” enquanto getUser() falhava → login↔dashboard loop.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const isAuthenticated = Boolean(user)
 
   const pathname = request.nextUrl.pathname
   const isLogin = pathname === '/login' || pathname.startsWith('/login/')
@@ -39,26 +64,37 @@ export async function proxy(request: NextRequest) {
     isLogin ||
     isAuthCallback ||
     pathname === '/favicon.ico' ||
-    pathname.startsWith('/_next')
+    pathname.startsWith('/_next') ||
+    pathname === '/manifest.webmanifest' ||
+    pathname === '/sw.js' ||
+    pathname.startsWith('/icons/') ||
+    pathname.startsWith('/pwa-icon/')
 
   if (!isPublic && !isAuthenticated) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/login'
-    redirectUrl.searchParams.set('next', pathname)
-    return NextResponse.redirect(redirectUrl)
+    redirectUrl.search = ''
+    redirectUrl.searchParams.set('next', safeNextPath(pathname))
+    return redirectWithCookies(redirectUrl, supabaseResponse)
   }
 
+  // Sessão válida em /login → dashboard (cookies do refresh vão no redirect).
+  // Sem cookies copiados, o hub layout via getUser() falhava e reabria /login.
   if (isLogin && isAuthenticated) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/dashboard'
     redirectUrl.search = ''
-    return NextResponse.redirect(redirectUrl)
+    return redirectWithCookies(redirectUrl, supabaseResponse)
   }
 
   if (pathname === '/') {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = isAuthenticated ? '/dashboard' : '/login'
-    return NextResponse.redirect(redirectUrl)
+    redirectUrl.search = ''
+    if (!isAuthenticated) {
+      redirectUrl.searchParams.set('next', '/dashboard')
+    }
+    return redirectWithCookies(redirectUrl, supabaseResponse)
   }
 
   return supabaseResponse

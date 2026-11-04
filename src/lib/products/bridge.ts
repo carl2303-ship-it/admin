@@ -69,7 +69,7 @@ const PRODUCT_GAPS: Record<ProductId, string> = {
   padel1:
     'HQ exige super_admins. Magic link só autentica; o user destino tem de ser SA. Sem exchange token no Manager.',
   sportsevents:
-    'ERP já no hub (/produtos/sportsevents). Bridge só emergência → sportsevents.app/admin. Auth = hub_staff.',
+    'ERP e Staff no hub (/produtos/sportsevents, /equipa). Sem bridge ao admin legado.',
 }
 
 export async function resolveBridge(
@@ -77,6 +77,18 @@ export async function resolveBridge(
   staff: HubStaff
 ): Promise<BridgeResult> {
   const deep = getDeepLink(product)
+
+  // HUB-50: nunca abrir sportsevents.app/admin (Staff legado).
+  if (product === 'sportsevents') {
+    return {
+      mode: 'deep_link',
+      product,
+      redirectUrl: deep.url,
+      note: 'Staff / acessos → /equipa no PADEL HUB.',
+      gap: PRODUCT_GAPS.sportsevents,
+    }
+  }
+
   const targetUserId = mappedUserId(staff, product)
   const service = productService(product)
 

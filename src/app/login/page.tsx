@@ -8,7 +8,13 @@ import { Lock } from 'lucide-react'
 function LoginFormInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const nextPath = searchParams.get('next') || '/dashboard'
+  const rawNext = searchParams.get('next') || '/dashboard'
+  const nextPath =
+    rawNext.startsWith('/') &&
+    rawNext !== '/' &&
+    !rawNext.startsWith('/login')
+      ? rawNext
+      : '/dashboard'
   const authError = searchParams.get('error')
 
   const [email, setEmail] = useState('')
@@ -40,8 +46,7 @@ function LoginFormInner() {
       return
     }
 
-    const safeNext = nextPath.startsWith('/') ? nextPath : '/dashboard'
-    router.replace(safeNext)
+    router.replace(nextPath)
     router.refresh()
   }
 

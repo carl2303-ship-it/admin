@@ -256,8 +256,8 @@ export function getPadel1ConfigStatus(): ProductConfigStatus {
 
 export function getSportsEventsConfigStatus(): ProductConfigStatus {
   const adminUrl = publicOrMissing(
-    process.env.NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL,
-    'https://sportsevents.app/admin'
+    process.env.NEXT_PUBLIC_SITE_URL,
+    'https://admin.sportsevents.app'
   )
   const authOk =
     present(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
@@ -303,11 +303,11 @@ export function getSportsEventsConfigStatus(): ProductConfigStatus {
     }),
     item({
       id: 'se-admin',
-      label: 'ERP deep-link',
-      connected: present(process.env.NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL),
-      detail: adminUrl,
-      publicUrl: adminUrl,
-      fixHint: 'Netlify admin → NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL',
+      label: 'Equipa hub (/equipa)',
+      connected: true,
+      detail: `${(adminUrl || 'https://admin.sportsevents.app').replace(/\/$/, '')}/equipa`,
+      publicUrl: `${(adminUrl || 'https://admin.sportsevents.app').replace(/\/$/, '')}/equipa`,
+      fixHint: 'Staff no hub — sem sportsevents.app/admin',
     }),
     item({
       id: 'se-stripe-external',

@@ -157,7 +157,7 @@ export const ADMIN_NETLIFY_ENV_CATALOG: Omit<
   },
   {
     key: 'NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL',
-    label: 'SE ERP deep-link',
+    label: 'SE ERP deep-link (deprecated — usar /equipa)',
     product: 'sportsevents',
     secret: false,
   },

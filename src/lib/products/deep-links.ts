@@ -27,11 +27,12 @@ export function getLegacyDeepLinks(): LegacyDeepLink[] {
     },
     {
       product: 'sportsevents',
-      label: 'SportsEvents ERP',
-      url:
-        process.env.NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL ||
-        'https://sportsevents.app/admin',
-      description: 'Requer staff_members no Supabase SE',
+      label: 'Equipa (PADEL HUB)',
+      // Nunca deep-link a sportsevents.app/admin (Staff legado).
+      url: `${(
+        process.env.NEXT_PUBLIC_SITE_URL || 'https://admin.sportsevents.app'
+      ).replace(/\/$/, '')}/equipa`,
+      description: 'Staff do hub = /equipa (hub_staff). Sem admin legado.',
     },
   ]
 }

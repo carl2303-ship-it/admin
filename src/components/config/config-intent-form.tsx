@@ -40,8 +40,8 @@ const OPTIONS: Record<
       label: 'SUPABASE_SERVICE_ROLE_KEY',
     },
     {
-      value: 'NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL',
-      label: 'NEXT_PUBLIC_SPORTSEVENTS_ADMIN_URL',
+      value: 'NEXT_PUBLIC_SITE_URL',
+      label: 'NEXT_PUBLIC_SITE_URL (hub)',
     },
     {
       value: 'SE_STRIPE_SECRET_KEY',
