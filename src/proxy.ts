@@ -68,6 +68,7 @@ export async function proxy(request: NextRequest) {
     pathname === '/manifest.webmanifest' ||
     pathname === '/sw.js' ||
     pathname.startsWith('/icons/') ||
+    pathname.startsWith('/brand/') ||
     pathname.startsWith('/pwa-icon/')
 
   if (!isPublic && !isAuthenticated) {

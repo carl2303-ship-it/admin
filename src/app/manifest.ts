@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next'
 
+const ICON_V = '20261105'
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: '/',
@@ -17,28 +19,22 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['business', 'productivity', 'sports'],
     icons: [
       {
-        src: '/icons/icon.svg',
-        sizes: 'any',
-        type: 'image/svg+xml',
-        purpose: 'any',
-      },
-      {
-        src: '/icons/icon-maskable.svg',
-        sizes: 'any',
-        type: 'image/svg+xml',
-        purpose: 'maskable',
-      },
-      {
-        src: '/pwa-icon/192',
+        src: `/brand/icon-192.png?v=${ICON_V}`,
         sizes: '192x192',
         type: 'image/png',
         purpose: 'any',
       },
       {
-        src: '/pwa-icon/512',
+        src: `/brand/icon-512.png?v=${ICON_V}`,
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any',
+      },
+      {
+        src: `/brand/icon-512.png?v=${ICON_V}`,
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
       },
     ],
   }

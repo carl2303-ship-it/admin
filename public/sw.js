@@ -1,12 +1,12 @@
 /* PADEL HUB — service worker (installable PWA) */
-const CACHE = 'padel-hub-v1'
+const CACHE = 'padel-hub-v2-20261105'
+const ICON_V = '20261105'
 const PRECACHE = [
-  '/icons/icon.svg',
-  '/icons/icon-maskable.svg',
-  '/pwa-icon/192',
-  '/pwa-icon/512',
-  '/pwa-icon/apple',
-  '/manifest.webmanifest',
+  `/brand/icon-192.png?v=${ICON_V}`,
+  `/brand/icon-512.png?v=${ICON_V}`,
+  `/brand/apple-touch-icon.png?v=${ICON_V}`,
+  `/favicon.ico?v=${ICON_V}`,
+  `/manifest.webmanifest?v=${ICON_V}`,
 ]
 
 self.addEventListener('install', (event) => {
@@ -60,9 +60,11 @@ self.addEventListener('fetch', (event) => {
 
   // Ícones / manifest / estáticos: cache-first
   if (
+    url.pathname.startsWith('/brand/') ||
     url.pathname.startsWith('/icons/') ||
     url.pathname.startsWith('/pwa-icon/') ||
     url.pathname === '/manifest.webmanifest' ||
+    url.pathname === '/favicon.ico' ||
     url.pathname === '/sw.js'
   ) {
     event.respondWith(

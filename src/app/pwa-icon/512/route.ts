@@ -1,10 +1,7 @@
-import { icon512 } from '@/lib/pwa/icon-pngs'
+import { NextResponse } from 'next/server'
 
-export function GET() {
-  return new Response(new Uint8Array(icon512), {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=86400, immutable',
-    },
-  })
+/** Legacy path — canónico em /brand/icon-512.png */
+export function GET(request: Request) {
+  const url = new URL('/brand/icon-512.png?v=20261105', request.url)
+  return NextResponse.redirect(url, 308)
 }

@@ -1,10 +1,7 @@
-import { apple } from '@/lib/pwa/icon-pngs'
+import { NextResponse } from 'next/server'
 
-export function GET() {
-  return new Response(new Uint8Array(apple), {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=86400, immutable',
-    },
-  })
+/** Legacy path — canónico em /brand/apple-touch-icon.png */
+export function GET(request: Request) {
+  const url = new URL('/brand/apple-touch-icon.png?v=20261105', request.url)
+  return NextResponse.redirect(url, 308)
 }
