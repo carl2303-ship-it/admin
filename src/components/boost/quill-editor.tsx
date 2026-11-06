@@ -80,6 +80,20 @@ export function QuillEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Flush Quill → hidden input on form submit (covers race before text-change).
+  useEffect(() => {
+    const form = hiddenRef.current?.form
+    if (!form) return
+    const onSubmit = () => {
+      const quill = quillRef.current
+      if (quill && hiddenRef.current) {
+        hiddenRef.current.value = quill.root.innerHTML
+      }
+    }
+    form.addEventListener('submit', onSubmit)
+    return () => form.removeEventListener('submit', onSubmit)
+  }, [])
+
   return (
     <div className="boost-quill rounded-xl border border-slate-700 bg-slate-950 [&_.ql-toolbar]:rounded-t-xl [&_.ql-container]:rounded-b-xl [&_.ql-editor]:min-h-[160px]">
       <div ref={hostRef} />

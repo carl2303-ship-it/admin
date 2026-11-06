@@ -56,6 +56,11 @@ export function ColorSizeFields({
             + Cor
           </button>
         </div>
+        <p className="text-[11px] text-slate-500">
+          Escreve o nome da cor (ex: Preto) e escolhe o hex — aparece na ficha
+          do produto na loja. Sem nome, cores com hex diferente de preto
+          guardam-se como «Cor 1», «Cor 2»…
+        </p>
         <div className="space-y-2">
           {colors.map((c, i) => (
             <div key={i} className="flex items-center gap-2">
