@@ -142,12 +142,38 @@ export async function saveProduct(
       updated_at: new Date().toISOString(),
     }
 
-    if (id) {
-      const { error } = await client.from('products').update(payload).eq('id', id)
-      if (error) return { ok: false, error: error.message }
-    } else {
-      const { error } = await client.from('products').insert([payload])
-      if (error) return { ok: false, error: error.message }
+    const missingOrderHint =
+      'Falta a coluna boost.products.display_order — corre a migration 20261103170000_boost_products_display_order.sql no projeto SportsEvents (tprbpeacicadsbmvxcqk).'
+
+    const write = async (row: Record<string, unknown>) => {
+      if (id) {
+        return client.from('products').update(row).eq('id', id)
+      }
+      return client.from('products').insert([row])
+    }
+
+    let { error } = await write(payload)
+    if (error?.message?.includes('display_order')) {
+      const withoutOrder = { ...payload } as Record<string, unknown>
+      delete withoutOrder.display_order
+      const retry = await write(withoutOrder)
+      if (!retry.error) {
+        revalidateBoost(['/produtos/boost/produtos'])
+        return {
+          ok: true,
+          message:
+            'Produto guardado sem ordem na loja — corre a migration display_order no SE para ativar a ordem.',
+        }
+      }
+      error = retry.error
+    }
+    if (error) {
+      return {
+        ok: false,
+        error: error.message.includes('display_order')
+          ? missingOrderHint
+          : error.message,
+      }
     }
 
     revalidateBoost(['/produtos/boost/produtos'])
