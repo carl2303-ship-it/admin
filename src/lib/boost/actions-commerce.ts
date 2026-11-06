@@ -9,6 +9,7 @@ import {
   slugify,
   type ActionResult,
 } from './actions-shared'
+import { parseProductColors } from './product-colors'
 
 // --- Products ---
 
@@ -91,15 +92,10 @@ export async function saveProduct(
       .map((u) => u.trim())
       .filter(Boolean)
 
-    const colors = parseJsonArray(String(formData.get('colors_json') || '[]'))
-      .map((c) => {
-        if (!c || typeof c !== 'object') return null
-        const o = c as { name?: unknown; hex?: unknown }
-        const colorName = String(o.name || '').trim()
-        if (!colorName) return null
-        return { name: colorName, hex: String(o.hex || '#000000') }
-      })
-      .filter(Boolean)
+    // colors jsonb on boost.products — store reads product.colors (name+hex).
+    const colors = parseProductColors(
+      parseJsonArray(String(formData.get('colors_json') || '[]'))
+    )
 
     const sizes = parseJsonArray(String(formData.get('sizes_json') || '[]'))
       .map((s) => String(s || '').trim())
