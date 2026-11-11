@@ -28,7 +28,7 @@ Abrir http://localhost:3000 → redirect para `/login` ou `/dashboard`.
 |------|--------|
 | `supabase/migrations/20260929140000_create_hub_staff.sql` | Tabela + RLS — **aplicar no Supabase SportsEvents** |
 | `supabase/optional/boost_admin_users_rls.sql` | Hardening RLS Boost (opcional; não aplicar sem Carlos) |
-| `.env.example` | Auth/SE + Boost + Padel1 + Edge JWT Boost |
+| `.env.example` | Auth/SE + Boost + Padel1 + Edge JWT (SE) |
 | `src/proxy.ts` | Gate Auth (Next 16 proxy) |
 | `src/lib/auth/` | RBAC roles + guards |
 | `src/lib/boost/` | Módulo Boost Store (queries + server actions) |

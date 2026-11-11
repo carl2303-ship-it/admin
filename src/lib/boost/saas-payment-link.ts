@@ -36,7 +36,7 @@ export async function createSaasPaymentLink(
     return {
       ok: false,
       error:
-        'Edge loja não configurado: falta URL/anon Edge (BOOST_EDGE_* ou legado Boost). Hold: Edge ainda no projecto Boost até SE + webhook prontos.',
+        'Edge loja não configurado: falta anon SE (NEXT_PUBLIC_SUPABASE_ANON_KEY) ou override BOOST_EDGE_ANON_KEY.',
     }
   }
 

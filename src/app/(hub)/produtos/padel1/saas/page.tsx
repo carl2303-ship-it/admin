@@ -12,10 +12,14 @@ import {
   ErrorBanner,
   Panel,
 } from '@/components/boost/ui'
+import {
+  resolveBoostAnonKey,
+  resolveBoostApiUrl,
+} from '@/lib/supabase/admin'
 
 function edgeConfigured(): { ok: boolean; message?: string } {
-  const url = Boolean(process.env.BOOST_SUPABASE_URL?.trim())
-  const anon = Boolean(process.env.BOOST_SUPABASE_ANON_KEY?.trim())
+  const url = Boolean(resolveBoostApiUrl())
+  const anon = Boolean(resolveBoostAnonKey())
   const edgeAuth =
     Boolean(process.env.BOOST_EDGE_AUTH_EMAIL?.trim()) &&
     Boolean(process.env.BOOST_EDGE_AUTH_PASSWORD?.trim())
@@ -25,14 +29,14 @@ function edgeConfigured(): { ok: boolean; message?: string } {
     return {
       ok: false,
       message:
-        'Edge Boost não configurado: falta BOOST_SUPABASE_URL e/ou BOOST_SUPABASE_ANON_KEY. Sem isto não é possível gerar/enviar links de pagamento SaaS.',
+        'Edge SaaS (SE) sem anon: falta NEXT_PUBLIC_SUPABASE_ANON_KEY (ou BOOST_EDGE_ANON_KEY). Sem isto não é possível gerar/enviar links de pagamento SaaS.',
     }
   }
   if (!edgeAuth && !edgeUser) {
     return {
       ok: false,
       message:
-        'Falta BOOST_EDGE_AUTH_EMAIL/PASSWORD ou BOOST_EDGE_USER_ID. Links Stripe podem funcionar com anon; provision/credenciais e alguns invokes autenticados falham.',
+        'Falta BOOST_EDGE_AUTH_EMAIL/PASSWORD ou BOOST_EDGE_USER_ID (user Auth SE). Links Stripe podem funcionar com anon; provision/credenciais e invokes autenticados falham.',
     }
   }
   return { ok: true }
@@ -63,7 +67,7 @@ export default async function Padel1SaasTourPage() {
       </h2>
       <p className="text-sm text-slate-400">
         Organizations com <code>source=boost</code>. Provision e links Stripe
-        via Edge Functions existentes — não há lógica Stripe no hub. Cartões
+        via Edge Functions SportsEvents — não há lógica Stripe no hub. Cartões
         activos mostram início/fim do plano; renovação recorrente (sem Stripe
         auto-cobrança) envia link por email no fim do período (cron diário) ou
         via «Enviar link de pagamento».

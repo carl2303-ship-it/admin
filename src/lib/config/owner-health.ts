@@ -22,12 +22,12 @@ function lojaOk(): boolean {
     present(process.env.BOOST_EDGE_AUTH_EMAIL) &&
     present(process.env.BOOST_EDGE_AUTH_PASSWORD)
   const edgeUser = present(process.env.BOOST_EDGE_USER_ID)
-  const data =
-    present(process.env.BOOST_SUPABASE_URL) ||
-    present(process.env.NEXT_PUBLIC_SUPABASE_URL)
+  // Dados loja + Edge defaultam SportsEvents (schema boost / functions SE).
+  const data = present(process.env.NEXT_PUBLIC_SUPABASE_URL)
   const anon =
-    present(process.env.BOOST_SUPABASE_ANON_KEY) ||
-    present(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+    present(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) ||
+    present(process.env.BOOST_EDGE_ANON_KEY) ||
+    present(process.env.NEXT_PUBLIC_BOOST_EDGE_ANON_KEY)
   return Boolean(data && anon && (edgeAuth || edgeUser || managementApiConfigured()))
 }
 

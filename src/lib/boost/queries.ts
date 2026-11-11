@@ -817,7 +817,7 @@ export async function getStripeVisibility(): Promise<
       subscription_expires_at: string | null
     }[]
 
-    // Hold: Edge Boost com anon legado basta para stripe-checkout (fallback anon).
+    // Edge canónico = SE; anon SE (ou override) basta para stripe-checkout (fallback anon).
     const edgeConfigured = Boolean(
       resolveBoostApiUrl() && resolveBoostAnonKey()
     )

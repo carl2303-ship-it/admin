@@ -3,6 +3,11 @@
  * Never returns secret values — only presence / public URLs.
  */
 
+import {
+  resolveBoostAnonKey,
+  resolveBoostApiUrl,
+} from '@/lib/supabase/admin'
+
 export type IntegrationStatus = {
   id: string
   label: string
@@ -88,38 +93,54 @@ export function getBoostConfigStatus(): ProductConfigStatus {
     present(process.env.BOOST_EDGE_AUTH_EMAIL) &&
     present(process.env.BOOST_EDGE_AUTH_PASSWORD)
   const edgeUser = present(process.env.BOOST_EDGE_USER_ID)
-  const edgeOk =
-    present(process.env.BOOST_SUPABASE_URL) &&
-    present(process.env.BOOST_SUPABASE_ANON_KEY) &&
-    (edgeAuth || edgeUser)
+  const edgeUrl = resolveBoostApiUrl()
+  const edgeAnon = present(resolveBoostAnonKey())
+  const edgeOverride = present(
+    process.env.BOOST_EDGE_URL || process.env.NEXT_PUBLIC_BOOST_EDGE_URL
+  )
+  const edgeOk = edgeAnon && (edgeAuth || edgeUser)
 
   const integrations: IntegrationStatus[] = [
     item({
+      id: 'boost-edge-url',
+      label: 'Edge Functions URL',
+      connected: Boolean(edgeUrl),
+      detail: edgeOverride
+        ? `Override BOOST_EDGE_URL → ${edgeUrl}`
+        : `Default SE → ${edgeUrl}`,
+      publicUrl: edgeUrl,
+      fixHint:
+        'Default SE. Só define BOOST_EDGE_URL se precisares de override de emergência (legado Boost).',
+    }),
+    item({
       id: 'boost-supabase-url',
-      label: 'Boost Supabase URL',
+      label: 'Boost URL legado (opcional)',
       connected: present(process.env.BOOST_SUPABASE_URL),
       detail: present(process.env.BOOST_SUPABASE_URL)
-        ? 'BOOST_SUPABASE_URL definido'
-        : 'BOOST_SUPABASE_URL em falta',
-      fixHint: 'Netlify admin → env BOOST_SUPABASE_URL',
+        ? 'BOOST_SUPABASE_URL definido (só override legado)'
+        : 'Não necessário — dados/Edge defaultam SE',
+      fixHint: 'Opcional. Remover se apontar ao Boost legado após cutover Edge SE.',
     }),
     item({
       id: 'boost-service-role',
-      label: 'Boost service role',
+      label: 'Boost service role legado',
       connected: present(process.env.BOOST_SUPABASE_SERVICE_ROLE_KEY),
       detail: present(process.env.BOOST_SUPABASE_SERVICE_ROLE_KEY)
-        ? 'Service role presente (server-only)'
-        : 'BOOST_SUPABASE_SERVICE_ROLE_KEY em falta',
-      fixHint: 'Netlify admin → env BOOST_SUPABASE_SERVICE_ROLE_KEY',
+        ? 'Presente (só Auth Edge se override = Boost)'
+        : 'Não necessário com Edge SE (usa SUPABASE_SERVICE_ROLE_KEY)',
+      fixHint: 'Opcional — só se BOOST_EDGE_URL = Boost legado.',
     }),
     item({
       id: 'boost-anon',
-      label: 'Boost anon key',
-      connected: present(process.env.BOOST_SUPABASE_ANON_KEY),
-      detail: present(process.env.BOOST_SUPABASE_ANON_KEY)
-        ? 'Anon key presente (Edge invoke)'
-        : 'BOOST_SUPABASE_ANON_KEY em falta',
-      fixHint: 'Netlify admin → env BOOST_SUPABASE_ANON_KEY',
+      label: 'Edge anon',
+      connected: edgeAnon,
+      detail: edgeAnon
+        ? present(process.env.BOOST_EDGE_ANON_KEY) ||
+          present(process.env.NEXT_PUBLIC_BOOST_EDGE_ANON_KEY)
+          ? 'BOOST_EDGE_ANON_KEY / override'
+          : 'NEXT_PUBLIC_SUPABASE_ANON_KEY (SE)'
+        : 'Falta NEXT_PUBLIC_SUPABASE_ANON_KEY (ou BOOST_EDGE_ANON_KEY)',
+      fixHint: 'Netlify admin → NEXT_PUBLIC_SUPABASE_ANON_KEY (SE)',
     }),
     item({
       id: 'boost-edge-auth',
@@ -127,10 +148,11 @@ export function getBoostConfigStatus(): ProductConfigStatus {
       connected: edgeOk,
       detail: edgeOk
         ? edgeAuth
-          ? 'BOOST_EDGE_AUTH_EMAIL/PASSWORD OK'
+          ? 'BOOST_EDGE_AUTH_EMAIL/PASSWORD OK (Auth do projecto Edge)'
           : 'BOOST_EDGE_USER_ID OK'
-        : 'Falta BOOST_EDGE_AUTH_* ou BOOST_EDGE_USER_ID (+ URL/anon)',
-      fixHint: 'Netlify admin → BOOST_EDGE_AUTH_EMAIL+PASSWORD ou BOOST_EDGE_USER_ID',
+        : 'Falta BOOST_EDGE_AUTH_* ou BOOST_EDGE_USER_ID (user Auth SE)',
+      fixHint:
+        'Netlify admin → BOOST_EDGE_AUTH_EMAIL+PASSWORD ou BOOST_EDGE_USER_ID no Auth SE',
     }),
     item({
       id: 'boost-store-url',
@@ -391,7 +413,7 @@ export function getHubConfigStatus(): ProductConfigStatus {
           process.env.SUPABASE_ACCESS_TOKEN
       )
         ? 'Token presente (server-only)'
-        : 'Ausente — rotação Edge Boost só via checklist',
+        : 'Ausente — rotação secrets Edge SE só via checklist',
       fixHint: 'PAT em SUPABASE_ACCESS_TOKEN ou BOOST_SUPABASE_ACCESS_TOKEN',
     }),
     item({

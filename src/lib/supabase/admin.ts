@@ -63,8 +63,11 @@ export function createBoostServiceClient() {
 }
 
 /**
- * URL do projecto onde corre a Edge `stripe-checkout`.
- * Canónico: SportsEvents. Override: BOOST_EDGE_URL / NEXT_PUBLIC_BOOST_EDGE_URL.
+ * URL do projecto onde correm as Edge Functions da loja/SaaS
+ * (`stripe-checkout`, `provision-saas-license`, …).
+ * Canónico: SportsEvents (`tprbpeacicadsbmvxcqk`).
+ * Override de emergência: BOOST_EDGE_URL / NEXT_PUBLIC_BOOST_EDGE_URL
+ * (ex. apontar ao Boost legado `gmpyjnufuvsoewbtirsg` só se necessário).
  */
 export function resolveBoostApiUrl(): string {
   const override =
@@ -74,8 +77,9 @@ export function resolveBoostApiUrl(): string {
 }
 
 /**
- * Anon key do projecto Edge (SE por defeito).
+ * Anon key do projecto Edge (SE por defeito = NEXT_PUBLIC_SUPABASE_ANON_KEY).
  * Override: BOOST_EDGE_ANON_KEY / NEXT_PUBLIC_BOOST_EDGE_ANON_KEY.
+ * Se o override de URL apontar ao Boost legado, usa anon Boost.
  */
 export function resolveBoostAnonKey(): string | undefined {
   const edgeAnon =
@@ -96,7 +100,8 @@ export function resolveBoostAnonKey(): string | undefined {
 
 /**
  * Service role só para Auth admin no projecto Edge (magiclink JWT).
- * SE por defeito; se Edge override = Boost legado, usa BOOST_* service role.
+ * SE por defeito (SUPABASE_SERVICE_ROLE_KEY).
+ * Se Edge override = Boost legado, usa BOOST_* service role.
  */
 export function createBoostEdgeAuthAdminClient(): SupabaseClient | null {
   const edgeUrl = resolveBoostApiUrl()

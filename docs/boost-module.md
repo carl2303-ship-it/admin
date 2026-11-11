@@ -13,13 +13,14 @@ UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia
 
 ## Env
 
-- `BOOST_SUPABASE_URL` / `BOOST_SUPABASE_SERVICE_ROLE_KEY` / `BOOST_SUPABASE_ANON_KEY`
+- Dados/Storage/Edge: **SportsEvents** (`NEXT_PUBLIC_SUPABASE_*` + `SUPABASE_SERVICE_ROLE_KEY`)
+- `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` ou `BOOST_EDGE_USER_ID` — JWT Auth **SE**
 - `NEXT_PUBLIC_BOOST_ADMIN_URL` — deep-link emergência
-- `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` ou `BOOST_EDGE_USER_ID`
 - `NEXT_PUBLIC_BOOST_STORE_URL` — default `https://sportsevents.app/store` (boostpadel.store descontinuado)
 - `NEXT_PUBLIC_TOUR_APP_URL` — base da App Tour nos cards SaaS (default `https://tour.padel1.app`; **não** `tour.boostpadel.store`)
+- Opcional emergência: `BOOST_EDGE_URL` / `BOOST_EDGE_ANON_KEY` (só se forçar projecto Boost legado)
 
-## Edge Functions (reutilizadas)
+## Edge Functions (SE — `tprbpeacicadsbmvxcqk`)
 
 - `provision-saas-license`
 - `stripe-checkout` (`saas-tour-subscription` a partir do hub)
@@ -34,9 +35,9 @@ UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia
 
 ### Enviar link de pagamento (manual)
 
-Botão **Enviar link de pagamento** em `/produtos/boost/saas` → server action → Edge `stripe-checkout` com `sendPaymentLinkEmail: true` (mesmo caminho do admin Boost).
+Botão **Enviar link de pagamento** em `/produtos/boost/saas` → server action → Edge SE `stripe-checkout` com `sendPaymentLinkEmail: true`.
 
-Requer no Netlify admin: `BOOST_SUPABASE_URL`, `BOOST_SUPABASE_ANON_KEY`, service role, e preferencialmente `BOOST_EDGE_*`. A UI mostra aviso âmbar se Edge estiver incompleta.
+Requer no Netlify admin: `NEXT_PUBLIC_SUPABASE_*` + `SUPABASE_SERVICE_ROLE_KEY`, e `BOOST_EDGE_AUTH_*` ou `BOOST_EDGE_USER_ID` (Auth SE). A UI mostra aviso âmbar se JWT Edge estiver incompleto. **Não** defines `BOOST_EDGE_URL` apontando ao Boost — o default é SE.
 
 ### Renovação automática (cron Netlify)
 
@@ -74,18 +75,17 @@ Migration Boost (coluna): `supabase/migrations/20261001150000_organizations_rene
 ## Stripe no hub (sem `STRIPE_SECRET_KEY`)
 
 O hub **não** precisa de `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` no Netlify do admin.
-Pagamentos e webhooks ficam nas **Edge Functions do projeto Boost** (onde já existe `STRIPE_SECRET_KEY`).
+Pagamentos e webhooks ficam nas **Edge Functions do projeto SportsEvents**.
 
 Para **visibilidade** (`/produtos/boost/stripe`) + gerar payment links SaaS:
 
 | Env no hub (admin Netlify) | Para quê |
 |----------------------------|----------|
-| `BOOST_SUPABASE_URL` | Client + invoke Edge |
-| `BOOST_SUPABASE_SERVICE_ROLE_KEY` | Ler orgs / ebook sessions (tabelas) |
-| `BOOST_SUPABASE_ANON_KEY` | Invoke Edge (`stripe-checkout`, provision) |
-| `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` **ou** `BOOST_EDGE_USER_ID` | JWT para EFs autenticadas |
+| `NEXT_PUBLIC_SUPABASE_URL` / `ANON` / `SUPABASE_SERVICE_ROLE_KEY` | Dados schema `boost` + invoke Edge SE |
+| `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` **ou** `BOOST_EDGE_USER_ID` | JWT Auth SE para EFs autenticadas |
 | `NEXT_PUBLIC_BOOST_STORE_URL` | Link loja na UI Stripe |
 | `NEXT_PUBLIC_TOUR_APP_URL` | Base App Tour nos cards SaaS (default `https://tour.padel1.app`) |
+| `BOOST_EDGE_URL` (opcional) | **Não** definir em produção — só override emergência |
 
 ### URLs Tour nos cards SaaS (`/produtos/boost/saas`)
 
@@ -96,10 +96,10 @@ Para **visibilidade** (`/produtos/boost/stripe`) + gerar payment links SaaS:
 
 **«Página pública» (legado):** o email de credenciais Boost e o link do slug no admin antigo apontavam para `tour.boostpadel.store/{slug}`. Não era um site marketing separado — era a App Tour com tema do organizador. O hub renomeou para **Entrada com marca** e usa `tour.padel1.app`.
 
-Os emails de credenciais (botão «Credenciais») são enviados pela Edge Function Boost `provision-saas-license` → `sendTourCredentialsEmail`. Esse template também precisa do domínio correcto (repo `boostpadel`).
+Os emails de credenciais (botão «Credenciais») são enviados pela Edge Function SE `provision-saas-license` → `sendTourCredentialsEmail`.
 
-| Só no Boost (Supabase Edge / Netlify Boost) | Para quê |
-|---------------------------------------------|---------|
+| Só nas Edge secrets SE (não no Netlify admin) | Para quê |
+|-----------------------------------------------|---------|
 | `STRIPE_SECRET_KEY` | Checkout / manage subscription nas EFs |
 | `STRIPE_WEBHOOK_SECRET` | Webhook Stripe nas EFs |
 | `TOUR_APP_URL` (opcional na Edge) | Override no email de credenciais; default `https://tour.padel1.app` |

@@ -33,7 +33,7 @@ export async function BoostStripeOpsSection() {
             <StatusPill
               active={d.edgeConfigured}
               activeLabel="Credenciais Edge OK"
-              inactiveLabel="Falta BOOST_EDGE_* / ANON"
+              inactiveLabel="Falta anon SE / JWT Edge"
             />
           </div>
         </Panel>
