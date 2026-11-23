@@ -1,7 +1,7 @@
 /** Constantes do funil legado PADEL IQ PRO (smartpadelstrategy). PT only. */
 
-/** Base canónica da loja (sportsevents.app/store). */
-export const STORE_BASE_DEFAULT = 'https://sportsevents.app/store'
+/** Base canónica da loja (store.padel1.app raiz, sem /store). */
+export const STORE_BASE_DEFAULT = 'https://store.padel1.app'
 
 export const LEGACY_PADEL_IQ = {
   title: 'PADEL IQ PRO: O SISTEMA TÁTICO DEFINITIVO',

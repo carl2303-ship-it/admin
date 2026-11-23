@@ -16,7 +16,7 @@ UI no hub em `/produtos/boost/*`. Meta: **substituir o `admin.html`** para o dia
 - Dados/Storage/Edge: **SportsEvents** (`NEXT_PUBLIC_SUPABASE_*` + `SUPABASE_SERVICE_ROLE_KEY`)
 - `BOOST_EDGE_AUTH_EMAIL` + `BOOST_EDGE_AUTH_PASSWORD` ou `BOOST_EDGE_USER_ID` — JWT Auth **SE**
 - `NEXT_PUBLIC_BOOST_ADMIN_URL` — deep-link emergência
-- `NEXT_PUBLIC_BOOST_STORE_URL` — default `https://sportsevents.app/store` (boostpadel.store descontinuado)
+- `NEXT_PUBLIC_BOOST_STORE_URL` — default `https://store.padel1.app` (raiz; sem `/store`; boostpadel.store descontinuado)
 - `NEXT_PUBLIC_TOUR_APP_URL` — base da App Tour nos cards SaaS (default `https://tour.padel1.app`; **não** `tour.boostpadel.store`)
 - Opcional emergência: `BOOST_EDGE_URL` / `BOOST_EDGE_ANON_KEY` (só se forçar projecto Boost legado)
 

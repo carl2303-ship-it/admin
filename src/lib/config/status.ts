@@ -79,7 +79,7 @@ function item(
 export function getBoostConfigStatus(): ProductConfigStatus {
   const storeUrl = publicOrMissing(
     process.env.NEXT_PUBLIC_BOOST_STORE_URL,
-    'https://sportsevents.app/store'
+    'https://store.padel1.app'
   )
   const tourAppUrl = publicOrMissing(
     process.env.NEXT_PUBLIC_TOUR_APP_URL,

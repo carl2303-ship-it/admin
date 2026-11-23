@@ -828,7 +828,7 @@ export async function getStripeVisibility(): Promise<
         edgeConfigured,
         storeUrl:
           process.env.NEXT_PUBLIC_BOOST_STORE_URL ||
-          'https://sportsevents.app/store',
+          'https://store.padel1.app',
         subscriptions,
         recentEbookSessions: (purchases.data || []) as BoostEbookPurchase[],
         withStripeSub: subscriptions.filter((s) => s.stripe_subscription_id)
