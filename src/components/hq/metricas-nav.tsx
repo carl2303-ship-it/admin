@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 
 const TABS: { href: string; label: string; exact?: boolean }[] = [
   { href: '/metricas', label: 'Visão geral', exact: true },
-  { href: '/metricas/boost', label: 'Boost Store' },
+  { href: '/metricas/boost', label: 'Store' },
   { href: '/metricas/padel1', label: 'Padel One' },
   { href: '/metricas/se', label: 'SportsEvents' },
 ]

@@ -11,7 +11,7 @@ export function getLegacyDeepLinks(): LegacyDeepLink[] {
   return [
     {
       product: 'boost',
-      label: 'Boost Store Admin',
+      label: 'Store Admin',
       url:
         process.env.NEXT_PUBLIC_BOOST_ADMIN_URL ||
         'https://admin.sportsevents.app',

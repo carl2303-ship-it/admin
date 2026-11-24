@@ -193,7 +193,7 @@ export function getBoostConfigStatus(): ProductConfigStatus {
 
   return {
     product: 'boost',
-    label: 'Boost Store',
+    label: 'Store',
     integrations,
     connectedCount: integrations.filter((i) => i.connected).length,
     totalCount: integrations.length,

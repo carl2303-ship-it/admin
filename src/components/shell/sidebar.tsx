@@ -32,7 +32,7 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, product: 'dashboard' },
-  { href: '/produtos/boost', label: 'Boost Store', icon: Store, product: 'boost' },
+  { href: '/produtos/boost', label: 'Store', icon: Store, product: 'boost' },
   { href: '/produtos/padel1', label: 'Padel One HQ', icon: Building2, product: 'padel1' },
   {
     href: '/produtos/sportsevents',

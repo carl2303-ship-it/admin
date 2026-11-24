@@ -8,8 +8,8 @@ export default function BoostModuleLayout({
 }) {
   return (
     <ProductChrome
-      eyebrow="Boost Store"
-      title="Boost Store"
+      eyebrow="Store"
+      title="Store"
       nav={<BoostModuleNav />}
     >
       {children}

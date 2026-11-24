@@ -33,7 +33,7 @@ export default async function MetricasHubPage() {
       <section className="space-y-4">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-amber-400">
-            Boost Store
+            Store
           </h2>
           <Link
             href="/metricas/boost"
