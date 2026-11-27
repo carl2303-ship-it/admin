@@ -1,5 +1,6 @@
 import { redirect, notFound } from 'next/navigation'
 import { requireBoostModule, canWriteBoost, staffRole } from '@/lib/boost/auth'
+import { getStoreMarketplaceListingState } from '@/lib/boost/actions'
 import { getProduct, listBrands, listCategories } from '@/lib/boost/queries'
 import { ProductForm } from '@/components/boost/product-form'
 import { ConfigBanner, ErrorBanner, Panel } from '@/components/boost/ui'
@@ -19,10 +20,11 @@ export default async function EditProductPage({
     return <ErrorBanner message="Sem permissão de escrita (owner/commerce)." />
   }
 
-  const [product, categories, brands] = await Promise.all([
+  const [product, categories, brands, marketplace] = await Promise.all([
     getProduct(id),
     listCategories(),
     listBrands(),
+    getStoreMarketplaceListingState(id),
   ])
 
   if (!product.ok) {
@@ -36,6 +38,9 @@ export default async function EditProductPage({
   if (!categories.ok) return <ErrorBanner message={categories.error} />
   if (!brands.ok) return <ErrorBanner message={brands.error} />
 
+  const marketplaceListed = marketplace.ok ? marketplace.data.listed : false
+  const marketplaceError = marketplace.ok ? null : marketplace.error
+
   return (
     <Panel className="p-5">
       <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold">
@@ -45,6 +50,8 @@ export default async function EditProductPage({
         product={product.data}
         categories={categories.data}
         brands={brands.data}
+        marketplaceListed={marketplaceListed}
+        marketplaceError={marketplaceError}
       />
     </Panel>
   )

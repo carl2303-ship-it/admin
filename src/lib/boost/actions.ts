@@ -47,3 +47,10 @@ export {
   importLegacyPadelIqFunnel,
   publishEbookFunnelToStore,
 } from './actions-funnel-store'
+
+export {
+  getStoreMarketplaceListingState,
+  addProductToPadel1Marketplace,
+  removeProductFromPadel1Marketplace,
+} from './actions-marketplace'
+export type { MarketplaceListingState } from './actions-marketplace'

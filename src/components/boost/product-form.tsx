@@ -6,6 +6,7 @@ import { saveProduct } from '@/lib/boost/actions'
 import type { BoostBrand, BoostCategory, BoostProduct } from '@/lib/boost/types'
 import { AdditionalImagesField, ImageUploadField } from './image-upload'
 import { ColorSizeFields } from './color-size-fields'
+import { MarketplacePadel1Toggle } from './marketplace-padel1-toggle'
 import { QuillEditor } from './quill-editor'
 import { btnGhost, btnPrimary, fieldClass } from './ui'
 
@@ -31,10 +32,15 @@ export function ProductForm({
   product,
   categories,
   brands,
+  marketplaceListed = false,
+  marketplaceError = null,
 }: {
   product?: BoostProduct | null
   categories: BoostCategory[]
   brands: BoostBrand[]
+  /** True when an active source=store listing exists on Padel1. */
+  marketplaceListed?: boolean
+  marketplaceError?: string | null
 }) {
   const router = useRouter()
   const [pending, start] = useTransition()
@@ -57,6 +63,13 @@ export function ProductForm({
       }}
     >
       {product?.id && <input type="hidden" name="id" value={product.id} />}
+      {product?.id && (
+        <MarketplacePadel1Toggle
+          productId={product.id}
+          initiallyListed={marketplaceListed}
+          initialError={marketplaceError}
+        />
+      )}
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block space-y-1">
           <span className="text-xs font-bold uppercase text-slate-400">Nome</span>
