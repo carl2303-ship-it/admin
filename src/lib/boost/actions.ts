@@ -50,6 +50,7 @@ export {
 
 export {
   getStoreMarketplaceListingState,
+  listActiveStoreMarketplaceProductIds,
   addProductToPadel1Marketplace,
   removeProductFromPadel1Marketplace,
 } from './actions-marketplace'

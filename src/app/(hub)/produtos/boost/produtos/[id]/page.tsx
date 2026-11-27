@@ -43,9 +43,14 @@ export default async function EditProductPage({
 
   return (
     <Panel className="p-5">
-      <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold">
+      <h2 className="mb-1 font-[family-name:var(--font-display)] text-xl font-bold">
         Editar produto
       </h2>
+      <p className="mb-4 text-xs text-slate-400">
+        No topo do formulário: botão{' '}
+        <span className="font-semibold text-cyan-300">Adicionar à Padel1</span>{' '}
+        / Remover da Padel1.
+      </p>
       <ProductForm
         product={product.data}
         categories={categories.data}

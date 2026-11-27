@@ -81,6 +81,42 @@ export async function getStoreMarketplaceListingState(
   }
 }
 
+/**
+ * Active Store listings on Padel1 — for the products list table.
+ * Returns empty set when table/env missing (error message separate).
+ */
+export async function listActiveStoreMarketplaceProductIds(): Promise<
+  | { ok: true; productIds: string[] }
+  | { ok: false; error: string; missingConfig?: boolean; missingTable?: boolean }
+> {
+  const g = await guardWrite()
+  if (!g.ok) return g
+
+  const padel1 = requirePadel1()
+  if (!padel1.ok) {
+    return { ok: false, error: padel1.error, missingConfig: true }
+  }
+
+  const { data, error } = await padel1.client
+    .from(LISTINGS_TABLE)
+    .select('store_product_id')
+    .eq('source', 'store')
+    .eq('status', 'active')
+
+  if (error) {
+    if (isMissingTableError(error.message)) {
+      return { ok: false, error: MISSING_TABLE_HINT, missingTable: true }
+    }
+    return { ok: false, error: error.message }
+  }
+
+  const productIds = (data || [])
+    .map((row) => String((row as { store_product_id?: string }).store_product_id || ''))
+    .filter(Boolean)
+
+  return { ok: true, productIds }
+}
+
 type ProductRow = {
   id: string
   name: string
@@ -209,7 +245,10 @@ export async function addProductToPadel1Marketplace(
     const result = await upsertStoreListing(payload)
     if (!result.ok) return result
 
-    revalidateBoost([`/produtos/boost/produtos/${productId}`])
+    revalidateBoost([
+      '/produtos/boost/produtos',
+      `/produtos/boost/produtos/${productId}`,
+    ])
     return {
       ok: true,
       message: 'Produto adicionado à Padel1',
@@ -269,7 +308,10 @@ export async function removeProductFromPadel1Marketplace(
       return { ok: false, error: error.message }
     }
 
-    revalidateBoost([`/produtos/boost/produtos/${productId}`])
+    revalidateBoost([
+      '/produtos/boost/produtos',
+      `/produtos/boost/produtos/${productId}`,
+    ])
     return { ok: true, message: 'Produto removido da Padel1' }
   } catch (e) {
     return {

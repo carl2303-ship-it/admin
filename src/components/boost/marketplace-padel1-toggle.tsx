@@ -5,17 +5,21 @@ import {
   addProductToPadel1Marketplace,
   removeProductFromPadel1Marketplace,
 } from '@/lib/boost/actions'
-import { btnGhost, btnPrimary } from './ui'
+import { btnDanger, btnGhost, btnPrimary } from './ui'
+import { cn } from '@/lib/utils'
 
 export function MarketplacePadel1Toggle({
   productId,
   initiallyListed,
   initialError,
+  compact = false,
 }: {
   productId: string
   initiallyListed: boolean
   /** Env/table missing — show once, still allow retry after migration. */
   initialError?: string | null
+  /** Row action on the products list (short label). */
+  compact?: boolean
 }) {
   const [listed, setListed] = useState(initiallyListed)
   const [message, setMessage] = useState<string | null>(null)
@@ -38,22 +42,52 @@ export function MarketplacePadel1Toggle({
     })
   }
 
+  if (compact) {
+    return (
+      <div className="flex flex-col items-start gap-0.5">
+        <button
+          type="button"
+          disabled={pending}
+          onClick={toggle}
+          title={
+            listed
+              ? 'Remover este produto da lista Padel1'
+              : 'Adicionar este produto à lista Padel1'
+          }
+          className={cn(
+            listed ? btnGhost : btnPrimary,
+            'px-2 py-1 text-[11px] leading-tight'
+          )}
+        >
+          {pending ? '…' : listed ? 'Remover Padel1' : '→ Padel1'}
+        </button>
+        {error && (
+          <span className="max-w-[11rem] text-[10px] leading-snug text-amber-200/90">
+            {error}
+          </span>
+        )}
+      </div>
+    )
+  }
+
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3">
+    <div className="rounded-xl border border-cyan-500/40 bg-cyan-500/10 px-4 py-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-slate-100">Marketplace Padel1</p>
-          <p className="mt-0.5 text-xs text-slate-400">
+          <p className="text-sm font-semibold text-cyan-100">
+            Marketplace Padel1
+          </p>
+          <p className="mt-0.5 text-xs text-slate-300">
             {listed
               ? 'Este produto está na lista oficial da Padel1.'
-              : 'Publica este produto na lista do marketplace (source=store).'}
+              : 'Publica este produto na lista do marketplace com um clique.'}
           </p>
         </div>
         <button
           type="button"
           disabled={pending}
           onClick={toggle}
-          className={listed ? btnGhost : btnPrimary}
+          className={listed ? btnDanger : btnPrimary}
         >
           {pending
             ? 'A sincronizar…'

@@ -11,6 +11,7 @@ import {
 } from '@/lib/boost/actions'
 import type { BoostProduct } from '@/lib/boost/types'
 import { ActionButton } from '@/components/boost/action-buttons'
+import { MarketplacePadel1Toggle } from '@/components/boost/marketplace-padel1-toggle'
 import {
   ProductActiveToggle,
   ProductPriceInput,
@@ -42,12 +43,18 @@ function isSoldOut(p: Row): boolean {
 export function ProductsReorderTable({
   products,
   canWrite,
+  listedOnPadel1 = [],
+  marketplaceError = null,
 }: {
   products: Row[]
   canWrite: boolean
+  /** Product ids with an active source=store listing on Padel1. */
+  listedOnPadel1?: string[]
+  marketplaceError?: string | null
 }) {
   const router = useRouter()
   const [rows, setRows] = useState(products)
+  const listedSet = new Set(listedOnPadel1)
   const [dragId, setDragId] = useState<string | null>(null)
   const [overId, setOverId] = useState<string | null>(null)
   const [pending, start] = useTransition()
@@ -103,9 +110,15 @@ export function ProductsReorderTable({
       {canWrite && (
         <p className="text-xs text-slate-400">
           Arrasta pela pega ⋮⋮ para definir a ordem na loja. Destaques ficam
-          primeiro; físicos esgotados (stock 0) afundam para o fim. Ordem
-          custom = <code className="text-slate-300">display_order</code>.
+          primeiro; físicos esgotados (stock 0) afundam para o fim. Usa{' '}
+          <span className="font-semibold text-cyan-300">→ Padel1</span> para
+          publicar na lista do marketplace (ou abre Editar).
           {pending ? ' A guardar…' : null}
+        </p>
+      )}
+      {marketplaceError && (
+        <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+          Sync Padel1: {marketplaceError}
         </p>
       )}
       <TableShell>
@@ -117,6 +130,7 @@ export function ProductsReorderTable({
             <Th>Preço</Th>
             <Th>Stock</Th>
             <Th>Estado</Th>
+            <Th>Padel1</Th>
             <Th>Acções</Th>
           </tr>
         </thead>
@@ -124,7 +138,7 @@ export function ProductsReorderTable({
           {rows.length === 0 && (
             <tr>
               <td
-                colSpan={canWrite ? 7 : 6}
+                colSpan={canWrite ? 8 : 7}
                 className="border-b border-zinc-50 px-4 py-8 text-center text-slate-400"
               >
                 Nenhum produto
@@ -214,6 +228,21 @@ export function ProductsReorderTable({
                     </span>
                   )}
                 </div>
+              </Td>
+              <Td>
+                {canWrite ? (
+                  <MarketplacePadel1Toggle
+                    productId={p.id}
+                    initiallyListed={listedSet.has(p.id)}
+                    compact
+                  />
+                ) : listedSet.has(p.id) ? (
+                  <span className="text-[11px] font-semibold text-cyan-300">
+                    Na Padel1
+                  </span>
+                ) : (
+                  <span className="text-[11px] text-slate-500">—</span>
+                )}
               </Td>
               <Td>
                 <div className="flex flex-wrap gap-1.5">
